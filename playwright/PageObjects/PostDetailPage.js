@@ -60,7 +60,7 @@ module.exports = class PostDetailPage {
   }
 
   async pressDeleteOnElement(element, n){
-    for (var i = 0; i <= 10; i++) {
+    for (var i = 0; i <= n; i++) {
       await element.press('Delete');
     }
   }
