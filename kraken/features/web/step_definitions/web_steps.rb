@@ -142,6 +142,12 @@ if ENV['ADB_DEVICE_ARG'].nil?
     sleep 1
   end
 
+  When('I schedule the page') do
+    page_detail_page = PageDetailPage.new(@driver)
+    page_detail_page.schedule_page
+    sleep 1
+  end
+
   When('I return to pages list') do
     page_detail_page = PageDetailPage.new(@driver)
     page_detail_page.return_to_pages_list
@@ -209,9 +215,22 @@ if ENV['ADB_DEVICE_ARG'].nil?
     sleep 1
   end
 
+  When('I select filter by scheduled pages option') do
+    pages_page = PagesPage.new(@driver)
+    pages_page.select_filter_by_scheduled_pages_option
+    sleep 1
+  end
+
   When(/^I click page with title "([^"]*)"$/) do |title|
     pages_page = PagesPage.new(@driver)
     pages_page.click_page_with_title(title)
+    sleep 1
+  end
+
+  Then(/^I see first page with title "([^"]*)"$/) do |title|
+    pages_page = PagesPage.new(@driver)
+    page_title = pages_page.first_page_title
+    expect(page_title).to eq(title)
     sleep 1
   end
 

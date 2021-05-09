@@ -33,11 +33,25 @@ class PagesPage
     end.first.click
   end
 
+  def select_filter_by_scheduled_pages_option
+    @driver.find_elements(
+      :css, '.ember-power-select-option'
+    ).select do |element|
+      element.text == 'Scheduled pages'
+    end.first.click
+  end
+
   def click_page_with_title(title)
     @driver.find_elements(
       :css, '.gh-content-entry-title'
     ).select do |element|
       element.text == title
     end.first.click
+  end
+
+  def first_page_title
+    @driver.find_elements(
+      :css, '.gh-content-entry-title'
+    ).first.text
   end
 end

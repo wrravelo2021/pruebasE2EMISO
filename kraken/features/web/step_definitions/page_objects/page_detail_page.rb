@@ -30,6 +30,20 @@ class PageDetailPage
     ).click
   end
 
+  def schedule_page
+    @driver.find_element(
+      :css, '.gh-btn.gh-btn-outline.gh-publishmenu-trigger.ember-basic-dropdown-trigger.ember-view'
+    ).click
+    sleep 1
+    @driver.find_elements(
+      :css, '.gh-publishmenu-radio-button' 
+    )[1].click
+    sleep 1
+    @driver.find_element(
+      :css, '.gh-btn.gh-btn-blue.gh-publishmenu-button.gh-btn-icon.ember-view'
+    ).click
+  end
+
   def return_to_pages_list
     @driver.find_element(
       :css, 'a.blue.link.fw4.flex.items-center.ember-view'
