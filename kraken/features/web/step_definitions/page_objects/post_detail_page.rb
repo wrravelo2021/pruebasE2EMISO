@@ -21,6 +21,21 @@ class PostDetailPage
     ).send_keys(body)
   end
 
+  def delete_title_post
+    @driver.find_element(
+      :css, '.gh-editor-title.ember-text-area.gh-input.ember-view'
+    ).clear
+  end
+
+  def delete_body_post
+    @driver.find_element(
+      :css, '.koenig-editor__editor.__mobiledoc-editor'
+    ).click
+    @driver.find_element(
+      :css, '.koenig-editor__editor.__mobiledoc-editor'
+    ).clear
+  end
+
   def publish_post
     @driver.find_element(
       :css, '.gh-btn.gh-btn-outline.gh-publishmenu-trigger.ember-basic-dropdown-trigger.ember-view'

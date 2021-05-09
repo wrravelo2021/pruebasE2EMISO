@@ -249,6 +249,18 @@ if ENV['ADB_DEVICE_ARG'].nil?
     sleep 1
   end
 
+  When('I delete title the post') do
+    post_detail_page = PostDetailPage.new(@driver)
+    post_detail_page.delete_title_post
+    sleep 1
+  end
+
+  When('I delete body the post') do
+    post_detail_page = PostDetailPage.new(@driver)
+    post_detail_page.delete_body_post
+    sleep 1
+  end
+
   When('I publish the post') do
     post_detail_page = PostDetailPage.new(@driver)
     post_detail_page.publish_post
