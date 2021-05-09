@@ -7,6 +7,18 @@ module.exports = class TagDetailPage {
     return this.page.type('input[name="name"]', name);
   }
 
+  async enterDescriptionForNewTag(description) {
+    return this.page.type('id=tag-description', description);
+  }
+
+  async enterMetaTitleForNewTag(metaTitle) {
+    return this.page.type('id=meta-title', metaTitle);
+  }
+
+  async enterMetaDescriptionForNewTag(metaDescription) {
+    return this.page.type('id=meta-description', metaDescription);
+  }
+
   async clickSave() {
     return this.page.click('.gh-btn.gh-btn-blue.gh-btn-icon.ember-view');
   }

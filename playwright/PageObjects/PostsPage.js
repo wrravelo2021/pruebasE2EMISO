@@ -12,6 +12,11 @@ module.exports = class PostsPage {
     return this.page.click('.ember-power-select-selected-item:nth-child(1)');
   }
 
+  async openPostTagsFilterDropdown() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('css=div.gh-contentfilter-menu.gh-contentfilter-tag.ember-view');
+  }
+
   async selectFilterByPublishedPostsOption() {
     await new Promise(r => setTimeout(r, 1000));
     return this.page.click('.ember-power-select-option:has-text("Published posts")');
@@ -25,6 +30,11 @@ module.exports = class PostsPage {
   async selectFilterByDraftedPostsOption() {
     await new Promise(r => setTimeout(r, 1000));
     return this.page.click('.ember-power-select-option:has-text("Draft posts")');
+  }
+
+  async selectFilterByTagName(nameTag) {
+    await new Promise(r => setTimeout(r, 1000));
+    await this.page.click(`li:text("${nameTag}")`);
   }
 
   async getFirstPostTitle() {
