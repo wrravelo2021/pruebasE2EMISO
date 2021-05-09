@@ -1,3 +1,4 @@
+require "date"
 class PostDetailPage
   attr_reader :driver
 
@@ -62,5 +63,21 @@ class PostDetailPage
     @driver.find_elements(
       :css, '.ember-power-select-multiple-option.tag-token.js-draggableObject.draggable-object.ember-view'
     ).map(&:text)
+  end
+
+  def write_future_date 
+    @driver.find_element(
+      :css, '.gh-date-time-picker-date input'
+    ).clear
+
+    @driver.find_element(
+      :css, '.gh-date-time-picker-date input'
+    ).send_keys((Date.today + 1).to_s, :return)
+  end
+
+  def future_date_error
+    @driver.find_element(
+      :css, '.gh-date-time-picker-error'
+    ).text
   end
 end

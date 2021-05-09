@@ -25,6 +25,14 @@ class PagesPage
     end.first.click
   end
 
+  def select_filter_by_drafted_pages_option
+    @driver.find_elements(
+      :css, '.ember-power-select-option'
+    ).select do |element|
+      element.text == 'Draft pages'
+    end.first.click
+  end
+
   def click_page_with_title(title)
     @driver.find_elements(
       :css, '.gh-content-entry-title'

@@ -23,6 +23,12 @@ class HomePage
     ).click
   end
 
+  def go_to_view_site
+    @driver.find_element(
+      :css, 'a[href="#/site/"]'
+    ).click
+  end
+
   def close_published_post_notification
     @driver.find_element(
       :css, '.gh-notification-close'

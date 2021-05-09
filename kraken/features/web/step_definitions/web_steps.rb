@@ -113,6 +113,12 @@ if ENV['ADB_DEVICE_ARG'].nil?
     sleep 1
   end
 
+  When('I go to view site') do
+    home_page = HomePage.new(@driver)
+    home_page.go_to_view_site
+    sleep 1
+  end
+
   ####################
   # Page detail page #
   ####################
@@ -195,6 +201,12 @@ if ENV['ADB_DEVICE_ARG'].nil?
     sleep 1
   end
 
+  When('I select filter by drafted pages option') do
+    pages_page = PagesPage.new(@driver)
+    pages_page.select_filter_by_drafted_pages_option
+    sleep 1
+  end
+
   When(/^I click page with title "([^"]*)"$/) do |title|
     pages_page = PagesPage.new(@driver)
     pages_page.click_page_with_title(title)
@@ -246,6 +258,11 @@ if ENV['ADB_DEVICE_ARG'].nil?
     sleep 1
   end
 
+  When(/^I write future date/) do 
+    post_detail_page = PostDetailPage.new(@driver)
+    post_detail_page.write_future_date
+  end
+
   Then(/^I see tag with name "([^"]*)" assigned$/) do |name|
     post_detail_page = PostDetailPage.new(@driver)
     tags = post_detail_page.tags_name
@@ -264,6 +281,12 @@ if ENV['ADB_DEVICE_ARG'].nil?
     end.first
     expect(found_tag).to be_nil
     sleep 1
+  end
+
+  Then(/^I see future date error/) do 
+    post_detail_page = PostDetailPage.new(@driver)
+    date_error = post_detail_page.future_date_error
+    expect(date_error).to eq('Must be in the past')
   end
 
   ####################
@@ -404,3 +427,15 @@ if ENV['ADB_DEVICE_ARG'].nil?
     sleep 1
   end
 end
+
+  ####################
+  # View Site page ###
+  ####################
+
+  Then(/^I see first post on site with title "([^"]*)"$/) do |title|
+    view_site_page = ViewSitePage.new(@driver)
+    post_title = view_site_page.first_post_title
+    expect(post_title).to eq(title)
+
+    sleep 1
+  end
