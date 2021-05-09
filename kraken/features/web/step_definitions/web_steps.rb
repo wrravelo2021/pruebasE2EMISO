@@ -350,6 +350,18 @@ if ENV['ADB_DEVICE_ARG'].nil?
     sleep 1
   end
 
+  When('I select sort by Newest') do
+    posts_page = PostsPage.new(@driver)
+    posts_page.openPostSortByFilterDropdown
+    sleep 1
+  end
+
+  When('I select option sort by Newest') do
+    posts_page = PostsPage.new(@driver)
+    posts_page.selectFilterByNewestPostOption
+    sleep 1
+  end
+
   ####################
   # Profile page #####
   ####################

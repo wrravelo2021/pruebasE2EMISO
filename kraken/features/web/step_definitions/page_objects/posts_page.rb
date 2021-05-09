@@ -46,4 +46,20 @@ class PostsPage
       :css, '.gh-content-entry-title'
     ).first.text
   end
+
+  def openPostSortByFilterDropdown
+    @driver.find_elements(
+      :css, '.ember-power-select-selected-item'
+    ).select do |element|
+      element.text == 'Newest'
+    end.first.click
+  end
+
+  def selectFilterByNewestPostOption
+    @driver.find_elements(
+      :css, '.ember-power-select-option'
+    ).select do |element|
+      element.text == 'Newest'
+    end.first.click
+  end
 end
