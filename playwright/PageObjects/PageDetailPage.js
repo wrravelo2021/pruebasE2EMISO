@@ -47,4 +47,24 @@ module.exports = class PageDetailPage {
     await this.page.click('.koenig-editor__editor.__mobiledoc-editor');
     return this.page.keyboard.press("Backspace");
   }
+
+  async pressDeleteOnElement(element, n){
+    for (var i = 0; i <= n; i++) {
+      await element.press('Delete');
+    }
+  }
+
+  async fillDate(date){
+    await new Promise(r => setTimeout(r, 1000));
+    const dateField = await this.page.$('.gh-date-time-picker-date input');
+    await this.pressDeleteOnElement(dateField, 10);
+    await dateField.type(date);
+    await dateField.press('Enter');
+  }
+
+  async getFutureDateError(){
+    await new Promise(r => setTimeout(r, 1000));
+    return await this.page.$('.gh-date-time-picker-error');
+  }
+
 };

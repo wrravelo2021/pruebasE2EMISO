@@ -77,4 +77,12 @@ module.exports = class PostDetailPage {
     await new Promise(r => setTimeout(r, 1000));
     return await this.page.$('.gh-date-time-picker-error');
   }
+  async clickDeletePost() {
+    return this.page.click('#entry-controls > div.settings-menu-pane-in.settings-menu.settings-menu-pane > div.settings-menu-content > form > button');
+  }
+
+  async clickConfirmDeletePost() {
+    return this.page.click('.gh-btn.gh-btn-red.gh-btn-icon.ember-view');
+  }
+
 };

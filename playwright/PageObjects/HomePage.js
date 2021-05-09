@@ -32,4 +32,8 @@ module.exports = class HomePage {
     await this.page.click('.gh-user-name.mb1');
     return this.page.click('a:has-text("Your profile")');
   }
+
+  async goToViewSite() {
+    return this.page.click('.relative > span > a[href="#/site/"]');
+  }
 };

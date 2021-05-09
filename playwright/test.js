@@ -11,11 +11,11 @@ const PageDetailPage = require('./PageObjects/PageDetailPage.js');
 const PagePreviewPage = require('./PageObjects/PagePreviewPage.js');
 const TagsPage = require('./PageObjects/TagsPage.js');
 const TagDetailPage = require('./PageObjects/TagDetailPage.js');
-const ViewSitePage = require('./PageObjects/ViewSitePage');
+const ViewSitePage = require('./PageObjects/ViewSitePage.js');
 
 // Credentials
 const url = 'http://localhost:2368/ghost';
-let email = "drummerwilliam@gmail.com";
+let email = "emilsonqp@gmail.com";
 let password = "pruebasmiso";
 
 // Tests
@@ -537,3 +537,161 @@ it('F05 - should save draft and publish page', async () => {
   assert(publishedPageTitle != null, "Title is null");
   assert(publishedPageTitle === title, "Title is not the expected");
 });
+
+it('F06 Crear Draft post, validarlo en la lista', async () => {
+  let title = "Last Draft Post";
+  let body = "Last Draft Post Body";
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(url);
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(title)
+  await postDetailPage.enterBodyForNewPost(body);
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByDraftedPostsOption();
+
+  var firstPostTitle = await postsPage.getFirstPostTitle();
+  assert.equal(firstPostTitle, title);
+});
+
+it('F07 Crear 2 post, ordenar la lista por el mas nuevo, validar en la lista que el post mas reciente esté de primeras', async () => {
+  let titlePost1 = "Oldest Post";
+  let bodyPost1 = "Oldest Post Body";
+  let titlePost2 = "Newest Post";
+  let bodyPost2 = "Newest Post Body";
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(url);
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(titlePost1)
+  await postDetailPage.enterBodyForNewPost(bodyPost1);
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(titlePost2)
+  await postDetailPage.enterBodyForNewPost(bodyPost2);
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByPublishedPostsOption();
+  await postsPage.openPostSortByFilterDropdown();
+  await postsPage.selectFilterByNewestPostOption();
+
+  var firstPostTitle = await postsPage.getFirstPostTitle();
+  assert.equal(firstPostTitle, titlePost2);
+});
+
+it('F08 Crear post, ir al sitio web, validar que esté, volver y eliminarlo, ir de nuevo al sitio web y validar que NO esté', async () => {
+  let titlePost = "Post Publicado";
+  let bodyPost = "Post Publicado Body";
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const viewSitePage = new ViewSitePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(url);
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(titlePost)
+  await postDetailPage.enterBodyForNewPost(bodyPost);
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await homePage.goToViewSite();
+
+  var publishedPostTitle = await viewSitePage.getFirstPostTitle();
+  assert(publishedPostTitle != null, "Title is null");
+  assert(publishedPostTitle === titlePost, "Title is not the expected");
+
+  await homePage.goToPosts();
+  await postsPage.clickPostWithTitle(titlePost);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.clickDeletePost();
+  await postDetailPage.clickConfirmDeletePost();
+  await homePage.goToViewSite();
+
+  publishedPostTitle = await viewSitePage.getFirstPostTitle();
+  assert(publishedPostTitle != null, "Title is null");
+  assert(publishedPostTitle != titlePost, "Title is not the expected");
+
+});
+
+it('F09 Crear draft page, ir a lista y verificar que exista', async () => {
+  let titlePage = "New Page";
+  let bodyPage = "New Page Body";
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(url);
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+  await pagesPage.goToCreateNewPage();
+  await pageDetailPage.enterTitleForNewPage(titlePage);
+  await pageDetailPage.enterBodyForNewPage(bodyPage);
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByDraftedPagesOption();
+  
+  var firstPageTitle = await pagesPage.getFirstPageTitle();
+  assert.equal(firstPageTitle, titlePage);
+});
+
+it('F10 Crear page, ir a lista, editar el page, ingresamos fecha de publicación futura, validar error generado', async () => {
+  let titlePage = "New Page";
+  let bodyPage = "New Page Body";
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(url);
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+  await pagesPage.goToCreateNewPage();
+  await pageDetailPage.enterTitleForNewPage(titlePage);
+  await pageDetailPage.enterBodyForNewPage(bodyPage);
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.clickPageWithTitle(titlePage);
+  await pageDetailPage.openPageSettings();
+
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  await pageDetailPage.fillDate(tomorrow.toISOString().split('T')[0]);
+  
+  const dateError = await pageDetailPage.getFutureDateError();
+  const dateErrorText = dateError ? await dateError.innerText() : null;
+  assert(dateErrorText != null, "Error message is null");
+  assert(dateErrorText === "Must be in the past", "Error message is not the expected");
+});
+
+
