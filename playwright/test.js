@@ -30,36 +30,29 @@ afterEach(async () => {
 it('should publish post and remain publish even if I log out and log in again', async () => {
   let title = `${Date.now()}`;
   let body = `${Date.now()} body.`
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
 
   await page.goto(url);
-  const loginPage = new LoginPage(page);
   await loginPage.enterEmail(email);
   await loginPage.enterPassword(password);
   await loginPage.clickLogin();
-
-  const homePage = new HomePage(page);
   await homePage.goToPosts();
-
-  const postsPage = new PostsPage(page);
   await postsPage.goToCreateNewPost();
-
-  const postDetailPage = new PostDetailPage(page);
   await postDetailPage.enterTitleForNewPost(title)
   await postDetailPage.enterBodyForNewPost(body);
   await postDetailPage.publishPost();
   await postDetailPage.returnToPostsListFromPublishedPost();
-
-
   await homePage.closePublishedPostNotification();
   await homePage.signOut();
-
   await loginPage.enterEmail(email);
   await loginPage.enterPassword(password);
   await loginPage.clickLogin();
-
   await homePage.goToPosts();
-  postsPage.openPostTypeFilterDropdown();
-  postsPage.selectFilterByPublishedPostsOption();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByPublishedPostsOption();
 
   let firstPostTitle = await postsPage.getFirstPostTitle();
   assert.equal(firstPostTitle, title);
