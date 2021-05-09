@@ -1,10 +1,18 @@
+// Imports
 const playwright = require('playwright');
 const assert = require('assert')
+const LoginPage = require('./PageObjects/LoginPage.js');
+const HomePage = require('./PageObjects/HomePage.js');
+const PostsPage = require('./PageObjects/PostsPage.js');
+const PostDetailPage = require('./PageObjects/PostDetailPage.js');
 
+
+// Credentials
 const url = 'http://localhost:2368/ghost';
 let email = "drummerwilliam@gmail.com";
 let password = "pruebasmiso";
 
+// Tests
 let browser;
 let page;
 let context;
@@ -24,34 +32,40 @@ it('should publish post and remain publish even if I log out and log in again', 
   let body = `${Date.now()} body.`
 
   await page.goto(url);
-  await page.type('input[name="identification"]', email);
-  await page.type('input[name="password"]', password);
-  await page.click('css=button.login');
-  await page.click('.gh-nav-list-new.relative > a[href="#/posts/"]');
-  await page.click('a[href="#/editor/post/"]');
-  await page.type('.gh-editor-title.ember-text-area.gh-input.ember-view', title);
-  await page.click('.koenig-editor__editor.__mobiledoc-editor');
-  page.keyboard.type(body);
-  await page.click('.gh-btn.gh-btn-outline.gh-publishmenu-trigger.ember-basic-dropdown-trigger.ember-view');
-  await page.click('.gh-btn.gh-btn-blue.gh-publishmenu-button.gh-btn-icon.ember-view');
-  await page.click('a[href="#/posts/"].blue.link.fw4.flex.items-center.ember-view');
-  await page.click('.gh-notification-close');
-  await page.click('.gh-user-name.mb1');
-  await page.click('a[href="#/signout/"]');
-  await page.type('input[name="identification"]', email);
-  await page.type('input[name="password"]', password);
-  await page.click('css=button.login');
-  await page.click('.gh-nav-list-new.relative > a[href="#/posts/"]');
-  await new Promise(r => setTimeout(r, 1000));
-  await page.click('span:has-text("All posts")');
-  await new Promise(r => setTimeout(r, 1000));
-  await page.click('.ember-power-select-option:has-text("Published posts")');
-  await new Promise(r => setTimeout(r, 1000));
+  const loginPage = new LoginPage(page);
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
 
-  const postsTitles = await page.$$(".gh-content-entry-title");
-  let text = await postsTitles[0].innerText()
-  assert.equal(text, title);
+  const homePage = new HomePage(page);
+  await homePage.goToPosts();
+
+  const postsPage = new PostsPage(page);
+  await postsPage.goToCreateNewPost();
+
+  const postDetailPage = new PostDetailPage(page);
+  await postDetailPage.enterTitleForNewPost(title)
+  await postDetailPage.enterBodyForNewPost(body);
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsListFromPublishedPost();
+
+
+  await homePage.closePublishedPostNotification();
+  await homePage.signOut();
+
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+
+  await homePage.goToPosts();
+  postsPage.openPostTypeFilterDropdown();
+  postsPage.selectFilterByPublishedPostsOption();
+
+  let firstPostTitle = await postsPage.getFirstPostTitle();
+  assert.equal(firstPostTitle, title);
 });
+
+describe.skip('buenas', () => {
 
 it('should publish a drafted post', async () => {
   let title = `${Date.now()}`;
@@ -226,3 +240,4 @@ it('should create tag, assign that tag to a post, delete the tag and deassign th
   tags = await page.$$(".ember-power-select-multiple-option.tag-token.js-draggableObject.draggable-object.ember-view");
   assert.equal(tags.length, 0);
 });
+})
