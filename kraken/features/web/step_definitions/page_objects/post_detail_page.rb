@@ -57,4 +57,10 @@ class PostDetailPage
       :css, '.ember-power-select-option'
     ).click
   end
+
+  def tags_name
+    @driver.find_elements(
+      :css, '.ember-power-select-multiple-option.tag-token.js-draggableObject.draggable-object.ember-view'
+    ).map(&:text)
+  end
 end

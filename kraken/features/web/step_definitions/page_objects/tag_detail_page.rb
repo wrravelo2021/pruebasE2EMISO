@@ -12,19 +12,19 @@ class TagDetailPage
   end
 
   def click_save
-    @driver.find_elements(
+    @driver.find_element(
       :css, '.gh-btn.gh-btn-blue.gh-btn-icon.ember-view'
     ).click
   end
 
   def click_delete
-    @driver.find_elements(
+    @driver.find_element(
       :css, '.gh-btn.gh-btn-red.gh-btn-icon.mb15'
     ).click
   end
 
   def click_confirm_delete
-    @driver.find_elements(
+    @driver.find_element(
       :css, '.gh-btn.gh-btn-red.gh-btn-icon.ember-view'
     ).click
   end

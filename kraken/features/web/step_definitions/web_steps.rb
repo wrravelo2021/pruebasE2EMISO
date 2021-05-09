@@ -233,6 +233,26 @@ if ENV['ADB_DEVICE_ARG'].nil?
     sleep 1
   end
 
+  Then(/^I see tag with name "([^"]*)" assigned$/) do |name|
+    post_detail_page = PostDetailPage.new(@driver)
+    tags = post_detail_page.tags_name
+    found_tag = tags.select do |tag|
+      tag.strip == name
+    end.first
+    expect(found_tag).not_to be_nil
+    sleep 1
+  end
+
+  Then(/^I dont see tag with name "([^"]*)" assigned$/) do |name|
+    post_detail_page = PostDetailPage.new(@driver)
+    tags = post_detail_page.tags_name
+    found_tag = tags.select do |tag|
+      tag.strip == name
+    end.first
+    expect(found_tag).to be_nil
+    sleep 1
+  end
+
   ####################
   # Posts page #######
   ####################
