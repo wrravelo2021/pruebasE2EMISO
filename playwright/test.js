@@ -135,8 +135,8 @@ it('should change user password and login correctly.', async () => {
 
 it('should schedule a new page and filter it in the list of pages by scheduled status.', async () => {
   const test = 'F14';
-  const titlePost = "Escenario de prueba: " + test +  ' - ' + Date.now();
-  const bodyPost = "Esta es una nueva Page creada para el escenario de prueba: " + test;
+  const titlePage = "Escenario de prueba: " + test +  ' - ' + Date.now();
+  const bodyPage = "Esta es una nueva Page creada para el escenario de prueba: " + test;
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const pagePage = new PagesPage(page);
@@ -148,8 +148,8 @@ it('should schedule a new page and filter it in the list of pages by scheduled s
   await loginPage.clickLogin();
   await homePage.goToPages();
   await pagePage.goToCreateNewPage();
-  await pageDetailPage.enterTitleForNewPage(titlePost);
-  await pageDetailPage.enterBodyForNewPage(bodyPost);
+  await pageDetailPage.enterTitleForNewPage(titlePage);
+  await pageDetailPage.enterBodyForNewPage(bodyPage);
   await pageDetailPage.schedulePage();
   await pageDetailPage.returnToPagesList();
   await homePage.closePublishedPostNotification();
@@ -157,7 +157,48 @@ it('should schedule a new page and filter it in the list of pages by scheduled s
   await pagePage.selectFilterByScheduledPagesOption();
 
   let firstPageTitle = await pagePage.getFirstPageTitle();
-  assert.strictEqual(firstPageTitle, titlePost);
+  assert.strictEqual(firstPageTitle, titlePage);
+});
+
+it('should create a tag and then create a new post with this tag.', async () => {
+  const test = 'F15';
+  const tag = 'F15-' + + Date.now();
+  const description = "This Tag was created by Playwright";
+  const titlePost = "Escenario de prueba: " + test +  ' - ' + Date.now();
+  const bodyPost = "Esta es una nueva Page creada para el escenario de prueba: " + test;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const tagsPage = new TagsPage(page);
+  const tagDetailPage = new TagDetailPage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(url);
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  await homePage.goToTags();
+  await tagsPage.goToCreateNewTag();
+  await tagDetailPage.enterTitleForNewTag(tag);
+  await tagDetailPage.enterDescriptionForNewTag(description);
+  await tagDetailPage.enterMetaTitleForNewTag(tag);
+  await tagDetailPage.enterMetaDescriptionForNewTag(description);
+  await tagDetailPage.clickSave();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(titlePost);
+  await postDetailPage.enterBodyForNewPost(bodyPost);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.assignTagWithName(tag);
+  await postDetailPage.closePostSettings();
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await homePage.closePublishedPostNotification();
+  await postsPage.openPostTagsFilterDropdown();
+  await postsPage.selectFilterByTagName(tag);
+
+  let firstTagTitle = await postsPage.getFirstPostTitle();
+  assert.strictEqual(firstTagTitle, titlePost);
 });
 
 it('should publish post and remain publish even if I log out and log in again', async () => {
