@@ -4,11 +4,13 @@ if ENV['ADB_DEVICE_ARG'].nil?
     .sort_by { |file| File.mtime(file) }
     .each { |file| require file }
 
+  # Credentials
+  page_url = 'http://localhost:2371/ghost'
   user_email = 'drummerwilliam@gmail.com'
   user_password = 'pruebasmiso'
 
   When('I navigate to ghost admin') do
-    @driver.navigate.to 'http://localhost:2371/ghost'
+    @driver.navigate.to page_url
     sleep 1
   end
 
