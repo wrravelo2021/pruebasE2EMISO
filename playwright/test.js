@@ -160,7 +160,7 @@ it('should schedule a new page and filter it in the list of pages by scheduled s
   assert.strictEqual(firstPageTitle, titlePost);
 });
 
-it('should publish post and remain publish even if I log out and log in again', async () => {
+it('F16 - should publish post and remain publish even if I log out and log in again', async () => {
   let title = `${Date.now()}`;
   let body = `${Date.now()} body.`
   const loginPage = new LoginPage(page);
@@ -191,7 +191,7 @@ it('should publish post and remain publish even if I log out and log in again', 
   assert.equal(firstPostTitle, title);
 });
 
-it('should publish a drafted post', async () => {
+it('F17 - should publish a drafted post', async () => {
   let title = `${Date.now()}`;
   let body = `${Date.now()} body.`
 
@@ -226,7 +226,7 @@ it('should publish a drafted post', async () => {
   assert.equal(firstPostTitle, title);
 });
 
-it('should change user password and login whith wrong password.', async () => {
+it('F18 - should change user password and login whith wrong password', async () => {
   let newPassword = "newpruebasmiso";
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -262,7 +262,7 @@ it('should change user password and login whith wrong password.', async () => {
   await profilePage.clickChangePassword();
 });
 
-it('should edit a page', async () => {
+it('F19 - should edit a page', async () => {
   let title = `${Date.now()}`;
   let body = `${Date.now()} body.`
 
@@ -305,7 +305,7 @@ it('should edit a page', async () => {
   assert.equal(pageBodyContent.trim(), newBody);
 });
 
-it('should create tag, assign that tag to a post, delete the tag and deassign the tag from the post', async () => {
+it('F20 - should create tag, assign that tag to a post, delete the tag and deassign the tag from the post', async () => {
   let tag = `${Date.now()}`;
 
   const loginPage = new LoginPage(page);

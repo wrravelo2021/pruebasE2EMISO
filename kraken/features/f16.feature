@@ -1,7 +1,7 @@
-Feature: Example feature
+Feature: F16
 
   @user1 @web
-  Scenario: As a first user I say hi to a second user
+  Scenario: As a user I should publish post and remain publish even if I log out and log in again
     Given I navigate to ghost admin
     When I enter my email in login page
     And I enter my password in login page

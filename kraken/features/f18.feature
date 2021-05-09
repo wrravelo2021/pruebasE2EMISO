@@ -1,7 +1,7 @@
-Feature: Example feature
+Feature: F18
 
   @user1 @web
-  Scenario: As a first user I say hi to a second user
+  Scenario: As a user I should change user password and login whith wrong password
     Given I navigate to ghost admin
     When I enter my email in login page
     And I enter my password in login page

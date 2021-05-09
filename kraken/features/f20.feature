@@ -1,7 +1,7 @@
-Feature: Example feature
+Feature: F20
 
   @user1 @web
-  Scenario: As a first user I say hi to a second user
+  Scenario: As a user I should create tag, assign that tag to a post, delete the tag and deassign the tag from the post
     Given I navigate to ghost admin
     When I enter my email in login page
     And I enter my password in login page
