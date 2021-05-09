@@ -4,6 +4,9 @@ if ENV['ADB_DEVICE_ARG'].nil?
     .sort_by { |file| File.mtime(file) }
     .each { |file| require file }
 
+  user_email = 'drummerwilliam@gmail.com'
+  user_password = 'pruebasmiso'
+
   When('I navigate to ghost admin') do
     @driver.navigate.to 'http://localhost:2369/ghost'
     sleep 1
@@ -26,13 +29,13 @@ if ENV['ADB_DEVICE_ARG'].nil?
 
   When('I enter my email in login page') do
     login_page = LoginPage.new(@driver)
-    login_page.enter_email('drummerwilliam@gmail.com')
+    login_page.enter_email(user_email)
     sleep 1
   end
 
   When('I enter my password in login page') do
     login_page = LoginPage.new(@driver)
-    login_page.enter_password('pruebasmiso')
+    login_page.enter_password(user_password)
     sleep 1
   end
 
@@ -66,6 +69,12 @@ if ENV['ADB_DEVICE_ARG'].nil?
   When('I close the published post notification') do
     home_page = HomePage.new(@driver)
     home_page.close_published_post_notification
+    sleep 1
+  end
+
+  When('I close the changed password notification') do
+    home_page = HomePage.new(@driver)
+    home_page.close_changed_password_notification
     sleep 1
   end
 
@@ -248,9 +257,21 @@ if ENV['ADB_DEVICE_ARG'].nil?
     sleep 1
   end
 
+  When(/^I enter old password in profile page$/) do
+    profile_page = ProfilePage.new(@driver)
+    profile_page.enter_old_password(user_password)
+    sleep 1
+  end
+
   When(/^I enter new password "([^"]*)" in profile page$/) do |password|
     profile_page = ProfilePage.new(@driver)
     profile_page.enter_new_password(password)
+    sleep 1
+  end
+
+  When('I enter new password as original password in profile page') do
+    profile_page = ProfilePage.new(@driver)
+    profile_page.enter_new_password(user_password)
     sleep 1
   end
 
@@ -262,9 +283,23 @@ if ENV['ADB_DEVICE_ARG'].nil?
     sleep 1
   end
 
+  When(
+    'I enter new password confirmation as original password in profile page'
+  ) do
+    profile_page = ProfilePage.new(@driver)
+    profile_page.enter_new_password_confirmation(user_password)
+    sleep 1
+  end
+
   When('I click change password') do
     profile_page = ProfilePage.new(@driver)
     profile_page.click_change_password
+    sleep 1
+  end
+
+  When('I scroll to bottom in profile page') do
+    profile_page = ProfilePage.new(@driver)
+    profile_page.scroll_to_bottom
     sleep 1
   end
 

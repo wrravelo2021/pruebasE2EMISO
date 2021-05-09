@@ -6,7 +6,13 @@ class ProfilePage
   end
 
   def scroll_to_bottom
-    raise 'TODO'
+    element = @driver.find_element(
+      :css, '#user-password-old'
+    )
+    @driver.execute_script(
+      'arguments[0].scrollIntoView(true);',
+      element
+    )
   end
 
   def enter_old_password(password)
@@ -28,7 +34,7 @@ class ProfilePage
   end
 
   def click_change_password
-    @driver.find_elements(
+    @driver.find_element(
       :css, '.gh-btn.gh-btn-red.gh-btn-icon.button-change-password.ember-view'
     ).click
   end

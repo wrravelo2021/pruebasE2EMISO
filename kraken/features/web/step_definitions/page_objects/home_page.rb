@@ -29,6 +29,12 @@ class HomePage
     ).click
   end
 
+  def close_changed_password_notification
+    @driver.find_element(
+      :css, '.gh-notification-close'
+    ).click
+  end
+
   def sign_out
     @driver.find_element(
       :css, '.gh-user-name.mb1'
