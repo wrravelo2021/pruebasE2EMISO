@@ -20,4 +20,25 @@ module.exports = class PagesPage {
   async clickPageWithTitle(title) {
     return this.page.click(`.gh-content-entry-title:has-text("${title}")`);
   }
+
+  async openPageTypeFilterDropdown() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('.ember-power-select-selected-item:nth-child(1)');
+  }
+
+  async selectFilterByPublishedPagesOption() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('.ember-power-select-option:has-text("Published pages")');
+  }
+
+  async selectFilterByDraftedPagesOption() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('.ember-power-select-option:has-text("Draft pages")');
+  }
+
+  async getFirstPageTitle() {
+    await new Promise(r => setTimeout(r, 1000));
+    const pagesTitles = await this.page.$$(".gh-content-entry-title");
+    return pagesTitles[0].innerText();
+  }
 };
