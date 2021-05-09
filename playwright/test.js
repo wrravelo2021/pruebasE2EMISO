@@ -529,7 +529,7 @@ it('F05 - should save draft and publish page', async () => {
   assert(draftPageTitle != null, "Page title is null");
   assert(draftPageTitle === title, "Page title is not the expected");
 
-  await pagesPage.clickPageWithTitle();
+  await pagesPage.clickPageWithTitle(title);
   await pageDetailPage.publishPage();
   await pageDetailPage.returnToPagesList();
   await pagesPage.openPageTypeFilterDropdown();
