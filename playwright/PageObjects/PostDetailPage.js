@@ -9,11 +9,32 @@ module.exports = class PostDetailPage {
 
   async enterBodyForNewPost(body) {
     await this.page.click('.koenig-editor__editor.__mobiledoc-editor');
-    this.page.keyboard.type(body);
+    return this.page.keyboard.type(body);
+  }
+
+  async deleteTitlePost() {
+    await this.page.click('.gh-editor-title.ember-text-area.gh-input.ember-view');
+    await this.page.keyboard.press("Meta+A");
+    await this.page.keyboard.press("Control+A");
+    await this.page.keyboard.press("Delete");
+  }
+
+  async deleteBodyPost() {
+    await this.page.click('.koenig-editor__editor.__mobiledoc-editor');
+    await this.page.keyboard.press("Meta+A");
+    await this.page.keyboard.press("Control+A");
+    await this.page.keyboard.press("Delete");
   }
 
   async publishPost(body) {
+    await new Promise(r => setTimeout(r, 1000));
     await this.page.click('.gh-btn.gh-btn-outline.gh-publishmenu-trigger.ember-basic-dropdown-trigger.ember-view');
+    return this.page.click('.gh-btn.gh-btn-blue.gh-publishmenu-button.gh-btn-icon.ember-view');
+  }
+
+  async schedulePost() {
+    await this.page.click('.gh-btn.gh-btn-outline.gh-publishmenu-trigger.ember-basic-dropdown-trigger.ember-view');
+    await this.page.click('div:text("Schedule it for later")');
     return this.page.click('.gh-btn.gh-btn-blue.gh-publishmenu-button.gh-btn-icon.ember-view');
   }
 
@@ -36,5 +57,24 @@ module.exports = class PostDetailPage {
 
   async getTagsName() {
     return this.page.$$(".ember-power-select-multiple-option.tag-token.js-draggableObject.draggable-object.ember-view");
+  }
+
+  async pressDeleteOnElement(element, n){
+    for (var i = 0; i <= 10; i++) {
+      await element.press('Delete');
+    }
+  }
+  
+  async fillDate(date){
+    await new Promise(r => setTimeout(r, 1000));
+    const dateField = await this.page.$('.gh-date-time-picker-date input');
+    await this.pressDeleteOnElement(dateField, 10);
+    await dateField.type(date);
+    await dateField.press('Enter');
+  }
+
+  async getFutureDateError(){
+    await new Promise(r => setTimeout(r, 1000));
+    return await this.page.$('.gh-date-time-picker-error');
   }
 };

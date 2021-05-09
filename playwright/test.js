@@ -11,6 +11,7 @@ const PageDetailPage = require('./PageObjects/PageDetailPage.js');
 const PagePreviewPage = require('./PageObjects/PagePreviewPage.js');
 const TagsPage = require('./PageObjects/TagsPage.js');
 const TagDetailPage = require('./PageObjects/TagDetailPage.js');
+const ViewSitePage = require('./PageObjects/ViewSitePage');
 
 // Credentials
 const url = 'http://localhost:2368/ghost';
@@ -30,6 +31,133 @@ beforeEach(async() => {
 
 afterEach(async () => {
   await browser.close();
+});
+
+it('should schedule a new post and filter it in the list of posts by scheduled status.', async () => {
+  const test = 'F11';
+  const titlePost = "Escenario de prueba: " + test +  ' - ' + Date.now();
+  const bodyPost = "Este es un nuevo post creado para el escenario de prueba: " + test;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(url);
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(titlePost);
+  await postDetailPage.enterBodyForNewPost(bodyPost);
+  await postDetailPage.schedulePost();
+  await postDetailPage.returnToPostsList();
+  await homePage.closePublishedPostNotification();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByScheduledPostsOption();
+
+  let firstPostTitle = await postsPage.getFirstPostTitle();
+  assert.strictEqual(firstPostTitle, titlePost);
+});
+
+it('should create a post, then modify it and validate that the modification was made.', async () => {
+  const test = 'F12';
+  const titlePost = "Escenario de prueba: " + test +  ' - ' + Date.now();
+  const bodyPost = "Este es un nuevo post creado para el escenario de prueba: " + test;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+  const viewSitePage = new ViewSitePage(page);
+
+  await page.goto(url);
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(titlePost);
+  await postDetailPage.enterBodyForNewPost(bodyPost);
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await homePage.closePublishedPostNotification();
+  await homePage.goToViewSite();
+
+  let firstPostTitle = await viewSitePage.getFirstPostTitle();
+  assert.strictEqual(firstPostTitle, titlePost);
+
+  await homePage.goToPosts();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByPublishedPostsOption();
+  await postsPage.clickPostWithTitle(titlePost);
+  await postDetailPage.deleteTitlePost();
+  await postDetailPage.deleteBodyPost();
+  await postDetailPage.enterTitleForNewPost(titlePost + ' (Modificado)');
+  await postDetailPage.enterBodyForNewPost(bodyPost + ' (Modificado)');
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await homePage.closePublishedPostNotification();
+  await homePage.goToViewSite();
+
+  firstPostTitle = await viewSitePage.getFirstPostTitle();
+  assert.strictEqual(firstPostTitle, titlePost + ' (Modificado)');
+});
+
+it('should change user password and login correctly.', async () => {
+  // Test F13
+  let newPassword = "newpruebasmiso";
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
+
+  await page.goto(url);
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.scrollToBottom();
+  await profilePage.enterOldPassword(password);
+  await profilePage.enterNewPassword(newPassword);
+  await profilePage.enterNewPasswordConfirmation(newPassword);
+  await profilePage.clickChangePassword();
+  await homePage.closePublishedPostNotification();
+  await homePage.signOut();
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(newPassword);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.scrollToBottom();
+  await profilePage.enterOldPassword(newPassword);
+  await profilePage.enterNewPassword(password);
+  await profilePage.enterNewPasswordConfirmation(password);
+  await profilePage.clickChangePassword();
+});
+
+it('should schedule a new page and filter it in the list of pages by scheduled status.', async () => {
+  const test = 'F14';
+  const titlePost = "Escenario de prueba: " + test +  ' - ' + Date.now();
+  const bodyPost = "Esta es una nueva Page creada para el escenario de prueba: " + test;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagePage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(url);
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+  await pagePage.goToCreateNewPage();
+  await pageDetailPage.enterTitleForNewPage(titlePost);
+  await pageDetailPage.enterBodyForNewPage(bodyPost);
+  await pageDetailPage.schedulePage();
+  await pageDetailPage.returnToPagesList();
+  await homePage.closePublishedPostNotification();
+  await pagePage.openPageTypeFilterDropdown();
+  await pagePage.selectFilterByScheduledPagesOption();
+
+  let firstPageTitle = await pagePage.getFirstPageTitle();
+  assert.strictEqual(firstPageTitle, titlePost);
 });
 
 it('should publish post and remain publish even if I log out and log in again', async () => {
@@ -98,11 +226,8 @@ it('should publish a drafted post', async () => {
   assert.equal(firstPostTitle, title);
 });
 
-it('should change user password', async () => {
-  let title = `${Date.now()}`;
-  let body = `${Date.now()} body.`
+it('should change user password and login whith wrong password.', async () => {
   let newPassword = "newpruebasmiso";
-
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -117,7 +242,17 @@ it('should change user password', async () => {
   await profilePage.enterNewPassword(newPassword);
   await profilePage.enterNewPasswordConfirmation(newPassword);
   await profilePage.clickChangePassword();
+  await homePage.closePublishedPostNotification();
   await homePage.signOut();
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  
+  let messageError = await loginPage.getMessageError();
+  assert.strictEqual(messageError.trim(), "Your password is incorrect.");
+  
+  await loginPage.clearEmail();
+  await loginPage.clearPassword();
   await loginPage.enterEmail(email);
   await loginPage.enterPassword(newPassword);
   await loginPage.clickLogin();
@@ -174,7 +309,6 @@ it('should edit a page', async () => {
 
 it('should create tag, assign that tag to a post, delete the tag and deassign the tag from the post', async () => {
   let tag = `${Date.now()}`;
-  let newPassword = "newpruebasmiso";
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -220,4 +354,147 @@ it('should create tag, assign that tag to a post, delete the tag and deassign th
 
   tags = await postDetailPage.getTagsName();
   assert.equal(tags.length, 0);
+});
+
+it('F01 - should create and publish post', async () => {
+  const title = `${Date.now()}`;
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(url);
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(title);
+  await postDetailPage.enterBodyForNewPost('Cuerpo 1');
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByPublishedPostsOption();
+  const publishedPostTitle = await postsPage.getFirstPostTitle();
+  assert(publishedPostTitle != null, "Title is null");
+  assert(publishedPostTitle === title, "Title is not the expected");
+});
+
+it('F02 - should create and publish post on site', async () => {
+  const title = `${Date.now()}`;
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+  const viewSitePage = new ViewSitePage(page);
+
+  await page.goto(url);
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(title);
+  await postDetailPage.enterBodyForNewPost('Cuerpo 2');
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await homePage.goToViewSite();
+  const publishedPostTitle = await viewSitePage.getFirstPostTitle();
+  assert(publishedPostTitle != null, "Title is null");
+  assert(publishedPostTitle === title, "Title is not the expected");
+});
+
+it('F03 - should not allow future date for post', async () => {
+  const title = `${Date.now()}`;
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(url);
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(title);
+  await postDetailPage.enterBodyForNewPost('Cuerpo 3');
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.clickPostWithTitle(title);
+  await postDetailPage.openPostSettings();
+
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  await postDetailPage.fillDate(tomorrow.toISOString().split('T')[0]);
+
+  const dateError = await postDetailPage.getFutureDateError();
+  const dateErrorText = dateError ? await dateError.innerText() : null;
+  assert(dateErrorText != null, "Error message is null");
+  assert(dateErrorText === "Must be in the past", "Error message is not the expected");
+});
+
+it('F04 - should publish new page', async () => {
+  const title = `${Date.now()}`;
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(url);
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+  await pagesPage.goToCreateNewPage();
+  await pageDetailPage.enterTitleForNewPage(title);
+  await pageDetailPage.enterBodyForNewPage('Cuerpo 4');
+  await pageDetailPage.publishPage();
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByPublishedPagesOption();
+
+  const publishedPageTitle = await pagesPage.getFirstPageTitle();
+  assert(publishedPageTitle != null, "Title is null");
+  assert(publishedPageTitle === title, "Title is not the expected");
+});
+
+it('F05 - should save draft and publish page', async () => {
+  const title = `${Date.now()}`;
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(url);
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+  await pagesPage.goToCreateNewPage();
+  await pageDetailPage.enterTitleForNewPage(title);
+  await pageDetailPage.enterBodyForNewPage('Cuerpo 5');
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByDraftedPagesOption();
+
+  const draftPageTitle = await pagesPage.getFirstPageTitle();
+  assert(draftPageTitle != null, "Page title is null");
+  assert(draftPageTitle === title, "Page title is not the expected");
+
+  await pagesPage.clickPageWithTitle();
+  await pageDetailPage.publishPage();
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByPublishedPagesOption();
+
+  const publishedPageTitle = await pagesPage.getFirstPageTitle();
+  assert(publishedPageTitle != null, "Title is null");
+  assert(publishedPageTitle === title, "Title is not the expected");
 });

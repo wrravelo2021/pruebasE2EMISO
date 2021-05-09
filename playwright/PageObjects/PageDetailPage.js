@@ -17,6 +17,13 @@ module.exports = class PageDetailPage {
     return this.page.click('.gh-btn.gh-btn-blue.gh-publishmenu-button.gh-btn-icon.ember-view');
   }
 
+  async schedulePage() {
+    await new Promise(r => setTimeout(r, 1000));
+    await this.page.click('.gh-btn.gh-btn-outline.gh-publishmenu-trigger.ember-basic-dropdown-trigger.ember-view');
+    await this.page.click('div:text("Schedule it for later")');
+    return this.page.click('.gh-btn.gh-btn-blue.gh-publishmenu-button.gh-btn-icon.ember-view');
+  }
+
   async returnToPagesList() {
     return this.page.click('a.blue.link.fw4.flex.items-center.ember-view');
   }
