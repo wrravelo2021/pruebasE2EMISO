@@ -17,7 +17,7 @@ module.exports = class PostDetailPage {
     return this.page.click('.gh-btn.gh-btn-blue.gh-publishmenu-button.gh-btn-icon.ember-view');
   }
 
-  async returnToPostsListFromPublishedPost(body) {
-    return this.page.click('a[href="#/posts/"].blue.link.fw4.flex.items-center.ember-view');
+  async returnToPostsList(body) {
+    return this.page.click('a.blue.link.fw4.flex.items-center.ember-view');
   }
 };

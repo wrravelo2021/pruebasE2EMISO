@@ -9,7 +9,7 @@ module.exports = class PostsPage {
 
   async openPostTypeFilterDropdown() {
     await new Promise(r => setTimeout(r, 1000));
-    return this.page.click('span:has-text("All posts")');
+    return this.page.click('.ember-power-select-selected-item:nth-child(1)');
   }
 
   async selectFilterByPublishedPostsOption() {
@@ -17,9 +17,18 @@ module.exports = class PostsPage {
     return this.page.click('.ember-power-select-option:has-text("Published posts")');
   }
 
+  async selectFilterByDraftedPostsOption() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('.ember-power-select-option:has-text("Draft posts")');
+  }
+
   async getFirstPostTitle() {
     await new Promise(r => setTimeout(r, 1000));
     const postsTitles = await this.page.$$(".gh-content-entry-title");
     return postsTitles[0].innerText();
+  }
+
+  async clickPostWithTitle(title) {
+    return this.page.click(`.gh-content-entry-title:has-text("${title}")`);
   }
 };

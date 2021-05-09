@@ -44,7 +44,7 @@ it('should publish post and remain publish even if I log out and log in again', 
   await postDetailPage.enterTitleForNewPost(title)
   await postDetailPage.enterBodyForNewPost(body);
   await postDetailPage.publishPost();
-  await postDetailPage.returnToPostsListFromPublishedPost();
+  await postDetailPage.returnToPostsList();
   await homePage.closePublishedPostNotification();
   await homePage.signOut();
   await loginPage.enterEmail(email);
@@ -58,47 +58,42 @@ it('should publish post and remain publish even if I log out and log in again', 
   assert.equal(firstPostTitle, title);
 });
 
-describe.skip('buenas', () => {
-
 it('should publish a drafted post', async () => {
   let title = `${Date.now()}`;
   let body = `${Date.now()} body.`
 
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
   await page.goto(url);
-  await page.type('input[name="identification"]', email);
-  await page.type('input[name="password"]', password);
-  await page.click('css=button.login');
-  await page.click('.gh-nav-list-new.relative > a[href="#/posts/"]');
-  await page.click('a[href="#/editor/post/"]');
-  await page.type('.gh-editor-title.ember-text-area.gh-input.ember-view', title);
-  await page.click('.koenig-editor__editor.__mobiledoc-editor');
-  page.keyboard.type(body);
-  await page.click('a[href="#/posts/"].blue.link.fw4.flex.items-center.ember-view');
-  await new Promise(r => setTimeout(r, 1000));
-  await page.click('span:has-text("All posts")');
-  await new Promise(r => setTimeout(r, 1000));
-  await page.click('.ember-power-select-option:has-text("Draft posts")');
-  await new Promise(r => setTimeout(r, 1000));
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(title)
+  await postDetailPage.enterBodyForNewPost(body);
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByDraftedPostsOption();
 
-  var postsTitles = await page.$$(".gh-content-entry-title");
-  var text = await postsTitles[0].innerText();
-  assert.equal(text, title);
+  var firstPostTitle = await postsPage.getFirstPostTitle();
+  assert.equal(firstPostTitle, title);
 
-  await page.click(`.gh-content-entry-title:has-text("${title}")`);
-  await page.click('.gh-btn.gh-btn-outline.gh-publishmenu-trigger.ember-basic-dropdown-trigger.ember-view');
-  await page.click('.gh-btn.gh-btn-blue.gh-publishmenu-button.gh-btn-icon.ember-view');
-  await page.click('a[href="#/posts/?type=draft"].blue.link.fw4.flex.items-center.ember-view');
-  await page.click('.gh-notification-close');
-  await new Promise(r => setTimeout(r, 1000));
-  await page.click('span:has-text("Draft posts")');
-  await new Promise(r => setTimeout(r, 1000));
-  await page.click('.ember-power-select-option:has-text("Published posts")');
-  await new Promise(r => setTimeout(r, 1000));
+  await postsPage.clickPostWithTitle(title);
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await homePage.closePublishedPostNotification();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByPublishedPostsOption();
 
-  postsTitles = await page.$$(".gh-content-entry-title");
-  text = await postsTitles[0].innerText();
-  assert.equal(text, title);
+  var firstPostTitle = await postsPage.getFirstPostTitle();
+  assert.equal(firstPostTitle, title);
 });
+
+describe.skip('buenas', () => {
 
 it('should change user password', async () => {
   let title = `${Date.now()}`;
