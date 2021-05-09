@@ -15,6 +15,10 @@ Feature: Example feature
     And I close the changed password notification
     And I sign out
     And I enter my email in login page
+    And I enter my password in login page
+    And I click login
+    And I see wrong password error
+    And I clear password input in login page
     And I enter password "nuevapruebasmiso" in login page
     And I click login
     And I go to my profile

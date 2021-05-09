@@ -8,7 +8,7 @@ if ENV['ADB_DEVICE_ARG'].nil?
   user_password = 'pruebasmiso'
 
   When('I navigate to ghost admin') do
-    @driver.navigate.to 'http://localhost:2369/ghost'
+    @driver.navigate.to 'http://localhost:2371/ghost'
     sleep 1
   end
 
@@ -52,6 +52,19 @@ if ENV['ADB_DEVICE_ARG'].nil?
   When('I click login') do
     login_page = LoginPage.new(@driver)
     login_page.click_login
+    sleep 1
+  end
+
+  When('I clear password input in login page') do
+    login_page = LoginPage.new(@driver)
+    login_page.clear_password
+    sleep 1
+  end
+
+  Then('I see wrong password error') do
+    login_page = LoginPage.new(@driver)
+    error = login_page.error_message
+    expect(error.strip).to eq('Your password is incorrect.')
     sleep 1
   end
 

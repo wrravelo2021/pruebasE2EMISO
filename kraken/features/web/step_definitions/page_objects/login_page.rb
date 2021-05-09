@@ -22,4 +22,16 @@ class LoginPage
       :css, 'button.login'
     ).click
   end
+
+  def error_message
+    @driver.find_element(
+      :css, '.main-error'
+    ).text
+  end
+
+  def clear_password
+    @driver.find_element(
+      :css, 'input[name="password"]'
+    ).clear
+  end
 end
