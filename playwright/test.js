@@ -11,6 +11,7 @@ const PageDetailPage = require('./PageObjects/PageDetailPage.js');
 const PagePreviewPage = require('./PageObjects/PagePreviewPage.js');
 const TagsPage = require('./PageObjects/TagsPage.js');
 const TagDetailPage = require('./PageObjects/TagDetailPage.js');
+const ViewSitePage = require('./PageObjects/ViewSitePage');
 
 // Credentials
 const url = 'http://localhost:2368/ghost';
@@ -34,7 +35,7 @@ afterEach(async () => {
 
 it('should schedule a new post and filter it in the list of posts by scheduled status.', async () => {
   const test = 'F11';
-  const titlePost = "Escenario de prueba: " + test;
+  const titlePost = "Escenario de prueba: " + test +  ' - ' + Date.now();
   const bodyPost = "Este es un nuevo post creado para el escenario de prueba: " + test;
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -88,6 +89,49 @@ it('should publish post and remain publish even if I log out and log in again', 
 
   let firstPostTitle = await postsPage.getFirstPostTitle();
   assert.equal(firstPostTitle, title);
+});
+
+it('should create a post, then modify it and validate that the modification was made.', async () => {
+  const test = 'F12';
+  const titlePost = "Escenario de prueba: " + test +  ' - ' + Date.now();
+  const bodyPost = "Este es un nuevo post creado para el escenario de prueba: " + test;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+  const viewSitePage = new ViewSitePage(page);
+
+  await page.goto(url);
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(titlePost);
+  await postDetailPage.enterBodyForNewPost(bodyPost);
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await homePage.closePublishedPostNotification();
+  await homePage.goToViewSite();
+
+  let firstPostTitle = await viewSitePage.getFirstPostTitle();
+  assert.strictEqual(firstPostTitle, titlePost);
+
+  await homePage.goToPosts();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByPublishedPostsOption();
+  await postsPage.clickPostWithTitle(titlePost);
+  await postDetailPage.deleteTitlePost();
+  await postDetailPage.deleteBodyPost();
+  await postDetailPage.enterTitleForNewPost(titlePost + ' (Modificado)');
+  await postDetailPage.enterBodyForNewPost(bodyPost + ' (Modificado)');
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await homePage.closePublishedPostNotification();
+  await homePage.goToViewSite();
+
+  firstPostTitle = await viewSitePage.getFirstPostTitle();
+  assert.strictEqual(firstPostTitle, titlePost + ' (Modificado)');
 });
 
 it('should publish a drafted post', async () => {

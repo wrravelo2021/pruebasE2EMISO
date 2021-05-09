@@ -3,6 +3,10 @@ module.exports = class HomePage {
     this.page = page;
   }
 
+  async goToViewSite() {
+    return this.page.click('a:text("View site")');
+  }
+
   async goToPosts() {
     return this.page.click('.gh-nav-list-new.relative > a[href="#/posts/"]');
   }
