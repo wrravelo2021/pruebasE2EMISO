@@ -1,16 +1,16 @@
 ## Pre-requisitos
 
-### Tecnología
+### Tecnologías
 
 - Node.js ≥ v15.14.0
 - Ruby ≥ 2.6.5
 - Ghost v3.3.0
 
-### Credenciales 🎭
+### Credenciales
 
 Para las pruebas se debe crear un usuario de Ghost que luego debe ser remplazado en los archivos de pruebas como se indican en las instrucciones.
 
-## Playwright
+## Playwright 🎭
 
 A continuación se presentan las instrucciones para ejecutar las pruebas desarrolladas con playwright luego de clonar el repositorio desde la carpeta principal.
 
