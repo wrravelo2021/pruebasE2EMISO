@@ -211,7 +211,7 @@ it('should create tag, assign that tag to a post, delete the tag and deassign th
   await postDetailPage.publishPost();
   await postDetailPage.returnToPostsList();
   await homePage.goToTags();
-  await tagsPage.clickPostWithName(tag);
+  await tagsPage.clickTagWithName(tag);
   await tagDetailPage.clickDelete();
   await tagDetailPage.clickConfirmDelete();
   await homePage.goToPosts();
