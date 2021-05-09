@@ -17,6 +17,12 @@ module.exports = class PostDetailPage {
     return this.page.click('.gh-btn.gh-btn-blue.gh-publishmenu-button.gh-btn-icon.ember-view');
   }
 
+  async schedulePost() {
+    await this.page.click('.gh-btn.gh-btn-outline.gh-publishmenu-trigger.ember-basic-dropdown-trigger.ember-view');
+    await this.page.click('div:text("Schedule it for later")');
+    return this.page.click('.gh-btn.gh-btn-blue.gh-publishmenu-button.gh-btn-icon.ember-view');
+  }
+
   async returnToPostsList(body) {
     return this.page.click('a.blue.link.fw4.flex.items-center.ember-view');
   }

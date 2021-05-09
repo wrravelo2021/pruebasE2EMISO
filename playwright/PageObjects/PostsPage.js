@@ -17,6 +17,11 @@ module.exports = class PostsPage {
     return this.page.click('.ember-power-select-option:has-text("Published posts")');
   }
 
+  async selectFilterByScheduledPostsOption() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('.ember-power-select-option:has-text("Scheduled posts")');
+  }
+
   async selectFilterByDraftedPostsOption() {
     await new Promise(r => setTimeout(r, 1000));
     return this.page.click('.ember-power-select-option:has-text("Draft posts")');

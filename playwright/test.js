@@ -32,6 +32,33 @@ afterEach(async () => {
   await browser.close();
 });
 
+it('should schedule a new post and filter it in the list of posts by scheduled status.', async () => {
+  const test = 'F11';
+  const titlePost = "Escenario de prueba: " + test;
+  const bodyPost = "Este es un nuevo post creado para el escenario de prueba: " + test;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(url);
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(titlePost);
+  await postDetailPage.enterBodyForNewPost(bodyPost);
+  await postDetailPage.schedulePost();
+  await postDetailPage.returnToPostsList();
+  await homePage.closePublishedPostNotification();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByScheduledPostsOption();
+
+  let firstPostTitle = await postsPage.getFirstPostTitle();
+  assert.strictEqual(firstPostTitle, titlePost);
+});
+
 it('should publish post and remain publish even if I log out and log in again', async () => {
   let title = `${Date.now()}`;
   let body = `${Date.now()} body.`
