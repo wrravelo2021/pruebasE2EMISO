@@ -7,6 +7,10 @@ module.exports = class HomePage {
     return this.page.click('.gh-nav-list-new.relative > a[href="#/posts/"]');
   }
 
+  async goToPages() {
+    return this.page.click('a[href="#/pages/"]');
+  }
+
   async closePublishedPostNotification() {
     return this.page.click('.gh-notification-close');
   }
