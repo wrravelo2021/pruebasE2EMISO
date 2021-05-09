@@ -133,6 +133,33 @@ it('should change user password and login correctly.', async () => {
   await profilePage.clickChangePassword();
 });
 
+it('should schedule a new page and filter it in the list of pages by scheduled status.', async () => {
+  const test = 'F14';
+  const titlePost = "Escenario de prueba: " + test +  ' - ' + Date.now();
+  const bodyPost = "Esta es una nueva Page creada para el escenario de prueba: " + test;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagePage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(url);
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+  await pagePage.goToCreateNewPage();
+  await pageDetailPage.enterTitleForNewPage(titlePost);
+  await pageDetailPage.enterBodyForNewPage(bodyPost);
+  await pageDetailPage.schedulePage();
+  await pageDetailPage.returnToPagesList();
+  await homePage.closePublishedPostNotification();
+  await pagePage.openPageTypeFilterDropdown();
+  await pagePage.selectFilterByScheduledPagesOption();
+
+  let firstPageTitle = await pagePage.getFirstPageTitle();
+  assert.strictEqual(firstPageTitle, titlePost);
+});
+
 it('should publish post and remain publish even if I log out and log in again', async () => {
   let title = `${Date.now()}`;
   let body = `${Date.now()} body.`

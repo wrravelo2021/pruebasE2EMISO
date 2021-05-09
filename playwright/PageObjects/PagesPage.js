@@ -17,18 +17,13 @@ module.exports = class PagesPage {
     return this.page.click('.ember-power-select-option:has-text("Published pages")');
   }
 
+  async selectFilterByScheduledPagesOption() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('.ember-power-select-option:has-text("Scheduled pages")');
+  }
+
   async clickPageWithTitle(title) {
     return this.page.click(`.gh-content-entry-title:has-text("${title}")`);
-  }
-
-  async openPageTypeFilterDropdown() {
-    await new Promise(r => setTimeout(r, 1000));
-    return this.page.click('.ember-power-select-selected-item:nth-child(1)');
-  }
-
-  async selectFilterByPublishedPagesOption() {
-    await new Promise(r => setTimeout(r, 1000));
-    return this.page.click('.ember-power-select-option:has-text("Published pages")');
   }
 
   async selectFilterByDraftedPagesOption() {
