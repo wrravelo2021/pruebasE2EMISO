@@ -7,4 +7,9 @@ Feature: Example feature
     And I enter password "pruebasmiso" in login page
     And I click login
     And I go to posts
-    And I wait for 2 seconds
+    And I go to create new post
+    And I enter title "Test" for new post
+    And I enter body "Test" for new post
+    And I publish the post
+    And I return to posts list
+    And I close the published post notification
