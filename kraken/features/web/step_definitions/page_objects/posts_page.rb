@@ -17,6 +17,12 @@ class PostsPage
     ).first.click
   end
 
+  def open_post_tags_filter_dropdown
+    @driver.find_elements(
+      :css, '.ember-power-select-selected-item'
+    )[2].click
+  end
+
   def select_filter_by_published_posts_option
     @driver.find_elements(
       :css, '.ember-power-select-option'
@@ -30,6 +36,14 @@ class PostsPage
       :css, '.ember-power-select-option'
     ).select do |element|
       element.text == 'Draft posts'
+    end.first.click
+  end
+
+  def select_filter_by_tagname_posts_option(tagName)
+    @driver.find_elements(
+      :css, '.ember-power-select-option'
+    ).select do |element|
+      element.text == tagName
     end.first.click
   end
 

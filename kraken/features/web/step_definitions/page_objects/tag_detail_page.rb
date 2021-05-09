@@ -11,6 +11,24 @@ class TagDetailPage
     ).send_keys(name)
   end
 
+  def enter_description_for_new_tag(description)
+    @driver.find_element(
+      :css, 'textarea[name="description"]'
+    ).send_keys(description)
+  end
+
+  def enter_meta_title_for_new_tag(metaTitle)
+    @driver.find_element(
+      :css, 'input[name="metaTitle"]'
+    ).send_keys(metaTitle)
+  end
+
+  def enter_meta_description_for_new_ta(metaDescription)
+    @driver.find_element(
+      :css, 'textarea[name="metaDescription"]'
+    ).send_keys(metaDescription)
+  end
+
   def click_save
     @driver.find_element(
       :css, '.gh-btn.gh-btn-blue.gh-btn-icon.ember-view'

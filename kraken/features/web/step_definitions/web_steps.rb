@@ -306,6 +306,12 @@ if ENV['ADB_DEVICE_ARG'].nil?
     sleep 1
   end
 
+  When('I open post tags filter dropdown') do
+    posts_page = PostsPage.new(@driver)
+    posts_page.open_post_tags_filter_dropdown
+    sleep 1
+  end
+
   When('I select filter by published posts option') do
     posts_page = PostsPage.new(@driver)
     posts_page.select_filter_by_published_posts_option
@@ -315,6 +321,12 @@ if ENV['ADB_DEVICE_ARG'].nil?
   When('I select filter by drafted posts option') do
     posts_page = PostsPage.new(@driver)
     posts_page.select_filter_by_drafted_posts_option
+    sleep 1
+  end
+
+  When(/^I select filter by "([^"]*)" posts option$/) do |tagName|
+    post_page = PostsPage.new(@driver)
+    post_page.select_filter_by_tagname_posts_option(tagName)
     sleep 1
   end
 
@@ -393,6 +405,24 @@ if ENV['ADB_DEVICE_ARG'].nil?
   When(/^I enter title for new tag "([^"]*)"$/) do |name|
     tag_detail_page = TagDetailPage.new(@driver)
     tag_detail_page.enter_title_for_new_tag(name)
+    sleep 1
+  end
+
+  When(/^I enter description for new tag "([^"]*)"$/) do |description|
+    tag_detail_page = TagDetailPage.new(@driver)
+    tag_detail_page.enter_description_for_new_tag(description)
+    sleep 1
+  end
+
+  When(/^I enter meta title for new tag "([^"]*)"$/) do |metaTitle|
+    tag_detail_page = TagDetailPage.new(@driver)
+    tag_detail_page.enter_meta_title_for_new_tag(metaTitle)
+    sleep 1
+  end
+
+  When(/^I enter meta description for new tag "([^"]*)"$/) do |metaDescription|
+    tag_detail_page = TagDetailPage.new(@driver)
+    tag_detail_page.enter_meta_description_for_new_ta(metaDescription)
     sleep 1
   end
 
