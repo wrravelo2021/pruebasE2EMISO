@@ -16,14 +16,14 @@ module.exports = class PostDetailPage {
     await this.page.click('.gh-editor-title.ember-text-area.gh-input.ember-view');
     await this.page.keyboard.press("Meta+A");
     await this.page.keyboard.press("Control+A");
-    await this.page.keyboard.press("Delete");
+    return this.page.keyboard.press("Delete");
   }
 
   async deleteBodyPost() {
     await this.page.click('.koenig-editor__editor.__mobiledoc-editor');
     await this.page.keyboard.press("Meta+A");
     await this.page.keyboard.press("Control+A");
-    await this.page.keyboard.press("Delete");
+    return this.page.keyboard.press("Delete");
   }
 
   async publishPost(body) {
@@ -64,7 +64,7 @@ module.exports = class PostDetailPage {
       await element.press('Delete');
     }
   }
-  
+
   async fillDate(date){
     await new Promise(r => setTimeout(r, 1000));
     const dateField = await this.page.$('.gh-date-time-picker-date input');

@@ -247,13 +247,11 @@ it('should change user password and login whith wrong password.', async () => {
   await loginPage.enterEmail(email);
   await loginPage.enterPassword(password);
   await loginPage.clickLogin();
-  
+
   let messageError = await loginPage.getMessageError();
   assert.strictEqual(messageError.trim(), "Your password is incorrect.");
-  
-  await loginPage.clearEmail();
+
   await loginPage.clearPassword();
-  await loginPage.enterEmail(email);
   await loginPage.enterPassword(newPassword);
   await loginPage.clickLogin();
   await homePage.goToMyProfile();
