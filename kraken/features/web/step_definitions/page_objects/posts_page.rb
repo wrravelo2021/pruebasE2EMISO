@@ -40,4 +40,10 @@ class PostsPage
       element.text == title
     end.first.click
   end
+
+  def first_post_title
+    @driver.find_elements(
+      :css, '.gh-content-entry-title'
+    ).first.text
+  end
 end

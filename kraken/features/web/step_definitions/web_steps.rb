@@ -4,6 +4,11 @@ if ENV['ADB_DEVICE_ARG'].nil?
     .sort_by { |file| File.mtime(file) }
     .each { |file| require file }
 
+  When('I navigate to ghost admin') do
+    @driver.navigate.to 'http://localhost:2369/ghost'
+    sleep 1
+  end
+
   ####################
   # Login page #######
   ####################
@@ -16,6 +21,18 @@ if ENV['ADB_DEVICE_ARG'].nil?
   When(/^I enter password "([^"]*)" in login page$/) do |password|
     login_page = LoginPage.new(@driver)
     login_page.enter_password(password)
+    sleep 1
+  end
+
+  When('I enter my email in login page') do
+    login_page = LoginPage.new(@driver)
+    login_page.enter_email('drummerwilliam@gmail.com')
+    sleep 1
+  end
+
+  When('I enter my password in login page') do
+    login_page = LoginPage.new(@driver)
+    login_page.enter_password('pruebasmiso')
     sleep 1
   end
 
@@ -211,6 +228,14 @@ if ENV['ADB_DEVICE_ARG'].nil?
   When(/^I click post with title "([^"]*)"$/) do |title|
     posts_page = PostsPage.new(@driver)
     posts_page.click_post_with_title(title)
+    sleep 1
+  end
+
+  When(/^I see first post with title "([^"]*)"$/) do |title|
+    posts_page = PostsPage.new(@driver)
+    post_title = posts_page.first_post_title
+    expect(post_title).to eq(title)
+
     sleep 1
   end
 
