@@ -12,6 +12,16 @@ if ENV['ADB_DEVICE_ARG'].nil?
     sleep 1
   end
 
+  When('I move to last tab') do
+    @driver.switch_to.window(@driver.window_handles.last)
+    sleep 1
+  end
+
+  When('I move to first tab') do
+    @driver.switch_to.window(@driver.window_handles.first)
+    sleep 1
+  end
+
   ####################
   # Login page #######
   ####################
@@ -135,6 +145,22 @@ if ENV['ADB_DEVICE_ARG'].nil?
     sleep 1
   end
 
+  When('I erase page body content') do
+    page_detail_page = PageDetailPage.new(@driver)
+    page_detail_page.erase_body_content
+    sleep 1
+  end
+
+  #####################
+  # Page preview page #
+  #####################
+  Then(/^I see body content "([^"]*)"$/) do |content|
+    page_preview_page = PagePreviewPage.new(@driver)
+    body_content = page_preview_page.page_body_content
+    expect(body_content).to eq(content)
+    sleep 1
+  end
+
   ####################
   # Pages page #######
   ####################
@@ -240,7 +266,7 @@ if ENV['ADB_DEVICE_ARG'].nil?
     sleep 1
   end
 
-  When(/^I see first post with title "([^"]*)"$/) do |title|
+  Then(/^I see first post with title "([^"]*)"$/) do |title|
     posts_page = PostsPage.new(@driver)
     post_title = posts_page.first_post_title
     expect(post_title).to eq(title)

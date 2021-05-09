@@ -54,7 +54,9 @@ class PageDetailPage
     ).click
   end
 
-  def erase_one_character_from_body_content
-    raise 'TODO'
+  def erase_body_content
+    @driver.find_element(
+      :css, '.koenig-editor__editor.__mobiledoc-editor'
+    ).clear
   end
 end
