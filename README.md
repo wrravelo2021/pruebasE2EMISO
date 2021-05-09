@@ -65,9 +65,9 @@ A continuación se presentan las instrucciones para ejecutar las pruebas desarro
 
     ```ruby
     # Credentials
-    page_url = 'http://localhost:2371/ghost'
-    user_email = 'test@gmail.com'
-    user_password = 'pruebasmiso'
+    page_url = 'http://localhost:2371/ghost' # URL donde esta desplegado Ghost
+    user_email = 'test@gmail.com' # Email del usuario
+    user_password = 'pruebasmiso' # Contraseña del usuario
     ```
 
 4. Correr las pruebas
