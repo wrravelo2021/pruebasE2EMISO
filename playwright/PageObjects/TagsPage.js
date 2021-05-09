@@ -7,7 +7,7 @@ module.exports = class TagsPage {
     return this.page.click('a[href="#/tags/new/"]');
   }
 
-  async clickPostWithName(name) {
+  async clickTagWithName(name) {
     return this.page.click(`.gh-tag-list-name:has-text("${name}")`);
   }
 };
