@@ -75,3 +75,8 @@ A continuación se presentan las instrucciones para ejecutar las pruebas desarro
     ```bash
     bundle exec kraken-mobile run
     ```
+## Funcionalidades y escenarios de prueba
+
+El listado de funcionalidades que se probaron en este proyecto se puede encontrar en la wiki de este repositorio. Se puede acceder a través del [siguiente link](https://github.com/wrravelo2021/pruebasE2EMISO/wiki/Listado-de-funcionalidades).
+
+De la misma forma, el listado de escenarios de prueba se detalla en la wiki, con los casos de prueba de cada uno y el responsable de su desarrollo. Se puede acceder a través de [este link](https://github.com/wrravelo2021/pruebasE2EMISO/wiki/Listado-de-escenarios-de-prueba).
