@@ -11,6 +11,10 @@ module.exports = class HomePage {
     return this.page.click('a[href="#/pages/"]');
   }
 
+  async goToTags() {
+    return this.page.click('a[href="#/tags/"]');
+  }
+
   async closePublishedPostNotification() {
     return this.page.click('.gh-notification-close');
   }
