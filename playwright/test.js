@@ -60,37 +60,6 @@ it('should schedule a new post and filter it in the list of posts by scheduled s
   assert.strictEqual(firstPostTitle, titlePost);
 });
 
-it('should publish post and remain publish even if I log out and log in again', async () => {
-  let title = `${Date.now()}`;
-  let body = `${Date.now()} body.`
-  const loginPage = new LoginPage(page);
-  const homePage = new HomePage(page);
-  const postsPage = new PostsPage(page);
-  const postDetailPage = new PostDetailPage(page);
-
-  await page.goto(url);
-  await loginPage.enterEmail(email);
-  await loginPage.enterPassword(password);
-  await loginPage.clickLogin();
-  await homePage.goToPosts();
-  await postsPage.goToCreateNewPost();
-  await postDetailPage.enterTitleForNewPost(title)
-  await postDetailPage.enterBodyForNewPost(body);
-  await postDetailPage.publishPost();
-  await postDetailPage.returnToPostsList();
-  await homePage.closePublishedPostNotification();
-  await homePage.signOut();
-  await loginPage.enterEmail(email);
-  await loginPage.enterPassword(password);
-  await loginPage.clickLogin();
-  await homePage.goToPosts();
-  await postsPage.openPostTypeFilterDropdown();
-  await postsPage.selectFilterByPublishedPostsOption();
-
-  let firstPostTitle = await postsPage.getFirstPostTitle();
-  assert.equal(firstPostTitle, title);
-});
-
 it('should create a post, then modify it and validate that the modification was made.', async () => {
   const test = 'F12';
   const titlePost = "Escenario de prueba: " + test +  ' - ' + Date.now();
@@ -134,6 +103,67 @@ it('should create a post, then modify it and validate that the modification was 
   assert.strictEqual(firstPostTitle, titlePost + ' (Modificado)');
 });
 
+it('should change user password and login correctly.', async () => {
+  // Test F13
+  let newPassword = "newpruebasmiso";
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
+
+  await page.goto(url);
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.scrollToBottom();
+  await profilePage.enterOldPassword(password);
+  await profilePage.enterNewPassword(newPassword);
+  await profilePage.enterNewPasswordConfirmation(newPassword);
+  await profilePage.clickChangePassword();
+  await homePage.closePublishedPostNotification();
+  await homePage.signOut();
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(newPassword);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.scrollToBottom();
+  await profilePage.enterOldPassword(newPassword);
+  await profilePage.enterNewPassword(password);
+  await profilePage.enterNewPasswordConfirmation(password);
+  await profilePage.clickChangePassword();
+});
+
+it('should publish post and remain publish even if I log out and log in again', async () => {
+  let title = `${Date.now()}`;
+  let body = `${Date.now()} body.`
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(url);
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(title)
+  await postDetailPage.enterBodyForNewPost(body);
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await homePage.closePublishedPostNotification();
+  await homePage.signOut();
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByPublishedPostsOption();
+
+  let firstPostTitle = await postsPage.getFirstPostTitle();
+  assert.equal(firstPostTitle, title);
+});
+
 it('should publish a drafted post', async () => {
   let title = `${Date.now()}`;
   let body = `${Date.now()} body.`
@@ -169,11 +199,8 @@ it('should publish a drafted post', async () => {
   assert.equal(firstPostTitle, title);
 });
 
-it('should change user password', async () => {
-  let title = `${Date.now()}`;
-  let body = `${Date.now()} body.`
+it('should change user password and login whith wrong password.', async () => {
   let newPassword = "newpruebasmiso";
-
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -188,7 +215,17 @@ it('should change user password', async () => {
   await profilePage.enterNewPassword(newPassword);
   await profilePage.enterNewPasswordConfirmation(newPassword);
   await profilePage.clickChangePassword();
+  await homePage.closePublishedPostNotification();
   await homePage.signOut();
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  
+  let messageError = await loginPage.getMessageError();
+  assert.strictEqual(messageError.trim(), "Your password is incorrect.");
+  
+  await loginPage.clearEmail();
+  await loginPage.clearPassword();
   await loginPage.enterEmail(email);
   await loginPage.enterPassword(newPassword);
   await loginPage.clickLogin();
@@ -245,7 +282,6 @@ it('should edit a page', async () => {
 
 it('should create tag, assign that tag to a post, delete the tag and deassign the tag from the post', async () => {
   let tag = `${Date.now()}`;
-  let newPassword = "newpruebasmiso";
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
