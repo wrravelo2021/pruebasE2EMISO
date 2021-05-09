@@ -37,4 +37,13 @@ module.exports = class PostDetailPage {
   async getTagsName() {
     return this.page.$$(".ember-power-select-multiple-option.tag-token.js-draggableObject.draggable-object.ember-view");
   }
+
+  async clickDeletePost() {
+    return this.page.click('#entry-controls > div.settings-menu-pane-in.settings-menu.settings-menu-pane > div.settings-menu-content > form > button');
+  }
+
+  async clickConfirmDeletePost() {
+    return this.page.click('.gh-btn.gh-btn-red.gh-btn-icon.ember-view');
+  }
+
 };

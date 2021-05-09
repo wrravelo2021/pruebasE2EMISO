@@ -31,4 +31,14 @@ module.exports = class PostsPage {
   async clickPostWithTitle(title) {
     return this.page.click(`.gh-content-entry-title:has-text("${title}")`);
   }
+
+  async openPostSortByFilterDropdown() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('.ember-power-select-selected-item:has-text("Newest")');
+  }
+
+  async selectFilterByNewestPostOption() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('.ember-power-select-option:has-text("Newest")');
+  }
 };
