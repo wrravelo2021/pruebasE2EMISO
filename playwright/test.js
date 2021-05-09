@@ -46,8 +46,8 @@ it('should publish post and remain publish even if I log out and log in again', 
   await page.click('.gh-notification-close');
   await page.click('.gh-user-name.mb1');
   await page.click('a[href="#/signout/"]');
-  await page.type('input[name="identification"]', 'drummerwilliam@gmail.com');
-  await page.type('input[name="password"]', 'pruebasmiso');
+  await page.type('input[name="identification"]', email);
+  await page.type('input[name="password"]', password);
   await page.click('css=button.login');
   await page.click('.gh-nav-list-new.relative > a[href="#/posts/"]');
   await new Promise(r => setTimeout(r, 1000));
