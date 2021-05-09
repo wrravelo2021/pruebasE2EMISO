@@ -5,8 +5,8 @@ if ENV['ADB_DEVICE_ARG'].nil?
     .each { |file| require file }
 
   # Credentials
-  page_url = 'http://localhost:2371/ghost'
-  user_email = 'drummerwilliam@gmail.com'
+  page_url = 'http://localhost:2368/ghost'
+  user_email = 'emilsonqp@gmail.com'
   user_password = 'pruebasmiso'
 
   When('I navigate to ghost admin') do
@@ -118,6 +118,12 @@ if ENV['ADB_DEVICE_ARG'].nil?
   When('I go to view site') do
     home_page = HomePage.new(@driver)
     home_page.go_to_view_site
+    sleep 1
+  end
+
+  When('I go to posts again') do
+    home_page = HomePage.new(@driver)
+    home_page.go_to_posts
     sleep 1
   end
 
@@ -291,6 +297,18 @@ if ENV['ADB_DEVICE_ARG'].nil?
     expect(date_error).to eq('Must be in the past')
   end
 
+  When('I click delete post') do
+    post_detail_page = PostDetailPage.new(@driver)
+    post_detail_page.click_delete
+    sleep 1
+  end
+
+  When('I click confirm delete post') do
+    post_detail_page = PostDetailPage.new(@driver)
+    post_detail_page.click_confirm_delete
+    sleep 1
+  end
+
   ####################
   # Posts page #######
   ####################
@@ -438,6 +456,14 @@ end
     view_site_page = ViewSitePage.new(@driver)
     post_title = view_site_page.first_post_title
     expect(post_title).to eq(title)
+
+    sleep 1
+  end
+
+  Then(/^I see first post on site with title different to "([^"]*)"$/) do |title|
+    view_site_page = ViewSitePage.new(@driver)
+    post_title = view_site_page.first_post_title
+    expect(post_title).not_to eq(title)
 
     sleep 1
   end
