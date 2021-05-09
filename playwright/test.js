@@ -5,7 +5,7 @@ const LoginPage = require('./PageObjects/LoginPage.js');
 const HomePage = require('./PageObjects/HomePage.js');
 const PostsPage = require('./PageObjects/PostsPage.js');
 const PostDetailPage = require('./PageObjects/PostDetailPage.js');
-
+const ProfilePage = require('./PageObjects/ProfilePage.js');
 
 // Credentials
 const url = 'http://localhost:2368/ghost';
@@ -93,45 +93,40 @@ it('should publish a drafted post', async () => {
   assert.equal(firstPostTitle, title);
 });
 
-describe.skip('buenas', () => {
-
 it('should change user password', async () => {
   let title = `${Date.now()}`;
   let body = `${Date.now()} body.`
   let newPassword = "newpruebasmiso";
 
-  await page.goto(url);
-  await page.type('input[name="identification"]', email);
-  await page.type('input[name="password"]', password);
-  await page.click('css=button.login');
-  await page.click('.gh-nav-list-new.relative > a[href="#/posts/"]');
-  await page.click('.gh-user-name.mb1');
-  await page.click('a:has-text("Your profile")');
-  await new Promise(r => setTimeout(r, 1000));
-  await page.$eval('#user-password-old', (element) => {
-    element.scrollIntoView();
-  });
-  await page.type('#user-password-old', password);
-  await page.type('#user-password-new', newPassword);
-  await page.type('#user-new-password-verification', newPassword);
-  await page.click('.gh-btn.gh-btn-red.gh-btn-icon.button-change-password.ember-view');
-  await page.click('.gh-user-name.mb1');
-  await page.click('a[href="#/signout/"]');
-  await page.type('input[name="identification"]', email);
-  await page.type('input[name="password"]', newPassword);
-  await page.click('css=button.login');
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+  const profilePage = new ProfilePage(page);
 
-  await page.click('.gh-user-name.mb1');
-  await page.click('a:has-text("Your profile")');
-  await new Promise(r => setTimeout(r, 1000));
-  await page.$eval('#user-password-old', (element) => {
-    element.scrollIntoView();
-  });
-  await page.type('#user-password-old', newPassword);
-  await page.type('#user-password-new', password);
-  await page.type('#user-new-password-verification', password);
-  await page.click('.gh-btn.gh-btn-red.gh-btn-icon.button-change-password.ember-view');
+  await page.goto(url);
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.scrollToBottom();
+  await profilePage.enterOldPassword(password);
+  await profilePage.enterNewPassword(newPassword);
+  await profilePage.enterNewPasswordConfirmation(newPassword);
+  await profilePage.clickChangePassword();
+  await homePage.signOut();
+  await loginPage.enterEmail(email);
+  await loginPage.enterPassword(newPassword);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.scrollToBottom();
+  await profilePage.enterOldPassword(newPassword);
+  await profilePage.enterNewPassword(password);
+  await profilePage.enterNewPasswordConfirmation(password);
+  await profilePage.clickChangePassword();
 });
+
+describe.skip('buenas', () => {
 
 it('should edit a page', async () => {
   let title = `${Date.now()}`;

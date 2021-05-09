@@ -15,4 +15,9 @@ module.exports = class HomePage {
     await this.page.click('.gh-user-name.mb1');
     return this.page.click('a[href="#/signout/"]');
   }
+
+  async goToMyProfile() {
+    await this.page.click('.gh-user-name.mb1');
+    return this.page.click('a:has-text("Your profile")');
+  }
 };
