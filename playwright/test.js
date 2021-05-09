@@ -1,7 +1,5 @@
-//Importar Playwright
 const playwright = require('playwright');
 const assert = require('assert')
-const { chromium } = require('playwright');
 
 const url = 'http://localhost:2368/ghost';
 let email = "drummerwilliam@gmail.com";
@@ -10,6 +8,7 @@ let password = "pruebasmiso";
 let browser;
 let page;
 let context;
+
 beforeEach(async() => {
   browser = await playwright['chromium'].launch({ headless: false });
   context = await browser.newContext();
