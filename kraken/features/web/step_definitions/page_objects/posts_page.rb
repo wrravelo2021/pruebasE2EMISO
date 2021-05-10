@@ -39,6 +39,14 @@ class PostsPage
     end.first.click
   end
 
+  def select_filter_by_scheduled_posts_option
+    @driver.find_elements(
+      :css, '.ember-power-select-option'
+    ).select do |element|
+      element.text == 'Scheduled posts'
+    end.first.click
+  end
+
   def select_filter_by_tagname_posts_option(tagName)
     @driver.find_elements(
       :css, '.ember-power-select-option'

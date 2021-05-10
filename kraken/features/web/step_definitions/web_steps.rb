@@ -267,6 +267,12 @@ if ENV['ADB_DEVICE_ARG'].nil?
     sleep 1
   end
 
+  When('I schedule the post') do
+    post_detail_page = PostDetailPage.new(@driver)
+    post_detail_page.schedule_post
+    sleep 1
+  end
+
   When('I return to posts list') do
     post_detail_page = PostDetailPage.new(@driver)
     post_detail_page.return_to_posts_list
@@ -352,6 +358,12 @@ if ENV['ADB_DEVICE_ARG'].nil?
   When('I select filter by drafted posts option') do
     posts_page = PostsPage.new(@driver)
     posts_page.select_filter_by_drafted_posts_option
+    sleep 1
+  end
+
+  When('I select filter by scheduled posts option') do
+    posts_page = PostsPage.new(@driver)
+    posts_page.select_filter_by_scheduled_posts_option
     sleep 1
   end
 
