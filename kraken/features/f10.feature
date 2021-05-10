@@ -13,4 +13,5 @@ Feature: F10
     And I return to pages list
     And I click page with title "New drafted page"
     And I open page settings
+    And I write on page settings a future publish date
     Then I see expected error
