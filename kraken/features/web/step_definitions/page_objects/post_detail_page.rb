@@ -109,4 +109,16 @@ class PostDetailPage
       :css, '.gh-date-time-picker-error'
     ).text
   end
+
+  def click_delete
+    @driver.find_element(
+      :css, '#entry-controls > div.settings-menu-pane-in.settings-menu.settings-menu-pane > div.settings-menu-content > form > button'
+    ).click
+  end
+
+  def click_confirm_delete
+    @driver.find_element(
+      :css, '.gh-btn.gh-btn-red.gh-btn-icon.ember-view'
+    ).click
+  end
 end
