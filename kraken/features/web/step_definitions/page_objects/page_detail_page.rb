@@ -1,3 +1,4 @@
+require "date"
 class PageDetailPage
   attr_reader :driver
 
@@ -58,5 +59,21 @@ class PageDetailPage
     @driver.find_element(
       :css, '.koenig-editor__editor.__mobiledoc-editor'
     ).clear
+  end
+
+  def write_future_date 
+    @driver.find_element(
+      :css, '.gh-date-time-picker-date input'
+    ).clear
+
+    @driver.find_element(
+      :css, '.gh-date-time-picker-date input'
+    ).send_keys((Date.today + 2).to_s, :return)
+  end
+
+  def future_date_error
+    @driver.find_element(
+      :css, '.gh-date-time-picker-error'
+    ).text
   end
 end

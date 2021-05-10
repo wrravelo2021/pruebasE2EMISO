@@ -178,6 +178,18 @@ if ENV['ADB_DEVICE_ARG'].nil?
     sleep 1
   end
 
+  When(/^I write on page settings a future publish date/) do 
+    page_detail_page = PageDetailPage.new(@driver)
+    page_detail_page.write_future_date
+    sleep 1
+  end
+
+  Then(/^I see expected error/) do 
+    page_detail_page = PageDetailPage.new(@driver)
+    date_error = page_detail_page.future_date_error
+    expect(date_error).to eq('Must be in the past')
+  end
+
   #####################
   # Page preview page #
   #####################
