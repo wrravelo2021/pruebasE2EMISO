@@ -1,7 +1,7 @@
 Feature: F10
 
   @user1 @web
-  Scenario: As a user I should not be able to write future date for post
+  Scenario: Crear page, ir a lista, editar el page, ingresamos fecha de publicación futura, validar error generado
     Given I navigate to ghost admin
     When I enter my email in login page
     And I enter my password in login page
