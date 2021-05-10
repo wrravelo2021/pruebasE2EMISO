@@ -101,7 +101,7 @@ class PostDetailPage
 
     @driver.find_element(
       :css, '.gh-date-time-picker-date input'
-    ).send_keys((Date.today + 1).to_s, :return)
+    ).send_keys((Date.today + 2).to_s, :return)
   end
 
   def future_date_error
