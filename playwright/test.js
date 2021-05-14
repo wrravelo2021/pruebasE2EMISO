@@ -32,7 +32,7 @@ beforeEach(async() => {
 afterEach(async () => {
   await browser.close();
 });
-
+ 
 it('F11 - should schedule a new post and filter it in the list of posts by scheduled status.', async () => {
   test = 'F11';
   const titlePost = "Escenario de prueba: " + test +  ' - ' + Date.now();
@@ -446,6 +446,7 @@ it('F20 - should create tag, assign that tag to a post, delete the tag and deass
 });
 
 it('F01 - should create and publish post', async () => {
+  test = "F01";
   const title = `${Date.now()}`;
 
   const loginPage = new LoginPage(page);
@@ -456,21 +457,30 @@ it('F01 - should create and publish post', async () => {
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
+  await generateScreenshot(3);
   await postsPage.goToCreateNewPost();
+  await generateScreenshot(4);
   await postDetailPage.enterTitleForNewPost(title);
   await postDetailPage.enterBodyForNewPost('Cuerpo 1');
+  await generateScreenshot(5);
   await postDetailPage.publishPost();
+  await generateScreenshot(6);
   await postDetailPage.returnToPostsList();
+  await generateScreenshot(7);
   await postsPage.openPostTypeFilterDropdown();
   await postsPage.selectFilterByPublishedPostsOption();
+  await generateScreenshot(8);
   const publishedPostTitle = await postsPage.getFirstPostTitle();
   assert(publishedPostTitle != null, "Title is null");
   assert(publishedPostTitle === title, "Title is not the expected");
 });
 
 it('F02 - should create and publish post on site', async () => {
+  test = "F02";
   const title = `${Date.now()}`;
 
   const loginPage = new LoginPage(page);
@@ -482,20 +492,29 @@ it('F02 - should create and publish post on site', async () => {
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
+  await generateScreenshot(3);
   await postsPage.goToCreateNewPost();
+  await generateScreenshot(4);
   await postDetailPage.enterTitleForNewPost(title);
   await postDetailPage.enterBodyForNewPost('Cuerpo 2');
+  await generateScreenshot(5);
   await postDetailPage.publishPost();
+  await generateScreenshot(6);
   await postDetailPage.returnToPostsList();
+  await generateScreenshot(7);
   await homePage.goToViewSite();
+  await generateScreenshot(8);
   const publishedPostTitle = await viewSitePage.getFirstPostTitle();
   assert(publishedPostTitle != null, "Title is null");
   assert(publishedPostTitle === title, "Title is not the expected");
 });
 
 it('F03 - should not allow future date for post', async () => {
+  test = "F03";
   const title = `${Date.now()}`;
 
   const loginPage = new LoginPage(page);
@@ -506,20 +525,30 @@ it('F03 - should not allow future date for post', async () => {
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
+  await generateScreenshot(3);
   await postsPage.goToCreateNewPost();
+  await generateScreenshot(4);
   await postDetailPage.enterTitleForNewPost(title);
   await postDetailPage.enterBodyForNewPost('Cuerpo 3');
+  await generateScreenshot(5);
   await postDetailPage.publishPost();
+  await generateScreenshot(6);
   await postDetailPage.returnToPostsList();
+  await generateScreenshot(7);
   await postsPage.clickPostWithTitle(title);
+  await generateScreenshot(8);
   await postDetailPage.openPostSettings();
+  await generateScreenshot(9);
 
   const today = new Date();
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
   await postDetailPage.fillDate(tomorrow.toISOString().split('T')[0]);
+  await generateScreenshot(10);
 
   const dateError = await postDetailPage.getFutureDateError();
   const dateErrorText = dateError ? await dateError.innerText() : null;
@@ -528,6 +557,7 @@ it('F03 - should not allow future date for post', async () => {
 });
 
 it('F04 - should publish new page', async () => {
+  test = "F04";
   const title = `${Date.now()}`;
 
   const loginPage = new LoginPage(page);
@@ -538,15 +568,23 @@ it('F04 - should publish new page', async () => {
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPages();
+  await generateScreenshot(3);
   await pagesPage.goToCreateNewPage();
+  await generateScreenshot(4);
   await pageDetailPage.enterTitleForNewPage(title);
   await pageDetailPage.enterBodyForNewPage('Cuerpo 4');
+  await generateScreenshot(5);
   await pageDetailPage.publishPage();
+  await generateScreenshot(6);
   await pageDetailPage.returnToPagesList();
+  await generateScreenshot(7);
   await pagesPage.openPageTypeFilterDropdown();
   await pagesPage.selectFilterByPublishedPagesOption();
+  await generateScreenshot(8);
 
   const publishedPageTitle = await pagesPage.getFirstPageTitle();
   assert(publishedPageTitle != null, "Title is null");
@@ -554,6 +592,7 @@ it('F04 - should publish new page', async () => {
 });
 
 it('F05 - should save draft and publish page', async () => {
+  test = "F05";
   const title = `${Date.now()}`;
 
   const loginPage = new LoginPage(page);
@@ -564,24 +603,35 @@ it('F05 - should save draft and publish page', async () => {
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPages();
+  await generateScreenshot(3);
   await pagesPage.goToCreateNewPage();
+  await generateScreenshot(4);
   await pageDetailPage.enterTitleForNewPage(title);
   await pageDetailPage.enterBodyForNewPage('Cuerpo 5');
+  await generateScreenshot(5);
   await pageDetailPage.returnToPagesList();
+  await generateScreenshot(6);
   await pagesPage.openPageTypeFilterDropdown();
   await pagesPage.selectFilterByDraftedPagesOption();
+  await generateScreenshot(7);
 
   const draftPageTitle = await pagesPage.getFirstPageTitle();
   assert(draftPageTitle != null, "Page title is null");
   assert(draftPageTitle === title, "Page title is not the expected");
 
   await pagesPage.clickPageWithTitle(title);
+  await generateScreenshot(8);
   await pageDetailPage.publishPage();
+  await generateScreenshot(9);
   await pageDetailPage.returnToPagesList();
+  await generateScreenshot(10);
   await pagesPage.openPageTypeFilterDropdown();
   await pagesPage.selectFilterByPublishedPagesOption();
+  await generateScreenshot(11);
 
   const publishedPageTitle = await pagesPage.getFirstPageTitle();
   assert(publishedPageTitle != null, "Title is null");
