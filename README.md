@@ -81,10 +81,6 @@ A continuación se presentan las instrucciones para ejecutar las pruebas desarro
     ```bash
     bundle exec kraken-mobile run
     ```
-    
-
-        backstop reference
-        ```
 
 ## Reporte BackstopJS 🗄
 
