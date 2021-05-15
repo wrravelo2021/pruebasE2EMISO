@@ -444,9 +444,10 @@ it('F05 - should save draft and publish page', async () => {
   assert(publishedPageTitle === title, "Title is not the expected");
 });
 
-it('F06 Crear Draft post, validarlo en la lista', async () => {
+it('F06 - Crear Draft post, validarlo en la lista', async () => {
   let title = "Last Draft Post";
   let body = "Last Draft Post Body";
+  test = "F06";
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -456,24 +457,34 @@ it('F06 Crear Draft post, validarlo en la lista', async () => {
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
+  await generateScreenshot(3);
   await postsPage.goToCreateNewPost();
+  await generateScreenshot(4);
   await postDetailPage.enterTitleForNewPost(title)
+  await generateScreenshot(5);
   await postDetailPage.enterBodyForNewPost(body);
+  await generateScreenshot(6);
   await postDetailPage.returnToPostsList();
+  await generateScreenshot(7);
   await postsPage.openPostTypeFilterDropdown();
+  await generateScreenshot(8);
   await postsPage.selectFilterByDraftedPostsOption();
+  await generateScreenshot(9);
 
   var firstPostTitle = await postsPage.getFirstPostTitle();
   assert.equal(firstPostTitle, title);
 });
 
-it('F07 Crear 2 post, ordenar la lista por el mas nuevo, validar en la lista que el post mas reciente esté de primeras', async () => {
+it('F07 - Crear 2 post, ordenar la lista por el mas nuevo, validar en la lista que el post mas reciente esté de primeras', async () => {
   let titlePost1 = "Oldest Post";
   let bodyPost1 = "Oldest Post Body";
   let titlePost2 = "Newest Post";
   let bodyPost2 = "Newest Post Body";
+  test = "F07";
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -483,30 +494,48 @@ it('F07 Crear 2 post, ordenar la lista por el mas nuevo, validar en la lista que
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
+  await generateScreenshot(3);
   await postsPage.goToCreateNewPost();
+  await generateScreenshot(4);
   await postDetailPage.enterTitleForNewPost(titlePost1)
+  await generateScreenshot(5);
   await postDetailPage.enterBodyForNewPost(bodyPost1);
+  await generateScreenshot(6);
   await postDetailPage.publishPost();
+  await generateScreenshot(7);
   await postDetailPage.returnToPostsList();
+  await generateScreenshot(8);
   await postsPage.goToCreateNewPost();
+  await generateScreenshot(9);
   await postDetailPage.enterTitleForNewPost(titlePost2)
+  await generateScreenshot(10);
   await postDetailPage.enterBodyForNewPost(bodyPost2);
+  await generateScreenshot(11);
   await postDetailPage.publishPost();
+  await generateScreenshot(12);
   await postDetailPage.returnToPostsList();
+  await generateScreenshot(13);
   await postsPage.openPostTypeFilterDropdown();
+  await generateScreenshot(14);
   await postsPage.selectFilterByPublishedPostsOption();
+  await generateScreenshot(15);
   await postsPage.openPostSortByFilterDropdown();
+  await generateScreenshot(16);
   await postsPage.selectFilterByNewestPostOption();
+  await generateScreenshot(18);
 
   var firstPostTitle = await postsPage.getFirstPostTitle();
   assert.equal(firstPostTitle, titlePost2);
 });
 
-it('F08 Crear post, ir al sitio web, validar que esté, volver y eliminarlo, ir de nuevo al sitio web y validar que NO esté', async () => {
+it('F08 - Crear post, ir al sitio web, validar que esté, volver y eliminarlo, ir de nuevo al sitio web y validar que NO esté', async () => {
   let titlePost = "Post Publicado";
   let bodyPost = "Post Publicado Body";
+  test = "F08";
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -517,25 +546,40 @@ it('F08 Crear post, ir al sitio web, validar que esté, volver y eliminarlo, ir 
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
+  await generateScreenshot(3);
   await postsPage.goToCreateNewPost();
+  await generateScreenshot(4);
   await postDetailPage.enterTitleForNewPost(titlePost)
+  await generateScreenshot(5);
   await postDetailPage.enterBodyForNewPost(bodyPost);
+  await generateScreenshot(6);
   await postDetailPage.publishPost();
+  await generateScreenshot(7);
   await postDetailPage.returnToPostsList();
+  await generateScreenshot(8);
   await homePage.goToViewSite();
+  await generateScreenshot(9);
 
   var publishedPostTitle = await viewSitePage.getFirstPostTitle();
   assert(publishedPostTitle != null, "Title is null");
   assert(publishedPostTitle === titlePost, "Title is not the expected");
 
   await homePage.goToPosts();
+  await generateScreenshot(10);
   await postsPage.clickPostWithTitle(titlePost);
+  await generateScreenshot(11);
   await postDetailPage.openPostSettings();
+  await generateScreenshot(12);
   await postDetailPage.clickDeletePost();
+  await generateScreenshot(13);
   await postDetailPage.clickConfirmDeletePost();
+  await generateScreenshot(14);
   await homePage.goToViewSite();
+  await generateScreenshot(15);
 
   publishedPostTitle = await viewSitePage.getFirstPostTitle();
   assert(publishedPostTitle != null, "Title is null");
@@ -543,9 +587,10 @@ it('F08 Crear post, ir al sitio web, validar que esté, volver y eliminarlo, ir 
 
 });
 
-it('F09 Crear draft page, ir a lista y verificar que exista', async () => {
+it('F09 - Crear draft page, ir a lista y verificar que exista', async () => {
   let titlePage = "New Page";
   let bodyPage = "New Page Body";
+  test = "F09";
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -555,22 +600,32 @@ it('F09 Crear draft page, ir a lista y verificar que exista', async () => {
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPages();
+  await generateScreenshot(3);
   await pagesPage.goToCreateNewPage();
+  await generateScreenshot(4);
   await pageDetailPage.enterTitleForNewPage(titlePage);
+  await generateScreenshot(5);
   await pageDetailPage.enterBodyForNewPage(bodyPage);
+  await generateScreenshot(6);
   await pageDetailPage.returnToPagesList();
+  await generateScreenshot(7);
   await pagesPage.openPageTypeFilterDropdown();
+  await generateScreenshot(8);
   await pagesPage.selectFilterByDraftedPagesOption();
+  await generateScreenshot(9);
 
   var firstPageTitle = await pagesPage.getFirstPageTitle();
   assert.equal(firstPageTitle, titlePage);
 });
 
-it('F10 Crear page, ir a lista, editar el page, ingresamos fecha de publicación futura, validar error generado', async () => {
+it('F10 - Crear page, ir a lista, editar el page, ingresamos fecha de publicación futura, validar error generado', async () => {
   let titlePage = "New Page";
   let bodyPage = "New Page Body";
+  test = "F10";
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -580,19 +635,29 @@ it('F10 Crear page, ir a lista, editar el page, ingresamos fecha de publicación
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPages();
+  await generateScreenshot(3);
   await pagesPage.goToCreateNewPage();
+  await generateScreenshot(4);
   await pageDetailPage.enterTitleForNewPage(titlePage);
+  await generateScreenshot(5);
   await pageDetailPage.enterBodyForNewPage(bodyPage);
+  await generateScreenshot(6);
   await pageDetailPage.returnToPagesList();
+  await generateScreenshot(7);
   await pagesPage.clickPageWithTitle(titlePage);
+  await generateScreenshot(8);
   await pageDetailPage.openPageSettings();
+  await generateScreenshot(9);
 
   const today = new Date();
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
   await pageDetailPage.fillDate(tomorrow.toISOString().split('T')[0]);
+  await generateScreenshot(10);
 
   const dateError = await pageDetailPage.getFutureDateError();
   const dateErrorText = dateError ? await dateError.innerText() : null;
