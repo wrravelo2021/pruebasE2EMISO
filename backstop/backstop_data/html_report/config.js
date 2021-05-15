@@ -1,0 +1,652 @@
+report({
+  "testSuite": "BackstopJS",
+  "tests": [
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Kraken_F181_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Kraken_F181_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Kraken_F181_0_document_0_Computer.png",
+        "label": "Kraken_F18.1",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F18/1.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F18/1.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00",
+          "analysisTime": 41
+        }
+      },
+      "status": "pass"
+    },
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Kraken_F182_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Kraken_F182_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Kraken_F182_0_document_0_Computer.png",
+        "label": "Kraken_F18.2",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F18/2.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F18/2.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "1.01",
+          "analysisTime": 55
+        },
+        "diffImage": "../bitmaps_test/20210515-164050/failed_diff_TestforF18inKrakenandF10inPlaywright_Kraken_F182_0_document_0_Computer.png"
+      },
+      "status": "fail"
+    },
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Kraken_F183_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Kraken_F183_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Kraken_F183_0_document_0_Computer.png",
+        "label": "Kraken_F18.3",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F18/3.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F18/3.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "2.85",
+          "analysisTime": 61
+        },
+        "diffImage": "../bitmaps_test/20210515-164050/failed_diff_TestforF18inKrakenandF10inPlaywright_Kraken_F183_0_document_0_Computer.png"
+      },
+      "status": "fail"
+    },
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Kraken_F184_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Kraken_F184_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Kraken_F184_0_document_0_Computer.png",
+        "label": "Kraken_F18.4",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F18/4.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F18/4.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "6.58",
+          "analysisTime": 339
+        },
+        "diffImage": "../bitmaps_test/20210515-164050/failed_diff_TestforF18inKrakenandF10inPlaywright_Kraken_F184_0_document_0_Computer.png"
+      },
+      "status": "fail"
+    },
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Kraken_F185_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Kraken_F185_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Kraken_F185_0_document_0_Computer.png",
+        "label": "Kraken_F18.5",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F18/5.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F18/5.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "6.51",
+          "analysisTime": 465
+        },
+        "diffImage": "../bitmaps_test/20210515-164050/failed_diff_TestforF18inKrakenandF10inPlaywright_Kraken_F185_0_document_0_Computer.png"
+      },
+      "status": "fail"
+    },
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Kraken_F186_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Kraken_F186_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Kraken_F186_0_document_0_Computer.png",
+        "label": "Kraken_F18.6",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F18/6.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F18/6.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "6.20",
+          "analysisTime": 75
+        },
+        "diffImage": "../bitmaps_test/20210515-164050/failed_diff_TestforF18inKrakenandF10inPlaywright_Kraken_F186_0_document_0_Computer.png"
+      },
+      "status": "fail"
+    },
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Kraken_F187_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Kraken_F187_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Kraken_F187_0_document_0_Computer.png",
+        "label": "Kraken_F18.7",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F18/7.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F18/7.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00",
+          "analysisTime": 42
+        }
+      },
+      "status": "pass"
+    },
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Kraken_F188_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Kraken_F188_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Kraken_F188_0_document_0_Computer.png",
+        "label": "Kraken_F18.8",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F18/8.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F18/8.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00",
+          "analysisTime": 311
+        }
+      },
+      "status": "pass"
+    },
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Kraken_F189_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Kraken_F189_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Kraken_F189_0_document_0_Computer.png",
+        "label": "Kraken_F18.9",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F18/9.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F18/9.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "1.19",
+          "analysisTime": 55
+        },
+        "diffImage": "../bitmaps_test/20210515-164050/failed_diff_TestforF18inKrakenandF10inPlaywright_Kraken_F189_0_document_0_Computer.png"
+      },
+      "status": "fail"
+    },
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Kraken_F1810_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Kraken_F1810_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Kraken_F1810_0_document_0_Computer.png",
+        "label": "Kraken_F18.10",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F18/10.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F18/10.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "1.19",
+          "analysisTime": 305
+        },
+        "diffImage": "../bitmaps_test/20210515-164050/failed_diff_TestforF18inKrakenandF10inPlaywright_Kraken_F1810_0_document_0_Computer.png"
+      },
+      "status": "fail"
+    },
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Kraken_F1811_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Kraken_F1811_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Kraken_F1811_0_document_0_Computer.png",
+        "label": "Kraken_F18.11",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F18/11.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F18/11.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "1.19",
+          "analysisTime": 45
+        },
+        "diffImage": "../bitmaps_test/20210515-164050/failed_diff_TestforF18inKrakenandF10inPlaywright_Kraken_F1811_0_document_0_Computer.png"
+      },
+      "status": "fail"
+    },
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Kraken_F1812_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Kraken_F1812_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Kraken_F1812_0_document_0_Computer.png",
+        "label": "Kraken_F18.12",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F18/12.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F18/12.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.97",
+          "analysisTime": 48
+        },
+        "diffImage": "../bitmaps_test/20210515-164050/failed_diff_TestforF18inKrakenandF10inPlaywright_Kraken_F1812_0_document_0_Computer.png"
+      },
+      "status": "fail"
+    },
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Kraken_F1813_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Kraken_F1813_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Kraken_F1813_0_document_0_Computer.png",
+        "label": "Kraken_F18.13",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F18/13.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F18/13.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "2.85",
+          "analysisTime": 305
+        },
+        "diffImage": "../bitmaps_test/20210515-164050/failed_diff_TestforF18inKrakenandF10inPlaywright_Kraken_F1813_0_document_0_Computer.png"
+      },
+      "status": "fail"
+    },
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Kraken_F1814_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Kraken_F1814_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Kraken_F1814_0_document_0_Computer.png",
+        "label": "Kraken_F18.14",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F18/14.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F18/14.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "6.56",
+          "analysisTime": 60
+        },
+        "diffImage": "../bitmaps_test/20210515-164050/failed_diff_TestforF18inKrakenandF10inPlaywright_Kraken_F1814_0_document_0_Computer.png"
+      },
+      "status": "fail"
+    },
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Kraken_F1815_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Kraken_F1815_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Kraken_F1815_0_document_0_Computer.png",
+        "label": "Kraken_F18.15",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F18/15.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F18/15.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "6.50",
+          "analysisTime": 342
+        },
+        "diffImage": "../bitmaps_test/20210515-164050/failed_diff_TestforF18inKrakenandF10inPlaywright_Kraken_F1815_0_document_0_Computer.png"
+      },
+      "status": "fail"
+    },
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Playwright_F101_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Playwright_F101_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Playwright_F101_0_document_0_Computer.png",
+        "label": "Playwright_F10.1",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F10/1.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F10/1.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.00",
+          "analysisTime": 485
+        }
+      },
+      "status": "pass"
+    },
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Playwright_F102_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Playwright_F102_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Playwright_F102_0_document_0_Computer.png",
+        "label": "Playwright_F10.2",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F10/2.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F10/2.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "4.19",
+          "analysisTime": 72
+        },
+        "diffImage": "../bitmaps_test/20210515-164050/failed_diff_TestforF18inKrakenandF10inPlaywright_Playwright_F102_0_document_0_Computer.png"
+      },
+      "status": "fail"
+    },
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Playwright_F103_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Playwright_F103_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Playwright_F103_0_document_0_Computer.png",
+        "label": "Playwright_F10.3",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F10/3.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F10/3.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "7.02",
+          "analysisTime": 327
+        },
+        "diffImage": "../bitmaps_test/20210515-164050/failed_diff_TestforF18inKrakenandF10inPlaywright_Playwright_F103_0_document_0_Computer.png"
+      },
+      "status": "fail"
+    },
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Playwright_F104_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Playwright_F104_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Playwright_F104_0_document_0_Computer.png",
+        "label": "Playwright_F10.4",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F10/4.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F10/4.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.55",
+          "analysisTime": 340
+        },
+        "diffImage": "../bitmaps_test/20210515-164050/failed_diff_TestforF18inKrakenandF10inPlaywright_Playwright_F104_0_document_0_Computer.png"
+      },
+      "status": "fail"
+    },
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Playwright_F105_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Playwright_F105_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Playwright_F105_0_document_0_Computer.png",
+        "label": "Playwright_F10.5",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F10/5.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F10/5.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.55",
+          "analysisTime": 406
+        },
+        "diffImage": "../bitmaps_test/20210515-164050/failed_diff_TestforF18inKrakenandF10inPlaywright_Playwright_F105_0_document_0_Computer.png"
+      },
+      "status": "fail"
+    },
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Playwright_F106_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Playwright_F106_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Playwright_F106_0_document_0_Computer.png",
+        "label": "Playwright_F10.6",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F10/6.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F10/6.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.55",
+          "analysisTime": 52
+        },
+        "diffImage": "../bitmaps_test/20210515-164050/failed_diff_TestforF18inKrakenandF10inPlaywright_Playwright_F106_0_document_0_Computer.png"
+      },
+      "status": "fail"
+    },
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Playwright_F107_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Playwright_F107_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Playwright_F107_0_document_0_Computer.png",
+        "label": "Playwright_F10.7",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F10/7.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F10/7.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "6.99",
+          "analysisTime": 256
+        },
+        "diffImage": "../bitmaps_test/20210515-164050/failed_diff_TestforF18inKrakenandF10inPlaywright_Playwright_F107_0_document_0_Computer.png"
+      },
+      "status": "fail"
+    },
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Playwright_F108_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Playwright_F108_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Playwright_F108_0_document_0_Computer.png",
+        "label": "Playwright_F10.8",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F10/8.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F10/8.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "0.55",
+          "analysisTime": 80
+        },
+        "diffImage": "../bitmaps_test/20210515-164050/failed_diff_TestforF18inKrakenandF10inPlaywright_Playwright_F108_0_document_0_Computer.png"
+      },
+      "status": "fail"
+    },
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Playwright_F109_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Playwright_F109_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Playwright_F109_0_document_0_Computer.png",
+        "label": "Playwright_F10.9",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F10/9.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F10/9.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "1.06",
+          "analysisTime": 190
+        },
+        "diffImage": "../bitmaps_test/20210515-164050/failed_diff_TestforF18inKrakenandF10inPlaywright_Playwright_F109_0_document_0_Computer.png"
+      },
+      "status": "fail"
+    },
+    {
+      "pair": {
+        "reference": "../bitmaps_reference/TestforF18inKrakenandF10inPlaywright_Playwright_F1010_0_document_0_Computer.png",
+        "test": "../bitmaps_test/20210515-164050/TestforF18inKrakenandF10inPlaywright_Playwright_F1010_0_document_0_Computer.png",
+        "selector": "document",
+        "fileName": "TestforF18inKrakenandF10inPlaywright_Playwright_F1010_0_document_0_Computer.png",
+        "label": "Playwright_F10.10",
+        "requireSameDimensions": true,
+        "misMatchThreshold": 0.1,
+        "url": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.42.5/F10/10.png?raw=true",
+        "referenceUrl": "https://github.com/wrravelo2021/pruebasE2EMISO/blob/master/kraken/screenshots/3.3.0/F10/10.png?raw=true",
+        "expect": 0,
+        "viewportLabel": "Computer",
+        "diff": {
+          "isSameDimensions": true,
+          "dimensionDifference": {
+            "width": 0,
+            "height": 0
+          },
+          "misMatchPercentage": "1.18",
+          "analysisTime": 84
+        },
+        "diffImage": "../bitmaps_test/20210515-164050/failed_diff_TestforF18inKrakenandF10inPlaywright_Playwright_F1010_0_document_0_Computer.png"
+      },
+      "status": "fail"
+    }
+  ],
+  "id": "Test for F18 in Kraken and F10 in Playwright"
+});
