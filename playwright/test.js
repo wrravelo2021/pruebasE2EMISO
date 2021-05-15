@@ -526,7 +526,7 @@ it('F07 - Crear 2 post, ordenar la lista por el mas nuevo, validar en la lista q
   await postsPage.openPostSortByFilterDropdown();
   await generateScreenshot(16);
   await postsPage.selectFilterByNewestPostOption();
-  await generateScreenshot(18);
+  await generateScreenshot(17);
 
   var firstPostTitle = await postsPage.getFirstPostTitle();
   assert.equal(firstPostTitle, titlePost2);
