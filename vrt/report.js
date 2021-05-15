@@ -6,7 +6,7 @@ let tool = '';
 const PATH_3_3_0 = `screenshots/3.3.0`;
 const PATH_3_42_5 = `screenshots/3.42.5`;
 const PATH_COMPARISON = `screenshots/comparison`;
-const SCENARIOS = ['F01'];
+const SCENARIOS = ['F01', 'F05'];
 
 async function generateResultImage(scenario, step) {
   if (!fs.existsSync(`../${tool}/${PATH_COMPARISON}/${scenario}`)){
