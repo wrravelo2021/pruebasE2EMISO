@@ -114,7 +114,7 @@ A continuación se presentan las instrucciones para ejecutar el reporte generado
   backstop test
   ```
   
-### Reporte demo
+### Demo reporte BackstopJS
 
 En el siguiente link se encuentra el resultado de la ejecución de backstop. [Demo](https://wrravelo2021.github.io/pruebasE2EMISO/backstop/backstop_data/html_report/index.html)
 
