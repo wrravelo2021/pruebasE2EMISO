@@ -104,7 +104,7 @@ function createReport(scenarios, resultInfo){
       <body>
           <h1>Report for 
                <a href="${config.url}"> ${config.url}</a>
-              with ${tool} 🎭
+              with ${tool[0].toUpperCase() + tool.slice(1)} 🎭
           </h1>
           <div id="visualizer">
               ${scenarios.map(s=>scenario(s, resultInfo[s]))}
