@@ -81,10 +81,6 @@ A continuación se presentan las instrucciones para ejecutar las pruebas desarro
     ```bash
     bundle exec kraken-mobile run
     ```
-    
-
-        backstop reference
-        ```
 
 ## Reporte BackstopJS 🗄
 
@@ -117,6 +113,28 @@ A continuación se presentan las instrucciones para ejecutar el reporte generado
 ### Demo reporte BackstopJS
 
 En el siguiente link se encuentra el resultado de la ejecución de backstop. [Demo](https://wrravelo2021.github.io/pruebasE2EMISO/backstop/backstop_data/html_report/index.html)
+
+## Reporte ResembleJS 🤖
+
+A continuación se presentan las instrucciones para ejecutar el reporte generado por ResembleJS que se especificó para comparar las diferencias entre la versión 3.3.0 y 3.42.5 de Ghost para las funcionalidades F03, F05, F07, F08, F14, F13, F19, F20.
+
+1. Ir a la carpeta con las especificaciones de ResembleJS
+
+  ```bash
+  cd vrt/
+  ```
+
+2. Ejecutar reporte
+
+  ```bash
+  node reporte.js
+  ```
+  
+### Demo reporte ResembleJS
+
+En el siguiente link se encuentra el resultado de la ejecución de ResembleJS en Playwright. [Demo Playwright](https://raw.githack.com/wrravelo2021/pruebasE2EMISO/master/vrt/report-playwright.html)
+
+En el siguiente link se encuentra el resultado de la ejecución de ResembleJS en Kraken. [Demo Kraken](https://raw.githack.com/wrravelo2021/pruebasE2EMISO/master/vrt/report-kraken.html)
 
 ## Funcionalidades y escenarios de prueba ⚙️
 
