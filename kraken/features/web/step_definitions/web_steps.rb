@@ -191,13 +191,13 @@ if ENV['ADB_DEVICE_ARG'].nil?
     sleep 1
   end
 
-  When(/^I write on page settings a future publish date/) do 
+  When(/^I write on page settings a future publish date/) do
     page_detail_page = PageDetailPage.new(@driver)
     page_detail_page.write_future_date
     sleep 1
   end
 
-  Then(/^I see expected error/) do 
+  Then(/^I see expected error/) do
     page_detail_page = PageDetailPage.new(@driver)
     date_error = page_detail_page.future_date_error
     expect(date_error).to eq('Must be in the past')
@@ -301,7 +301,6 @@ if ENV['ADB_DEVICE_ARG'].nil?
   When('I return to posts list') do
     post_detail_page = PostDetailPage.new(@driver)
     post_detail_page.return_to_posts_list
-    sleep 1
   end
 
   When('I open post settings') do
@@ -322,7 +321,7 @@ if ENV['ADB_DEVICE_ARG'].nil?
     sleep 1
   end
 
-  When(/^I write future date/) do 
+  When(/^I write future date/) do
     post_detail_page = PostDetailPage.new(@driver)
     post_detail_page.write_future_date
   end
@@ -347,7 +346,7 @@ if ENV['ADB_DEVICE_ARG'].nil?
     sleep 1
   end
 
-  Then(/^I see future date error/) do 
+  Then(/^I see future date error/) do
     post_detail_page = PostDetailPage.new(@driver)
     date_error = post_detail_page.future_date_error
     expect(date_error).to eq('Must be in the past')
