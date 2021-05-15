@@ -10,7 +10,7 @@ if ENV['ADB_DEVICE_ARG'].nil?
   page_url = 'http://localhost:2368/ghost'
   user_email = 'emilsonqp@gmail.com'
   user_password = 'pruebasmiso'
-  path_screenshots = './screenshoots/3.3.0'
+  path_screenshots = './screenshots/3.3.0'
 
   unless File.directory?(path_screenshots)
     FileUtils.mkdir_p(path_screenshots)
