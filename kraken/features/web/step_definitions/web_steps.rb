@@ -1,3 +1,5 @@
+require 'fileutils'
+
 if ENV['ADB_DEVICE_ARG'].nil?
   require 'kraken-mobile/steps/web/kraken_steps'
   Dir["#{File.dirname(__FILE__)}/page_objects/*.rb"]
@@ -8,6 +10,11 @@ if ENV['ADB_DEVICE_ARG'].nil?
   page_url = 'http://localhost:2368/ghost'
   user_email = 'emilsonqp@gmail.com'
   user_password = 'pruebasmiso'
+  path_screenshots = './screenshoots/3.3.0'
+
+  unless File.directory?(path_screenshots)
+    FileUtils.mkdir_p(path_screenshots)
+  end
 
   When('I navigate to ghost admin') do
     @driver.navigate.to page_url
@@ -562,5 +569,19 @@ end
     post_title = view_site_page.first_post_title
     expect(post_title).not_to eq(title)
 
+    sleep 1
+  end
+
+  ####################
+  # Screenshots ######
+  ####################
+
+  When(/^I take screenshot of step ([^"]*) and scenario "([^"]*)"/) do |step, scenario|
+    path = '%s/%s' % [path_screenshots, scenario]
+    unless Dir.exist?(path)
+      FileUtils.mkdir_p(path)
+    end
+
+    @driver.save_screenshot('%s/%s.png' % [path, step])
     sleep 1
   end
