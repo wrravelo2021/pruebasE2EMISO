@@ -28,13 +28,19 @@ A continuación se presentan las instrucciones para ejecutar las pruebas desarro
 
 3. Modificar URL y accesos del usuario
 
-    En el archivo **/playwright/test.js** modificar las lineas bajo el comentario **Credentials** con las credenciales correspondientes creadas anteriormente en ghost.
+    En el archivo **/playwright/config.js** modificar la llave **url** y el objeto **credentials** con las credenciales correspondientes creadas anteriormente en ghost.
 
-    ```jsx
-    // Credentials
-    const url = 'http://localhost:2368/ghost'; // URL donde esta desplegado Ghost
-    let email = "test@gmail.com"; // Email del usuario
-    let password = "pruebasmiso"; // Contraseña del usuario
+    ```json
+    {
+        "url": "http://localhost:2368/ghost",
+        "credentials": {
+            "email": "test@gmail.com",
+            "password": "pruebasmiso"
+        },
+        "pathScreenshots": "./screenshots/3.42.5/",
+        "viewportHeight": 600,
+        "viewportWidth": 800
+    }
     ```
 
 4. Correr las pruebas
@@ -75,6 +81,39 @@ A continuación se presentan las instrucciones para ejecutar las pruebas desarro
     ```bash
     bundle exec kraken-mobile run
     ```
+    
+
+        backstop reference
+        ```
+
+## Reporte BackstopJS 🗄
+
+A continuación se presentan las instrucciones para ejecutar el reporte generado por BackstopJS que se especificó para comparar las diferencias entre la versión 3.3.0 y 3.42.5 de Ghost para las funcionalidades F18 en Kraken y F10 en Playwright.
+
+1. Ir a la carpeta con las especificaciones de BackstopJS
+
+  ```bash
+  cd backstop/
+  ```
+
+2. Instalar BackstopJS
+
+  ```bash
+  npm install -g backstopjs
+  ```
+
+3. Guardar las imágenes de referencia
+
+  ```bash
+  backstop reference
+  ```
+
+4. Ejecutar pruebas y reporte
+
+  ```bash
+  backstop test
+  ```
+
 ## Funcionalidades y escenarios de prueba ⚙️
 
 El listado de funcionalidades que se probaron en este proyecto se puede encontrar en la wiki de este repositorio. Se puede acceder a través del [siguiente link](https://github.com/wrravelo2021/pruebasE2EMISO/wiki/Listado-de-funcionalidades).
