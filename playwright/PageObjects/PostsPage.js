@@ -14,7 +14,7 @@ module.exports = class PostsPage {
 
   async openPostTagsFilterDropdown() {
     await new Promise(r => setTimeout(r, 1000));
-    return this.page.click('css=div.gh-contentfilter-menu.gh-contentfilter-tag.ember-view');
+    return this.page.click('css=div.gh-contentfilter-menu.gh-contentfilter-tag');
   }
 
   async selectFilterByPublishedPostsOption() {

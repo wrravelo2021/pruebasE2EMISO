@@ -222,6 +222,7 @@ it('F15 - should create a tag and then create a new post with this tag.', async 
   await generateScreenshot(4);
   await tagDetailPage.enterTitleForNewTag(tag);
   await tagDetailPage.enterDescriptionForNewTag(description);
+  await tagDetailPage.clickExpandMetaData();
   await tagDetailPage.enterMetaTitleForNewTag(tag);
   await tagDetailPage.enterMetaDescriptionForNewTag(description);
   await tagDetailPage.clickSave();

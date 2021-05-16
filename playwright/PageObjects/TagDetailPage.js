@@ -30,4 +30,7 @@ module.exports = class TagDetailPage {
   async clickConfirmDelete() {
     return this.page.click('.gh-btn.gh-btn-red.gh-btn-icon.ember-view');
   }
+  async clickExpandMetaData() {
+    return this.page.click('text=Expand');
+  }
 };
