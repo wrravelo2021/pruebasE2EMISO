@@ -535,6 +535,12 @@ if ENV['ADB_DEVICE_ARG'].nil?
     sleep 1
   end
 
+  When('I click expand meta data') do
+    tag_detail_page = TagDetailPage.new(@driver)
+    tag_detail_page.click_expand_meta_data
+    sleep 1
+  end
+
   ####################
   # Tags page ########
   ####################
