@@ -147,3 +147,10 @@ En el siguiente link se encuentra el resultado de la ejecución de ResembleJS en
 El listado de funcionalidades que se probaron en este proyecto se puede encontrar en la wiki de este repositorio. Se puede acceder a través del [siguiente link](https://github.com/wrravelo2021/pruebasE2EMISO/wiki/Listado-de-funcionalidades).
 
 De la misma forma, el listado de escenarios de prueba se detalla en la wiki, con los casos de prueba de cada uno y el responsable de su desarrollo. Se puede acceder a través de [este link](https://github.com/wrravelo2021/pruebasE2EMISO/wiki/Listado-de-escenarios-de-prueba).
+
+## Reporte de Incidencias
+
+Las incidencias encontradas durante la ejecución de pruebas E2E y VRT, se registro en el sistema de Issues de Github del proyecto. Se puede acceder a través del [siguiente link](https://github.com/wrravelo2021/pruebasE2EMISO/issues). 
+
+
+
