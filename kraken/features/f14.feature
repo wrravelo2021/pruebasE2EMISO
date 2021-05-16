@@ -18,7 +18,6 @@ Feature: F14
     And I take screenshot of step 5 and scenario "F14"
     And I return to pages list
     And I take screenshot of step 6 and scenario "F14"
-    And I close the published post notification
     And I open page type filter dropdown
     And I take screenshot of step 7 and scenario "F14"
     And I select filter by scheduled pages option

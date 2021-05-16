@@ -46,4 +46,10 @@ class TagDetailPage
       :css, '.gh-btn.gh-btn-red.gh-btn-icon.ember-view'
     ).click
   end
+
+  def click_expand_meta_data
+    @driver.find_elements(
+      :css, '.gh-btn'
+    )[2].click
+  end
 end

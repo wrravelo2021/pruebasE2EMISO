@@ -18,9 +18,9 @@ class PostsPage
   end
 
   def open_post_tags_filter_dropdown
-    @driver.find_elements(
-      :css, '.ember-power-select-selected-item'
-    )[2].click
+    @driver.find_element(
+      :css, '.gh-contentfilter-menu.gh-contentfilter-tag'
+    ).click
   end
 
   def select_filter_by_published_posts_option

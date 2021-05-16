@@ -16,7 +16,6 @@ Feature: F12
     And I publish the post
     And I take screenshot of step 4 and scenario "F12"
     And I return to posts list
-    And I close the published post notification
     And I go to view site
     And I take screenshot of step 5 and scenario "F12"
     Then I see first post on site with title "Test title"
@@ -40,7 +39,6 @@ Feature: F12
     And I take screenshot of step 12 and scenario "F12"
     And I return to posts list
     And I take screenshot of step 13 and scenario "F12"
-    And I close the published post notification
     And I go to view site
     And I take screenshot of step 14 and scenario "F12"
     Then I see first post on site with title "New title"

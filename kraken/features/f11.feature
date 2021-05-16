@@ -17,7 +17,6 @@ Feature: F11
     And I take screenshot of step 4 and scenario "F11"
     And I return to posts list
     And I take screenshot of step 5 and scenario "F11"
-    And I close the published post notification
     And I open post type filter dropdown
     And I take screenshot of step 6 and scenario "F11"
     And I select filter by scheduled posts option
