@@ -14,6 +14,7 @@ Feature: F15
     And I take screenshot of step 4 and scenario "F15"
     And I enter title for new tag "Tag name"
     And I enter description for new tag "Tag description"
+    And I click expand meta data
     And I enter meta title for new tag "Tag name"
     And I enter meta description for new tag "Tag description"
     And I click save new tag
@@ -34,7 +35,6 @@ Feature: F15
     And I take screenshot of step 10 and scenario "F15"
     And I return to posts list
     And I take screenshot of step 11 and scenario "F15"
-    And I close the published post notification
     And I open post tags filter dropdown
     And I take screenshot of step 12 and scenario "F15"
     And I select filter by "Tag name" posts option
