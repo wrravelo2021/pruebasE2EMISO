@@ -84,7 +84,7 @@ A continuación se presentan las instrucciones para ejecutar las pruebas desarro
 
 ## Reporte BackstopJS 🗄
 
-A continuación se presentan las instrucciones para ejecutar el reporte generado por BackstopJS que se especificó para comparar las diferencias entre la versión 3.3.0 y 3.42.5 de Ghost para las funcionalidades F18 en Kraken y F10 en Playwright.
+A continuación se presentan las instrucciones para ejecutar el reporte generado por BackstopJS que se especificó para comparar las diferencias entre la versión 3.3.0 y 3.42.5 de Ghost para las funcionalidades F18 en Kraken y F10 en Playwright. La descripción de las funcionalidades se puede encontrar acá: [Listado escenarios](https://github.com/wrravelo2021/pruebasE2EMISO/wiki/Listado-de-escenarios-de-prueba).
 
 1. Ir a la carpeta con las especificaciones de BackstopJS
 
@@ -116,7 +116,7 @@ En el siguiente link se encuentra el resultado de la ejecución de backstop. [De
 
 ## Reporte ResembleJS 🤖
 
-A continuación se presentan las instrucciones para ejecutar el reporte generado por ResembleJS que se especificó para comparar las diferencias entre la versión 3.3.0 y 3.42.5 de Ghost para las funcionalidades F03, F05, F07, F08, F14, F13, F19, F20.
+A continuación se presentan las instrucciones para ejecutar el reporte generado por ResembleJS que se especificó para comparar las diferencias entre la versión 3.3.0 y 3.42.5 de Ghost para las funcionalidades F03, F05, F07, F08, F14, F13, F19, F20. La descripción de las funcionalidades se puede encontrar acá: [Listado escenarios](https://github.com/wrravelo2021/pruebasE2EMISO/wiki/Listado-de-escenarios-de-prueba).
 
 1. Ir a la carpeta con las especificaciones de ResembleJS
 
