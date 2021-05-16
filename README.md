@@ -123,11 +123,17 @@ A continuación se presentan las instrucciones para ejecutar el reporte generado
   ```bash
   cd vrt/
   ```
-
-2. Ejecutar reporte
+  
+2. Instalar ResembleJS
 
   ```bash
-  node reporte.js
+  npm install -g resemblejs
+  ```
+  
+3. Ejecutar reporte
+
+  ```bash
+  node report.js
   ```
   
 ### Demo reporte ResembleJS
