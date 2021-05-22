@@ -13,6 +13,7 @@ const PagePreviewPage = require('./PageObjects/PagePreviewPage.js');
 const TagsPage = require('./PageObjects/TagsPage.js');
 const TagDetailPage = require('./PageObjects/TagDetailPage.js');
 const ViewSitePage = require('./PageObjects/ViewSitePage.js');
+const MockarooClient = require('./Mockaroo/MockarooClient');
 
 // Setings
 const {viewportHeight, viewportWidth, credentials, pathScreenshots} = config;
@@ -22,11 +23,17 @@ let browser;
 let page;
 let context;
 let test;
+let mockaroo = new MockarooClient();
+
+before(async() => {
+  dataPoolPosts = await mockaroo.getDataPoolPosts();
+});
 
 beforeEach(async() => {
   browser = await playwright['chromium'].launch({ headless: true, viewport: { width: viewportWidth, height: viewportHeight }});
   context = await browser.newContext();
   page = await context.newPage();
+  dataPoolPost = await mockaroo.getDataPoolPost(dataPoolPosts);
 });
 
 afterEach(async () => {
@@ -35,8 +42,8 @@ afterEach(async () => {
 
 it('F11 - should schedule a new post and filter it in the list of posts by scheduled status.', async () => {
   test = 'F11';
-  const titlePost = "Escenario de prueba: " + test +  ' - ' + Date.now();
-  const bodyPost = "Este es un nuevo post creado para el escenario de prueba: " + test;
+  const titlePost = dataPoolPost.title_post;
+  const bodyPost = dataPoolPost.body_post;
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const postsPage = new PostsPage(page);
@@ -45,28 +52,19 @@ it('F11 - should schedule a new post and filter it in the list of posts by sched
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(1);
   await loginPage.clickLogin();
-  await generateScreenshot(2);
   await homePage.goToPosts();
   await postsPage.goToCreateNewPost();
   await postDetailPage.enterTitleForNewPost(titlePost);
   await postDetailPage.enterBodyForNewPost(bodyPost);
-  await generateScreenshot(3);
   await postDetailPage.schedulePost();
-  await generateScreenshot(4);
   await postDetailPage.returnToPostsList();
-  await generateScreenshot(5);
-  await homePage.closePublishedPostNotification();
   await postsPage.openPostTypeFilterDropdown();
-  await generateScreenshot(6);
   await postsPage.selectFilterByScheduledPostsOption();
-  await generateScreenshot(7);
 
   let firstPostTitle = await postsPage.getFirstPostTitle();
   assert.strictEqual(firstPostTitle, titlePost);
 });
-
 
 it('F12 - should create a post, then modify it and validate that the modification was made.', async () => {
   test = 'F12';
