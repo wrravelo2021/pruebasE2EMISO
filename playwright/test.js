@@ -1,6 +1,7 @@
 // Imports
 const playwright = require('playwright');
-const assert = require('assert')
+const assert = require('assert');
+const faker = require('faker');
 const config = require("./config.json");
 const LoginPage = require('./PageObjects/LoginPage.js');
 const HomePage = require('./PageObjects/HomePage.js');
@@ -40,8 +41,7 @@ afterEach(async () => {
   await browser.close();
 });
 
-it('F11 - should schedule a new post and filter it in the list of posts by scheduled status.', async () => {
-  test = 'F11';
+it('F061 - should schedule a new post and filter it in the list of posts by scheduled status.', async () => {
   const titlePost = dataPoolPost.title_post;
   const bodyPost = dataPoolPost.body_post;
   const loginPage = new LoginPage(page);
@@ -64,6 +64,38 @@ it('F11 - should schedule a new post and filter it in the list of posts by sched
 
   let firstPostTitle = await postsPage.getFirstPostTitle();
   assert.strictEqual(firstPostTitle, titlePost);
+});
+
+it('F062 - should not schedule a new post when the title has more than 255 characters.', async () => {
+  const titlePost = faker.datatype.string(256);
+  const bodyPost = dataPoolPost.body_post;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(titlePost);
+  await postDetailPage.enterBodyForNewPost(bodyPost);
+  const canPublish = await postDetailPage.isAvailableOptionPublishPost();
+  assert.strictEqual(false, canPublish);
+
+  const newTitle = faker.datatype.string(255);
+  await postDetailPage.deleteTitlePost();
+  await postDetailPage.enterTitleForNewPost(newTitle);
+  await postDetailPage.clickTextareaBodyPost();
+  await postDetailPage.schedulePost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByScheduledPostsOption();
+
+  let firstPostTitle = await postsPage.getFirstPostTitle();
+  assert.strictEqual(firstPostTitle, newTitle);
 });
 
 it('F12 - should create a post, then modify it and validate that the modification was made.', async () => {
