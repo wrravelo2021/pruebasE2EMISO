@@ -41,6 +41,13 @@ module.exports = class PostDetailPage {
     return this.page.click('.gh-btn.gh-btn-blue.gh-publishmenu-button.gh-btn-icon.ember-view');
   }
 
+  async unschedulePost() {
+    await new Promise(r => setTimeout(r, 1000));
+    await this.page.click('.gh-publishmenu.ember-view');
+    await this.page.click('div:text("Revert to draft")');
+    return this.page.click('.gh-btn.gh-btn-blue.gh-publishmenu-button.gh-btn-icon.ember-view');
+  }
+
   async returnToPostsList(body) {
     await new Promise(r => setTimeout(r, 1000));
     return this.page.click('a.blue.link.fw4.flex.items-center.ember-view');

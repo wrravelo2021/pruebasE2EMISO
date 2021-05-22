@@ -98,6 +98,40 @@ it('F062 - should not schedule a new post when the title has more than 255 chara
   assert.strictEqual(firstPostTitle, newTitle);
 });
 
+it('F063 - should schedule a new post and then unschedule it', async () => {
+  const titlePost = dataPoolPost.title_post;
+  const bodyPost = dataPoolPost.body_post;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(titlePost);
+  await postDetailPage.enterBodyForNewPost(bodyPost);
+  await postDetailPage.schedulePost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByScheduledPostsOption();
+
+  let firstPostTitle = await postsPage.getFirstPostTitle();
+  assert.strictEqual(firstPostTitle, titlePost);
+
+  await postsPage.clickPostWithTitle(titlePost);
+  await postDetailPage.unschedulePost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByDraftedPostsOption();
+
+  firstPostTitle = await postsPage.getFirstPostTitle();
+  assert.strictEqual(firstPostTitle, titlePost);
+});
+
 it('F12 - should create a post, then modify it and validate that the modification was made.', async () => {
   test = 'F12';
   const titlePost = "Escenario de prueba: " + test +  ' - ' + Date.now();
