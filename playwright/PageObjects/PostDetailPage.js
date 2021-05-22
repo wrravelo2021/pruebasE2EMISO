@@ -89,4 +89,15 @@ module.exports = class PostDetailPage {
     return this.page.click('.gh-btn.gh-btn-red.gh-btn-icon.ember-view');
   }
 
+  async clickTextareaBodyPost() {
+    await new Promise(r => setTimeout(r, 1000));
+    await this.page.click('.koenig-editor__editor.__mobiledoc-editor');
+  }
+
+  async isAvailableOptionPublishPost() {
+    await new Promise(r => setTimeout(r, 1000));
+    const optionPublishPost = await this.page.$$('.gh-btn.gh-btn-outline.gh-publishmenu-trigger.ember-basic-dropdown-trigger.ember-view');
+    return optionPublishPost.length ? true : false;
+  }
+
 };
