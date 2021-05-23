@@ -36,4 +36,10 @@ module.exports = class LoginPage {
     const message = await this.page.$$(".main-error");
     return message[0].innerText();
   }
+
+  async clearEmailWithTripleClick() {
+    await this.page.click('input[name="identification"]', { clickCount: 3 });
+    await new Promise(r => setTimeout(r, 1000));
+    return await this.page.keyboard.press("Backspace");
+  }
 };

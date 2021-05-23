@@ -10,4 +10,15 @@ module.exports = class TagsPage {
   async clickTagWithName(name) {
     return this.page.click(`.gh-tag-list-name:has-text("${name}")`);
   }
+
+  async searchTagByName(nameTag) {
+    await new Promise(r => setTimeout(r, 1000));
+    const tagsTitles = await this.page.$$("h3.gh-tag-list-name");
+    for (var i = 0; i < tagsTitles.length; i++) {
+      if (await tagsTitles[i].innerText() === nameTag) {
+        return true;
+      }
+    }
+    return false;
+  }
 };

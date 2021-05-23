@@ -4,10 +4,12 @@ module.exports = class PostDetailPage {
   }
 
   async enterTitleForNewPost(title) {
+    await new Promise(r => setTimeout(r, 1000));
     return this.page.type('.gh-editor-title.ember-text-area.gh-input.ember-view', title);
   }
 
   async enterBodyForNewPost(body) {
+    await new Promise(r => setTimeout(r, 1000));
     await this.page.click('.koenig-editor__editor.__mobiledoc-editor');
     return this.page.keyboard.type(body);
   }
@@ -43,12 +45,29 @@ module.exports = class PostDetailPage {
   }
 
   async schedulePost() {
+    await new Promise(r => setTimeout(r, 1000));
     await this.page.click('.gh-btn.gh-btn-outline.gh-publishmenu-trigger.ember-basic-dropdown-trigger.ember-view');
     await this.page.click('div:text("Schedule it for later")');
     return this.page.click('.gh-btn.gh-btn-blue.gh-publishmenu-button.gh-btn-icon.ember-view');
   }
 
+  async unschedulePost() {
+    await new Promise(r => setTimeout(r, 1000));
+    await this.page.click('.gh-publishmenu.ember-view');
+    await this.page.click('div:text("Revert to draft")');
+    return this.page.click('.gh-btn.gh-btn-blue.gh-publishmenu-button.gh-btn-icon.ember-view');
+  }
+
+  async reschedulePost(newScheduleDate) {
+    await new Promise(r => setTimeout(r, 1000));
+    await this.page.click('.gh-btn.gh-btn-outline.gh-publishmenu-trigger.ember-basic-dropdown-trigger.ember-view');
+    await this.deleteDatePublishPost();
+    await this.page.type('.gh-date-time-picker-date', newScheduleDate);
+    return this.page.click('.gh-btn.gh-btn-blue.gh-publishmenu-button.gh-btn-icon.ember-view');
+  }
+
   async returnToPostsList(body) {
+    await new Promise(r => setTimeout(r, 1000));
     return this.page.click('a.blue.link.fw4.flex.items-center.ember-view');
   }
 
@@ -134,4 +153,48 @@ module.exports = class PostDetailPage {
     return this.page.click('.gh-btn.gh-btn-red.gh-btn-icon.ember-view');
   }
 
+  async clickTextareaBodyPost() {
+    await new Promise(r => setTimeout(r, 1000));
+    await this.page.click('.koenig-editor__editor.__mobiledoc-editor');
+  }
+
+  async isAvailableOptionPublishPost() {
+    await new Promise(r => setTimeout(r, 1000));
+    const optionPublishPost = await this.page.$$('.gh-btn.gh-btn-outline.gh-publishmenu-trigger.ember-basic-dropdown-trigger.ember-view');
+    return optionPublishPost.length ? true : false;
+  }
+
+  async clickExpandMetaData() {
+    await new Promise(r => setTimeout(r, 1000));
+    this.page.click('b:text("Meta data")');
+  }
+
+  async clickContractMetaData() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('.back.settings-menu-header-action');
+  }
+
+  async enterMetaTitleForPost(metaTitle) {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.type('id=meta-title', metaTitle);
+  }
+
+  async enterMetaDescriptionForPost(metaDescription) {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.type('id=meta-description', metaDescription);
+  }
+
+  async deleteMetaTitlePost() {
+    await this.page.click('id=meta-title');
+    await this.page.keyboard.press("Meta+A");
+    await this.page.keyboard.press("Control+A");
+    return this.page.keyboard.press("Delete");
+  }
+
+  async deleteDatePublishPost() {
+    await this.page.click('.gh-date-time-picker-date');
+    await this.page.keyboard.press("Meta+A");
+    await this.page.keyboard.press("Control+A");
+    return this.page.keyboard.press("Delete");
+  }
 };
