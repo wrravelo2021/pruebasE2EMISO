@@ -249,6 +249,50 @@ it('F066 - should schedule a new post and then reschedule it', async () => {
   assert.strictEqual(firstPostTitle, titlePost);
 });
 
+it('F067 should create a post, then modify it and validate that the modification was made.', async () => {
+  const titlePost = dataPoolPost.title_post;
+  const bodyPost = dataPoolPost.body_post;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+  const viewSitePage = new ViewSitePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(titlePost);
+  await postDetailPage.enterBodyForNewPost(bodyPost);
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await homePage.closePublishedPostNotification();
+  await homePage.goToViewSite();
+
+  let firstPostTitle = await viewSitePage.getFirstPostTitle();
+  assert.strictEqual(firstPostTitle, titlePost);
+
+  const newTitlePost = faker.datatype.string(255);
+  const newBodyPost = faker.lorem.paragraphs();
+  await homePage.goToPosts();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByPublishedPostsOption();
+  await postsPage.clickPostWithTitle(titlePost);
+  await postDetailPage.deleteTitlePost();
+  await postDetailPage.deleteBodyPost();
+  await postDetailPage.enterTitleForNewPost(newTitlePost);
+  await postDetailPage.enterBodyForNewPost(newBodyPost);
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await homePage.closePublishedPostNotification();
+  await homePage.goToViewSite();
+
+  firstPostTitle = await viewSitePage.getFirstPostTitle();
+  assert.strictEqual(firstPostTitle, newTitlePost);
+});
+
 it('F079 - should schedule a new page and filter it in the list of pages by scheduled status.', async () => {
   const titlePage = dataPoolPage.title_page;
   const bodyPage = dataPoolPage.body_page;
@@ -451,63 +495,6 @@ it('F084 - should schedule a new page and then reschedule it', async () => {
 
   firstPageTitle = await pagesPage.getFirstPageTitle();
   assert.strictEqual(firstPageTitle, titlePage);
-});
-
-it('F12 - should create a post, then modify it and validate that the modification was made.', async () => {
-  test = 'F12';
-  const titlePost = "Escenario de prueba: " + test +  ' - ' + Date.now();
-  const bodyPost = "Este es un nuevo post creado para el escenario de prueba: " + test;
-  const loginPage = new LoginPage(page);
-  const homePage = new HomePage(page);
-  const postsPage = new PostsPage(page);
-  const postDetailPage = new PostDetailPage(page);
-  const viewSitePage = new ViewSitePage(page);
-
-  await page.goto(config.url);
-  await loginPage.enterEmail(credentials.email);
-  await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(1);
-  await loginPage.clickLogin();
-  await generateScreenshot(2);
-  await homePage.goToPosts();
-  await postsPage.goToCreateNewPost();
-  await postDetailPage.enterTitleForNewPost(titlePost);
-  await postDetailPage.enterBodyForNewPost(bodyPost);
-  await generateScreenshot(3);
-  await postDetailPage.publishPost();
-  await generateScreenshot(4);
-  await postDetailPage.returnToPostsList();
-  await homePage.closePublishedPostNotification();
-  await homePage.goToViewSite();
-  await generateScreenshot(5);
-
-  let firstPostTitle = await viewSitePage.getFirstPostTitle();
-  assert.strictEqual(firstPostTitle, titlePost);
-
-  await homePage.goToPosts();
-  await generateScreenshot(6);
-  await postsPage.openPostTypeFilterDropdown();
-  await generateScreenshot(7);
-  await postsPage.selectFilterByPublishedPostsOption();
-  await generateScreenshot(8);
-  await postsPage.clickPostWithTitle(titlePost);
-  await generateScreenshot(9);
-  await postDetailPage.deleteTitlePost();
-  await postDetailPage.deleteBodyPost();
-  await generateScreenshot(10);
-  await postDetailPage.enterTitleForNewPost(titlePost + ' (Modificado)');
-  await postDetailPage.enterBodyForNewPost(bodyPost + ' (Modificado)');
-  await generateScreenshot(11);
-  await postDetailPage.publishPost();
-  await generateScreenshot(12);
-  await postDetailPage.returnToPostsList();
-  await generateScreenshot(13);
-  await homePage.closePublishedPostNotification();
-  await homePage.goToViewSite();
-  await generateScreenshot(14);
-
-  firstPostTitle = await viewSitePage.getFirstPostTitle();
-  assert.strictEqual(firstPostTitle, titlePost + ' (Modificado)');
 });
 
 it('F13 - should change user password and login correctly.', async () => {
