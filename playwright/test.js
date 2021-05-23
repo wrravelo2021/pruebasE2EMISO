@@ -3,6 +3,7 @@ const playwright = require('playwright');
 const assert = require('assert');
 const faker = require('faker');
 const config = require("./config.json");
+const aPrioriData = require("./apriori.json");
 const LoginPage = require('./PageObjects/LoginPage.js');
 const HomePage = require('./PageObjects/HomePage.js');
 const PostsPage = require('./PageObjects/PostsPage.js');
@@ -30,6 +31,7 @@ before(async() => {
   dataPoolPosts = await mockaroo.getDataPoolPosts();
   dataPoolPages = await mockaroo.getDataPoolPages();
   dataPoolTags = await mockaroo.getDataPoolTags();
+  dataPoolSlugs = await mockaroo.getDataPoolSlugs();
 });
 
 beforeEach(async() => {
@@ -39,6 +41,7 @@ beforeEach(async() => {
   dataPoolPost = await mockaroo.getDataPoolRandom(dataPoolPosts);
   dataPoolPage = await mockaroo.getDataPoolRandom(dataPoolPages);
   dataPoolTag = await mockaroo.getDataPoolRandom(dataPoolTags);
+  dataPoolSlug = await mockaroo.getDataPoolRandom(dataPoolSlugs);
 });
 
 afterEach(async () => {
@@ -442,7 +445,7 @@ it('F083 - should not schedule a new page when the meta title has more than 300 
   await pageDetailPage.clickContractMetaDataPage();
   await pageDetailPage.closePageSettings();
   await pageDetailPage.schedulePage();
-  
+
   let message = await homePage.getMessageAlertNotification();
   assert.strictEqual(message, "Saving failed: Meta Title cannot be longer than 300 characters.");
 
@@ -1003,9 +1006,9 @@ it('F10 - Crear page, ir a lista, editar el page, ingresamos fecha de publicaciÃ
   assert(dateErrorText === "Must be in the past", "Error message is not the expected");
 });
 
-it('F16.1 - should publish post and remain publish even if I log out and log in again', async () => {
-  let title = `${Date.now()}`;
-  let body = `${Date.now()} body.`
+it('F16 - should publish post and remain publish even if I log out and log in again', async () => {
+  let title = faker.name.title();
+  let body = faker.lorem.word(14);
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -1035,9 +1038,9 @@ it('F16.1 - should publish post and remain publish even if I log out and log in 
   assert.equal(firstPostTitle, title);
 });
 
-it('F16.2 - should publish post with long title and remain publish even if I log out and log in again', async () => {
-  let title = "a".repeat(201);
-  let body = `${Date.now()} body.`;
+it('F17 - should publish post with long title and remain publish even if I log out and log in again', async () => {
+  let title = faker.lorem.words(201).substring(0, 201);
+  let body = faker.lorem.word(14);
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -1067,9 +1070,9 @@ it('F16.2 - should publish post with long title and remain publish even if I log
   assert.equal(firstPostTitle, title);
 });
 
-it('F17.1 - should publish a drafted post', async () => {
-  let title = `${Date.now()}`;
-  let body = `${Date.now()} body.`
+it('F18 - should publish a drafted post', async () => {
+  let title = faker.name.title();
+  let body = faker.lorem.word(14);
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -1101,9 +1104,9 @@ it('F17.1 - should publish a drafted post', async () => {
   assert.equal(firstPostTitle, title);
 });
 
-it('F17.2 - should publish a drafted post with long title', async () => {
-  let title = "a".repeat(201);
-  let body = `${Date.now()} body.`
+it('F19 - should publish a drafted post with long title', async () => {
+  let title = faker.lorem.words(201).substring(0, 201);
+  let body = faker.lorem.word(14);
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -1135,8 +1138,8 @@ it('F17.2 - should publish a drafted post with long title', async () => {
   assert.equal(firstPostTitle, title);
 });
 
-it('F18.1 - should change user password and login whith wrong password', async () => {
-  let newPassword = "newpruebasmiso";
+it('F20 - should change user password and login whith wrong password', async () => {
+  let newPassword = faker.internet.password();
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1171,8 +1174,8 @@ it('F18.1 - should change user password and login whith wrong password', async (
   await profilePage.clickChangePassword();
 });
 
-it('F18.2 - should try to change empty password then change user password and login whith wrong password', async () => {
-  let newPassword = "newpruebasmiso";
+it('F21 - should try to change empty password then change user password and login whith wrong password', async () => {
+  let newPassword = faker.internet.password();
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1214,8 +1217,8 @@ it('F18.2 - should try to change empty password then change user password and lo
   await profilePage.clickChangePassword();
 });
 
-it('F18.3 - should try to change short password then change user password and login whith wrong password', async () => {
-  let newPassword = "newpruebasmiso";
+it('F22 - should try to change short password then change user password and login whith wrong password', async () => {
+  let newPassword = faker.internet.password();
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1259,9 +1262,9 @@ it('F18.3 - should try to change short password then change user password and lo
   await profilePage.clickChangePassword();
 });
 
-it('F18.4 - should try to change only numbers password then change user password and login whith wrong password', async () => {
-  let insecurePassword = "1111111111";
-  let newPassword = "newpruebasmiso";
+it('F23 - should try to change only numbers password then change user password and login whith wrong password', async () => {
+  let insecurePassword = `${faker.datatype.number({max: 9})}`.repeat(10);
+  let newPassword = faker.internet.password();
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1305,9 +1308,9 @@ it('F18.4 - should try to change only numbers password then change user password
   await profilePage.clickChangePassword();
 });
 
-it('F18.5 - should try to change with all characters insecure password then change user password and login whith wrong password', async () => {
-  let insecurePassword = "aaaaaaaaaa";
-  let newPassword = "newpruebasmiso";
+it('F24 - should try to change with all characters insecure password then change user password and login whith wrong password', async () => {
+  let insecurePassword = `${faker.lorem.word().substring(0,1)}`.repeat(10);
+  let newPassword = faker.internet.password();
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1351,8 +1354,8 @@ it('F18.5 - should try to change with all characters insecure password then chan
   await profilePage.clickChangePassword();
 });
 
-it('F18.6 - should try to change with more than 60 characters then change user password and login whith wrong password', async () => {
-  let newPassword = "newpruebasmiso".repeat(6);
+it('F25 - should try to change with more than 60 characters then change user password and login whith wrong password', async () => {
+  let newPassword = `${faker.lorem.word(15)}`.repeat(6);
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1387,9 +1390,9 @@ it('F18.6 - should try to change with more than 60 characters then change user p
   await profilePage.clickChangePassword();
 });
 
-it('F19.1 - should edit a page', async () => {
-  let title = `${Date.now()}`;
-  let body = `${Date.now()} body.`
+it('F26 - should edit a page', async () => {
+  let title = faker.name.title();
+  let body = faker.lorem.word(14);
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -1416,50 +1419,7 @@ it('F19.1 - should edit a page', async () => {
   var pageBodyContent = await pagePreviewPage.getPageBodyContent();
   assert.equal(pageBodyContent.trim(), body);
 
-  let newBody = `${Date.now()} new body.`;
-  await pageDetailPage.closePageSettings();
-  for(var i = 0; i < body.length + 1; i++) {
-    await pageDetailPage.eraseOneCharacterFromBodyContent();
-  }
-  await pageDetailPage.enterBodyForNewPage(newBody);
-  await pageDetailPage.publishPage();
-
-  let [thirdPage] = await pageDetailPage.openPagePreviewWithContext(context);
-  pagePreviewPage = new PagePreviewPage(thirdPage);
-  pageBodyContent = await pagePreviewPage.getPageBodyContent();
-  assert.equal(pageBodyContent.trim(), newBody);
-});
-
-it('F19.2 - should edit a page with long title', async () => {
-  let title = "a".repeat(201);
-  let body = `${Date.now()} body.`
-
-  const loginPage = new LoginPage(page);
-  const homePage = new HomePage(page);
-  const pagesPage = new PagesPage(page);
-  const pageDetailPage = new PageDetailPage(page);
-
-  await page.goto(config.url);
-  await loginPage.enterEmail(credentials.email);
-  await loginPage.enterPassword(credentials.password);
-  await loginPage.clickLogin();
-  await homePage.goToPages();
-  await pagesPage.goToCreateNewPage();
-  await pageDetailPage.enterTitleForNewPage(title);
-  await pageDetailPage.enterBodyForNewPage(body);
-  await pageDetailPage.publishPage();
-  await pageDetailPage.returnToPagesList();
-  await pagesPage.openPageTypeFilterDropdown();
-  await pagesPage.selectFilterByPublishedPagesOption();
-  await pagesPage.clickPageWithTitle(title)
-  await pageDetailPage.openPageSettings();
-
-  let [secondPage] = await pageDetailPage.openPagePreviewWithContext(context);
-  var pagePreviewPage = new PagePreviewPage(secondPage);
-  var pageBodyContent = await pagePreviewPage.getPageBodyContent();
-  assert.equal(pageBodyContent.trim(), body);
-
-  let newBody = `${Date.now()} new body.`;
+  let newBody = faker.lorem.word(14);
   await pageDetailPage.closePageSettings();
   await pageDetailPage.clearBody();
   await pageDetailPage.enterBodyForNewPage(newBody);
@@ -1471,8 +1431,49 @@ it('F19.2 - should edit a page with long title', async () => {
   assert.equal(pageBodyContent.trim(), newBody);
 });
 
-it('F20.1 - should create tag, assign that tag to a post, delete the tag and deassign the tag from the post', async () => {
-  let tag = `${Date.now()}`;
+it('F27 - should edit a page with long title', async () => {
+  let title = faker.lorem.words(201).substring(0, 201);
+  let body = faker.lorem.word(14);
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+  await pagesPage.goToCreateNewPage();
+  await pageDetailPage.enterTitleForNewPage(title);
+  await pageDetailPage.enterBodyForNewPage(body);
+  await pageDetailPage.publishPage();
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByPublishedPagesOption();
+  await pagesPage.clickPageWithTitle(title)
+  await pageDetailPage.openPageSettings();
+
+  let [secondPage] = await pageDetailPage.openPagePreviewWithContext(context);
+  var pagePreviewPage = new PagePreviewPage(secondPage);
+  var pageBodyContent = await pagePreviewPage.getPageBodyContent();
+  assert.equal(pageBodyContent.trim(), body);
+
+  let newBody = faker.lorem.word(14);
+  await pageDetailPage.closePageSettings();
+  await pageDetailPage.clearBody();
+  await pageDetailPage.enterBodyForNewPage(newBody);
+  await pageDetailPage.publishPage();
+
+  let [thirdPage] = await pageDetailPage.openPagePreviewWithContext(context);
+  pagePreviewPage = new PagePreviewPage(thirdPage);
+  pageBodyContent = await pagePreviewPage.getPageBodyContent();
+  assert.equal(pageBodyContent.trim(), newBody);
+});
+
+it('F28 - should create tag, assign that tag to a post, delete the tag and deassign the tag from the post', async () => {
+  let tag = faker.lorem.word();
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -1492,8 +1493,8 @@ it('F20.1 - should create tag, assign that tag to a post, delete the tag and dea
   await homePage.goToPosts();
   await postsPage.goToCreateNewPost();
 
-  let title = `${Date.now()}`;
-  let body = `${Date.now()} body.`;
+  let title = faker.name.title();
+  let body = faker.lorem.word();
   await postDetailPage.enterTitleForNewPost(title)
   await postDetailPage.enterBodyForNewPost(body);
   await postDetailPage.openPostSettings();
@@ -1520,8 +1521,8 @@ it('F20.1 - should create tag, assign that tag to a post, delete the tag and dea
   assert.equal(tags.length, 0);
 });
 
-it('F20.2 - should try create empty tag then create tag, assign that tag to a post, delete the tag and deassign the tag from the post', async () => {
-  let tag = `${Date.now()}`;
+it('F29 - should try create empty tag then create tag, assign that tag to a post, delete the tag and deassign the tag from the post', async () => {
+  let tag = faker.lorem.word();
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -1553,8 +1554,8 @@ it('F20.2 - should try create empty tag then create tag, assign that tag to a po
   await homePage.goToPosts();
   await postsPage.goToCreateNewPost();
 
-  let title = `${Date.now()}`;
-  let body = `${Date.now()} body.`;
+  let title = faker.name.title();
+  let body = faker.lorem.word();
   await postDetailPage.enterTitleForNewPost(title)
   await postDetailPage.enterBodyForNewPost(body);
   await postDetailPage.openPostSettings();
@@ -1581,8 +1582,9 @@ it('F20.2 - should try create empty tag then create tag, assign that tag to a po
   assert.equal(tags.length, 0);
 });
 
-it('F20.3 - should try create tag with title that exceeds max characters, assign that tag to a post, delete the tag and deassign the tag from the post', async () => {
-  let tag = 'a'.repeat(25);
+it('F30 - should try create tag with title that exceeds max characters, assign that tag to a post, delete the tag and deassign the tag from the post', async () => {
+  let tag = faker.lorem.word();
+  let invalidTag = `${faker.lorem.word().substring(0,1)}`.repeat(192);
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -1597,13 +1599,26 @@ it('F20.3 - should try create tag with title that exceeds max characters, assign
   await loginPage.clickLogin();
   await homePage.goToTags();
   await tagsPage.goToCreateNewTag();
+  await tagDetailPage.enterTitleForNewTag(invalidTag);
+  await tagDetailPage.clickSave();
+
+  let tagTitleError = await tagDetailPage.tagTitleError();
+  assert.strictEqual(tagTitleError.trim(), "Tag names cannot be longer than 191 characters.");
+
   await tagDetailPage.enterTitleForNewTag(tag);
   await tagDetailPage.clickSave();
+
+  await homePage.goToTags();
+  await homePage.confirmLeaveCurrentPage();
+  await tagsPage.goToCreateNewTag();
+  await tagDetailPage.enterTitleForNewTag(tag);
+  await tagDetailPage.clickSave();
+
   await homePage.goToPosts();
   await postsPage.goToCreateNewPost();
 
-  let title = `${Date.now()}`;
-  let body = `${Date.now()} body.`;
+  let title = faker.name.title();
+  let body = faker.lorem.word();
   await postDetailPage.enterTitleForNewPost(title)
   await postDetailPage.enterBodyForNewPost(body);
   await postDetailPage.openPostSettings();
@@ -1630,8 +1645,8 @@ it('F20.3 - should try create tag with title that exceeds max characters, assign
   assert.equal(tags.length, 0);
 });
 
-it('F21.1 - should change user email and login whith wrong email', async () => {
-  let newEmail = "pruebasmiso@gmail.com";
+it('F31 - should change user email and login whith wrong email', async () => {
+  let newEmail = faker.internet.email();
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1661,8 +1676,8 @@ it('F21.1 - should change user email and login whith wrong email', async () => {
   await profilePage.clickSave();
 });
 
-it('F21.2 - should try to change empty email then change user email and login whith wrong email', async () => {
-  let newEmail = "pruebasmiso@gmail.com";
+it('F32 - should try to change empty email then change user email and login whith wrong email', async () => {
+  let newEmail = faker.internet.email();
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1698,9 +1713,9 @@ it('F21.2 - should try to change empty email then change user email and login wh
   await profilePage.clickSave();
 });
 
-it('F21.3 - should try to change URL email then change user email and login whith wrong email', async () => {
-  let newEmail = "pruebasmiso@gmail.com";
-  let invalidEmail = "http://google.com";
+it('F33 - should try to change URL email then change user email and login whith wrong email', async () => {
+  let newEmail = faker.internet.email();
+  let invalidEmail = faker.internet.url();
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1737,9 +1752,9 @@ it('F21.3 - should try to change URL email then change user email and login whit
   await profilePage.clickSave();
 });
 
-it('F21.4 - should try to change email to one that exceeds max characters then change user email and login whith wrong email', async () => {
-  let newEmail = "pruebasmiso@gmail.com";
-  let invalidEmail = `${'a'.repeat(250)}@gmail.com`;
+it('F34 - should try to change email to one that exceeds max characters then change user email and login whith wrong email', async () => {
+  let newEmail = faker.internet.email();
+  let invalidEmail = `${faker.lorem.word().substring(0,1).repeat(250)}@gmail.com`;
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1776,8 +1791,8 @@ it('F21.4 - should try to change email to one that exceeds max characters then c
   await profilePage.clickSave();
 });
 
-it('F22.1 - should change slug in profile', async () => {
-  let newSlug = "slug";
+it('F35 - should change slug in profile', async () => {
+  let newSlug = dataPoolSlug.slug;
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1793,8 +1808,8 @@ it('F22.1 - should change slug in profile', async () => {
   await profilePage.clickSave();
 });
 
-it('F22.2 - should change slug in profile with URL', async () => {
-  let newSlug = "http://google.com/";
+it('F36 - should change slug in profile with URL', async () => {
+  let newSlug = dataPoolSlug.url;
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1810,7 +1825,7 @@ it('F22.2 - should change slug in profile with URL', async () => {
   await profilePage.clickSave();
 });
 
-it('F22.3 - should change slug in profile with empty text', async () => {
+it('F37 - should change slug in profile with empty text', async () => {
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1826,8 +1841,8 @@ it('F22.3 - should change slug in profile with empty text', async () => {
   await profilePage.clickSave();
 });
 
-it('F22.4 - should change slug in profile with empty text', async () => {
-  let slug = 'algo algo algo';
+it('F38 - should change slug in profile with empty text', async () => {
+  let slug = dataPoolSlug.sentence;
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1843,8 +1858,8 @@ it('F22.4 - should change slug in profile with empty text', async () => {
   await profilePage.clickSave();
 });
 
-it('F22.5 - should change slug in profile with email', async () => {
-  let slug = 'drummerwilliam@gmail.com';
+it('F39 - should change slug in profile with email', async () => {
+  let slug = dataPoolSlug.email;
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1860,8 +1875,8 @@ it('F22.5 - should change slug in profile with email', async () => {
   await profilePage.clickSave();
 });
 
-it('F22.6 - should change slug in profile with number of characters exceeded', async () => {
-  let slug = 'a'.repeat(200);
+it('F40 - should change slug in profile with number of characters exceeded', async () => {
+  let slug = `${dataPoolSlug.word.substring(0,1)}`.repeat(200);
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1877,8 +1892,9 @@ it('F22.6 - should change slug in profile with number of characters exceeded', a
   await profilePage.clickSave();
 });
 
-it('F23.1 - should change website', async () => {
-  let website = 'https://www.google.com';
+it('F41 - should change website', async () => {
+  const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
+  let website = randomData['url'];
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1894,25 +1910,9 @@ it('F23.1 - should change website', async () => {
   await profilePage.clickSave();
 });
 
-it('F23.2 - should try to change website with email as website', async () => {
-    let website = 'drummerwilliam@gmail.com';
-    const loginPage = new LoginPage(page);
-    const homePage = new HomePage(page);
-    const profilePage = new ProfilePage(page);
-
-    await page.goto(config.url);
-    await loginPage.enterEmail(credentials.email);
-    await loginPage.enterPassword(credentials.password);
-    await loginPage.clickLogin();
-    await homePage.goToMyProfile();
-    await profilePage.clearWebsite();
-    await profilePage.enterWebsite(website);
-    await profilePage.clickSave();
-    await profilePage.clickSave();
-  });
-
-it('F23.3 - should try to change website with integer as website', async () => {
-  let website = '11111111';
+it('F42 - should try to change website with email as website', async () => {
+  const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
+  let website = randomData['email'];
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1926,13 +1926,11 @@ it('F23.3 - should try to change website with integer as website', async () => {
   await profilePage.enterWebsite(website);
   await profilePage.clickSave();
   await profilePage.clickSave();
-
-  let errorMessage = await profilePage.websiteErrorMessage();
-  assert.strictEqual(errorMessage.trim(), "Website is not a valid url");
 });
 
-it('F23.4 - should try to change website with integer as sentence', async () => {
-  let website = 'algo algo algo';
+it('F43 - should try to change website with integer as website', async () => {
+  const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
+  let website = `${randomData['singleDigitNumber']}`.repeat(10);
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1951,8 +1949,30 @@ it('F23.4 - should try to change website with integer as sentence', async () => 
   assert.strictEqual(errorMessage.trim(), "Website is not a valid url");
 });
 
-it('F23.5 - should try to change website with a website that exceeds max characters', async () => {
-  let website = `http://${'a'.repeat(2000)}.com`;
+it('F44 - should try to change website with integer as sentence', async () => {
+  const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
+  let website = randomData['sentence'];
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.clearWebsite();
+  await profilePage.enterWebsite(website);
+  await profilePage.clickSave();
+  await profilePage.clickSave();
+
+  let errorMessage = await profilePage.websiteErrorMessage();
+  assert.strictEqual(errorMessage.trim(), "Website is not a valid url");
+});
+
+it('F45 - should try to change website with a website that exceeds max characters', async () => {
+  const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
+  let website = `http://${randomData['word'].substring(0,1).repeat(2000)}.com`;
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
