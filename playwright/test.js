@@ -562,12 +562,51 @@ it('F085 - should create a tag and then create a new post with this tag.', async
   await postDetailPage.closePostSettings();
   await postDetailPage.publishPost();
   await postDetailPage.returnToPostsList();
-  await homePage.closePublishedPostNotification();
   await postsPage.openPostTagsFilterDropdown();
   await postsPage.selectFilterByTagName(nameTag);
 
   let firstTagTitle = await postsPage.getFirstPostTitle();
   assert.strictEqual(firstTagTitle, titlePost);
+});
+
+it('F086 - should create a tag and then create a new page with this tag.', async () => {
+  const nameTag = dataPoolTag.name_tag;
+  const descriptionTag = dataPoolTag.description_tag;
+  const titlePage = dataPoolPage.title_page;
+  const bodyPage = dataPoolPage.body_page;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const tagsPage = new TagsPage(page);
+  const tagDetailPage = new TagDetailPage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToTags();
+  await tagsPage.goToCreateNewTag();
+  await tagDetailPage.enterTitleForNewTag(nameTag);
+  await tagDetailPage.enterDescriptionForNewTag(descriptionTag);
+  await tagDetailPage.clickExpandMetaData();
+  await tagDetailPage.enterMetaTitleForNewTag(nameTag);
+  await tagDetailPage.enterMetaDescriptionForNewTag(descriptionTag);
+  await tagDetailPage.clickSave();
+  await homePage.goToPages();
+  await pagesPage.goToCreateNewPage();
+  await pageDetailPage.enterTitleForNewPage(titlePage);
+  await pageDetailPage.enterBodyForNewPage(bodyPage);
+  await pageDetailPage.openPageSettings();
+  await pageDetailPage.assignTagWithName(nameTag);
+  await pageDetailPage.closePageSettings();
+  await pageDetailPage.publishPage();
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTagsFilterDropdown();
+  await pagesPage.selectFilterByTagName(nameTag);
+
+  let firstTagTitle = await pagesPage.getFirstPageTitle();
+  assert.strictEqual(firstTagTitle, titlePage);
 });
 
 it('F01 - should create and publish post', async () => {
