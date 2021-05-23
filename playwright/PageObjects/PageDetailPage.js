@@ -31,6 +31,14 @@ module.exports = class PageDetailPage {
     return this.page.click('.gh-btn.gh-btn-blue.gh-publishmenu-button.gh-btn-icon.ember-view');
   }
 
+  async reschedulePage(newScheduleDate) {
+    await new Promise(r => setTimeout(r, 1000));
+    await this.page.click('.gh-btn.gh-btn-outline.gh-publishmenu-trigger.ember-basic-dropdown-trigger.ember-view');
+    await this.deleteDatePublishPage();
+    await this.page.type('.gh-date-time-picker-date', newScheduleDate);
+    return this.page.click('.gh-btn.gh-btn-blue.gh-publishmenu-button.gh-btn-icon.ember-view');
+  }
+
   async returnToPagesList() {
     await new Promise(r => setTimeout(r, 1000));
     return this.page.click('a.blue.link.fw4.flex.items-center.ember-view');
@@ -124,6 +132,13 @@ module.exports = class PageDetailPage {
 
   async deleteMetaTitlePage() {
     await this.page.click('id=meta-title');
+    await this.page.keyboard.press("Meta+A");
+    await this.page.keyboard.press("Control+A");
+    return this.page.keyboard.press("Delete");
+  }
+
+  async deleteDatePublishPage() {
+    await this.page.click('.gh-date-time-picker-date');
     await this.page.keyboard.press("Meta+A");
     await this.page.keyboard.press("Control+A");
     return this.page.keyboard.press("Delete");

@@ -415,42 +415,42 @@ it('F083 - should not schedule a new page when the meta title has more than 300 
   let firstPageTitle = await pagesPage.getFirstPageTitle();
   assert.strictEqual(firstPageTitle, titlePage);
 });
-/*
+
 it('F084 - should schedule a new page and then reschedule it', async () => {
-  const titlePost = dataPoolPost.title_post;
-  const bodyPost = dataPoolPost.body_post;
+  const titlePage = dataPoolPage.title_page;
+  const bodyPage = dataPoolPage.body_page;
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
-  const postsPage = new PostsPage(page);
-  const postDetailPage = new PostDetailPage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
 
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
   await loginPage.clickLogin();
-  await homePage.goToPosts();
-  await postsPage.goToCreateNewPost();
-  await postDetailPage.enterTitleForNewPost(titlePost);
-  await postDetailPage.enterBodyForNewPost(bodyPost);
-  await postDetailPage.schedulePost();
-  await postDetailPage.returnToPostsList();
-  await postsPage.openPostTypeFilterDropdown();
-  await postsPage.selectFilterByScheduledPostsOption();
+  await homePage.goToPages();
+  await pagesPage.goToCreateNewPage();
+  await pageDetailPage.enterTitleForNewPage(titlePage);
+  await pageDetailPage.enterBodyForNewPage(bodyPage);
+  await pageDetailPage.schedulePage();
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByScheduledPagesOption();
 
-  let firstPostTitle = await postsPage.getFirstPostTitle();
-  assert.strictEqual(firstPostTitle, titlePost);
+  let firstPageTitle = await pagesPage.getFirstPageTitle();
+  assert.strictEqual(firstPageTitle, titlePage);
 
   const newScheduleDate = faker.date.soon(1).toISOString().split('T')[0];
-  await postsPage.clickPostWithTitle(titlePost);
-  await postDetailPage.reschedulePost(newScheduleDate);
-  await postDetailPage.returnToPostsList();
-  await postsPage.openPostTypeFilterDropdown();
-  await postsPage.selectFilterByScheduledPostsOption();
+  await pagesPage.clickPageWithTitle(titlePage);
+  await pageDetailPage.reschedulePage(newScheduleDate);
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByScheduledPagesOption();
 
-  firstPostTitle = await postsPage.getFirstPostTitle();
-  assert.strictEqual(firstPostTitle, titlePost);
+  firstPageTitle = await pagesPage.getFirstPageTitle();
+  assert.strictEqual(firstPageTitle, titlePage);
 });
-*/
+
 it('F12 - should create a post, then modify it and validate that the modification was made.', async () => {
   test = 'F12';
   const titlePost = "Escenario de prueba: " + test +  ' - ' + Date.now();
