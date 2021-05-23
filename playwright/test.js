@@ -3,6 +3,7 @@ const playwright = require('playwright');
 const assert = require('assert');
 const faker = require('faker');
 const config = require("./config.json");
+const aPrioriData = require("./apriori.json");
 const LoginPage = require('./PageObjects/LoginPage.js');
 const HomePage = require('./PageObjects/HomePage.js');
 const PostsPage = require('./PageObjects/PostsPage.js');
@@ -33,7 +34,7 @@ before(async() => {
 });
 
 beforeEach(async() => {
-  browser = await playwright['chromium'].launch({ headless: true, viewport: { width: viewportWidth, height: viewportHeight }});
+  browser = await playwright['chromium'].launch({ headless: false, viewport: { width: viewportWidth, height: viewportHeight }});
   context = await browser.newContext();
   page = await context.newPage();
   dataPoolPost = await mockaroo.getDataPoolRandom(dataPoolPosts);
@@ -398,7 +399,7 @@ it('F083 - should not schedule a new page when the meta title has more than 300 
   await pageDetailPage.clickContractMetaDataPage();
   await pageDetailPage.closePageSettings();
   await pageDetailPage.schedulePage();
-  
+
   let message = await homePage.getMessageAlertNotification();
   assert.strictEqual(message, "Saving failed: Meta Title cannot be longer than 300 characters.");
 
@@ -1903,7 +1904,8 @@ it('F22.6 - should change slug in profile with number of characters exceeded', a
 });
 
 it('F23.1 - should change website', async () => {
-  let website = faker.internet.url();
+  const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
+  let website = randomData['url'];
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1920,24 +1922,26 @@ it('F23.1 - should change website', async () => {
 });
 
 it('F23.2 - should try to change website with email as website', async () => {
-    let website = faker.internet.email();
-    const loginPage = new LoginPage(page);
-    const homePage = new HomePage(page);
-    const profilePage = new ProfilePage(page);
+  const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
+  let website = randomData['email'];
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
 
-    await page.goto(config.url);
-    await loginPage.enterEmail(credentials.email);
-    await loginPage.enterPassword(credentials.password);
-    await loginPage.clickLogin();
-    await homePage.goToMyProfile();
-    await profilePage.clearWebsite();
-    await profilePage.enterWebsite(website);
-    await profilePage.clickSave();
-    await profilePage.clickSave();
-  });
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.clearWebsite();
+  await profilePage.enterWebsite(website);
+  await profilePage.clickSave();
+  await profilePage.clickSave();
+});
 
 it('F23.3 - should try to change website with integer as website', async () => {
-  let website = `${faker.datatype.number({max: 9})}`.repeat(10);
+  const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
+  let website = `${randomData['singleDigitNumber']}`.repeat(10);
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1957,7 +1961,8 @@ it('F23.3 - should try to change website with integer as website', async () => {
 });
 
 it('F23.4 - should try to change website with integer as sentence', async () => {
-  let website = faker.lorem.sentence();
+  const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
+  let website = randomData['sentence'];
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1977,7 +1982,8 @@ it('F23.4 - should try to change website with integer as sentence', async () => 
 });
 
 it('F23.5 - should try to change website with a website that exceeds max characters', async () => {
-  let website = `http://${faker.lorem.word().substring(0,1).repeat(2000)}.com`;
+  const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
+  let website = `http://${randomData['word'].substring(0,1).repeat(2000)}.com`;
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
