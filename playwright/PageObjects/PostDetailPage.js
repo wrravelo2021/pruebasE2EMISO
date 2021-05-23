@@ -107,4 +107,24 @@ module.exports = class PostDetailPage {
     return optionPublishPost.length ? true : false;
   }
 
+  async clickExpandMetaData() {
+    await new Promise(r => setTimeout(r, 1000));
+    this.page.click('b:text("Meta data")');
+  }
+
+  async clickContractMetaData() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('.back.settings-menu-header-action');
+  }
+
+  async enterMetaTitleForPost(metaTitle) {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.type('id=meta-title', metaTitle);
+  }
+
+  async enterMetaDescriptionForPost(metaDescription) {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.type('id=meta-description', metaDescription);
+  }
+
 };
