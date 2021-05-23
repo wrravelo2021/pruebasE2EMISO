@@ -929,7 +929,7 @@ it('F094 - should not create a new tag when the canonical URL is not in the corr
   assert.strictEqual(existsTag, true);
 });
 
-it('F01.a - should create post with fields ok', async () => {
+it('F01 - should create post with fields ok', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const body = randomData['sentence'];
@@ -956,7 +956,7 @@ it('F01.a - should create post with fields ok', async () => {
   assert(publishedPostTitle === title, "Title is not the expected");
 });
 
-it('F01.b - should create post with invalid HTML blocks', async () => {
+it('F02 - should create post with invalid HTML blocks', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const block = "<" + randomData['word'] + " " + randomData['sentence'] + ">";
@@ -986,7 +986,7 @@ it('F01.b - should create post with invalid HTML blocks', async () => {
   assert(publishedPostTitle === title, "Title is not the expected");
 });
 
-it('F01.c - should create post with invalid Youtube urls', async () => {
+it('F03 - should create post with invalid Youtube urls', async () => {
   const title = dataPoolGeneric.word;
   const link = dataPoolGeneric.word + dataPoolGeneric.url;
 
@@ -1018,7 +1018,7 @@ it('F01.c - should create post with invalid Youtube urls', async () => {
   assert(publishedPostTitle === title, "Title is not the expected");
 });
 
-it('F01.d - should create post with unsplash images', async () => {
+it('F04 - should create post with unsplash images', async () => {
   const title = dataPoolGeneric.word;
   const image = dataPoolGeneric.animal;
 
@@ -1046,7 +1046,7 @@ it('F01.d - should create post with unsplash images', async () => {
   assert(publishedPostTitle === title, "Title is not the expected");
 });
 
-it('F01.e - should create post with maximum title length', async () => {
+it('F05 - should create post with maximum title length', async () => {
   const longTitle = faker.lorem.words(256);
   const okTitle = faker.lorem.words(10);
   const body = faker.lorem.sentences(10);
@@ -1076,7 +1076,7 @@ it('F01.e - should create post with maximum title length', async () => {
   assert(publishedPostTitle === okTitle, "Title is not the expected");
 });
 
-it('F01.f - should create post with maximum length of title and excerpt', async () => {
+it('F06 - should create post with maximum length of title and excerpt', async () => {
   const longTitle = faker.lorem.words(256);
   const okTitle = faker.lorem.words(10);
   const longExcerpt = faker.lorem.words(256);
@@ -1117,7 +1117,7 @@ it('F01.f - should create post with maximum length of title and excerpt', async 
   assert(publishedPostTitle === okTitle, "Title is not the expected");
 });
 
-it('F02.a - should create post with fields ok and publish post on site', async () => {
+it('F07 - should create post with fields ok and publish post on site', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const body = randomData['sentence'];
@@ -1144,7 +1144,7 @@ it('F02.a - should create post with fields ok and publish post on site', async (
   assert(publishedPostTitle === title, "Title is not the expected");
 });
 
-it('F02.b - should create post with invalid HTMLs and publish post on site', async () => {
+it('F08 - should create post with invalid HTMLs and publish post on site', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const block = "<" + randomData['word'] + " " + randomData['sentence'] + ">";
@@ -1173,7 +1173,7 @@ it('F02.b - should create post with invalid HTMLs and publish post on site', asy
   assert(publishedPostTitle === title, "Title is not the expected");
 });
 
-it('F02.c - should create post with invalid Twitter urls and publish post on site', async () => {
+it('F09 - should create post with invalid Twitter urls and publish post on site', async () => {
   const title = dataPoolGeneric.word;
   const link = dataPoolGeneric.word + dataPoolGeneric.url;
 
@@ -1206,7 +1206,7 @@ it('F02.c - should create post with invalid Twitter urls and publish post on sit
   assert(publishedPostTitle === title, "Title is not the expected");
 });
 
-it('F02.d - should create post with unplash images and publish post on site', async () => {
+it('F10 - should create post with unplash images and publish post on site', async () => {
   const title = dataPoolGeneric.word;
   const image = dataPoolGeneric.animal;
 
@@ -1236,7 +1236,7 @@ it('F02.d - should create post with unplash images and publish post on site', as
   assert(publishedPostTitle === title, "Title is not the expected");
 });
 
-it('F02.e - should create post with maximum title length and publish post on site', async () => {
+it('F11 - should create post with maximum title length and publish post on site', async () => {
   const longTitle = faker.lorem.words(256);
   const okTitle = faker.lorem.words(10);
   const body = faker.lorem.sentences(10);
@@ -1266,7 +1266,7 @@ it('F02.e - should create post with maximum title length and publish post on sit
   assert(publishedPostTitle === okTitle, "Title is not the expected");
 });
 
-it('F02.f - should create post with maximum length of title and excerpt and publish it on site', async () => {
+it('F12 - should create post with maximum length of title and excerpt and publish it on site', async () => {
   const longTitle = faker.lorem.words(256);
   const okTitle = faker.lorem.words(10);
   const longExcerpt = faker.lorem.words(256);
@@ -1308,7 +1308,7 @@ it('F02.f - should create post with maximum length of title and excerpt and publ
   assert(publishedPostTitle === okTitle, "Title is not the expected");
 });
 
-it('F03.a - should not allow future date for post, with body and title ok', async () => {
+it('F13 - should not allow future date for post, with body and title ok', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const body = randomData['sentence'];
@@ -1341,7 +1341,7 @@ it('F03.a - should not allow future date for post, with body and title ok', asyn
   assert(dateErrorText === "Must be in the past", "Error message is not the expected");
 });
 
-it('F03.b - should not allow future hour for post, with body and title ok', async () => {
+it('F14 - should not allow future hour for post, with body and title ok', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const body = randomData['sentence'];
@@ -1373,7 +1373,7 @@ it('F03.b - should not allow future hour for post, with body and title ok', asyn
   assert(dateErrorText === "Must be in the past", "Error message is not the expected");
 });
 
-it('F03.c - should not allow future date for post, with random tag', async () => {
+it('F15 - should not allow future date for post, with random tag', async () => {
   const title = dataPoolGeneric.word;
   const body = dataPoolGeneric.sentence;
   const futureDate = dataPoolGeneric.futureDate;
@@ -1407,7 +1407,7 @@ it('F03.c - should not allow future date for post, with random tag', async () =>
   assert(dateErrorText === "Must be in the past", "Error message is not the expected");
 });
 
-it('F03.d - should not allow future date for post, with invalid HTMLs', async () => {
+it('F46 - should not allow future date for post, with invalid HTMLs', async () => {
   const title = dataPoolGeneric.word;
   const body = dataPoolGeneric.sentence;
   const futureDate = dataPoolGeneric.futureDate;
@@ -1442,7 +1442,7 @@ it('F03.d - should not allow future date for post, with invalid HTMLs', async ()
   assert(dateErrorText === "Must be in the past", "Error message is not the expected");
 });
 
-it('F03.e - should not allow future date for post, invalid Vimeo urls', async () => {
+it('F47 - should not allow future date for post, invalid Vimeo urls', async () => {
   const title = faker.lorem.words(10);
 
   const loginPage = new LoginPage(page);
@@ -1479,7 +1479,7 @@ it('F03.e - should not allow future date for post, invalid Vimeo urls', async ()
   assert(dateErrorText === "Must be in the past", "Error message is not the expected");
 });
 
-it('F03.f - should not allow future date for post, maximum length of excerpt', async () => {
+it('F48 - should not allow future date for post, maximum length of excerpt', async () => {
   const title = faker.lorem.words(10);
   const body = faker.lorem.sentences(10);
   const longExcerpt = faker.lorem.words(256);
@@ -1524,7 +1524,7 @@ it('F03.f - should not allow future date for post, maximum length of excerpt', a
   assert(dateErrorText === "Must be in the past", "Error message is not the expected");
 });
 
-it('F04.a - should publish new page with fields ok', async () => {
+it('F49 - should publish new page with fields ok', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const body = randomData['sentence'];
@@ -1552,7 +1552,7 @@ it('F04.a - should publish new page with fields ok', async () => {
   assert(publishedPageTitle === title, "Title is not the expected");
 });
 
-it('F04.b - should publish new page with invalid HTMLs', async () => {
+it('F50 - should publish new page with invalid HTMLs', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const block = "<" + randomData['word'] + " " + randomData['sentence'] + ">";
@@ -1582,7 +1582,7 @@ it('F04.b - should publish new page with invalid HTMLs', async () => {
   assert(publishedPageTitle === title, "Title is not the expected");
 });
 
-it('F04.c - should publish new page with invalid CodePen urls', async () => {
+it('F51 - should publish new page with invalid CodePen urls', async () => {
   const title = dataPoolGeneric.word;
   const link = dataPoolGeneric.word + dataPoolGeneric.url;
 
@@ -1616,7 +1616,7 @@ it('F04.c - should publish new page with invalid CodePen urls', async () => {
   assert(publishedPageTitle === title, "Title is not the expected");
 });
 
-it('F04.d - should publish new page with unsplash images', async () => {
+it('F52 - should publish new page with unsplash images', async () => {
   const title = dataPoolGeneric.word;
   const image = dataPoolGeneric.animal;
 
@@ -1647,7 +1647,7 @@ it('F04.d - should publish new page with unsplash images', async () => {
   assert(publishedPageTitle === title, "Title is not the expected");
 });
 
-it('F04.e - should publish new page with maximum title length', async () => {
+it('F53 - should publish new page with maximum title length', async () => {
   const longTitle = faker.lorem.words(256);
   const okTitle = faker.lorem.words(10);
   const body = faker.lorem.sentences(10);
@@ -1680,7 +1680,7 @@ it('F04.e - should publish new page with maximum title length', async () => {
   assert(publishedPageTitle === okTitle, "Title is not the expected");
 });
 
-it('F04.f - should publish new page with maximum length of title and excerpt', async () => {
+it('F54 - should publish new page with maximum length of title and excerpt', async () => {
   const longTitle = faker.lorem.words(256);
   const longExcerpt = faker.lorem.words(256);
   const okTitle = faker.lorem.words(10);
@@ -1725,7 +1725,7 @@ it('F04.f - should publish new page with maximum length of title and excerpt', a
   assert(publishedPageTitle === okTitle, "Title is not the expected");
 });
 
-it('F05.a - should save draft and publish page with fields ok', async () => {
+it('F55 - should save draft and publish page with fields ok', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const body = randomData['sentence'];
@@ -1762,7 +1762,7 @@ it('F05.a - should save draft and publish page with fields ok', async () => {
   assert(publishedPageTitle === title, "Title is not the expected");
 });
 
-it('F05.b - should save draft and publish page with invalid spotify links', async () => {
+it('F56 - should save draft and publish page with invalid spotify links', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const link = randomData['word'] + randomData['url'];
@@ -1806,7 +1806,7 @@ it('F05.b - should save draft and publish page with invalid spotify links', asyn
   assert(publishedPageTitle === title, "Title is not the expected");
 });
 
-it('F05.c - should try to save draft with title max length and publish page', async () => {
+it('F57 - should try to save draft with title max length and publish page', async () => {
   const longTitle = dataPoolGeneric.word.repeat(256);
   const okTitle = dataPoolGeneric.word;
   const body = dataPoolGeneric.sentence;
@@ -1847,7 +1847,7 @@ it('F05.c - should try to save draft with title max length and publish page', as
   assert(publishedPageTitle === okTitle, "Title is not the expected");
 });
 
-it('F05.d - should save draft with invalid SoundCloud urls and publish page', async () => {
+it('F58 - should save draft with invalid SoundCloud urls and publish page', async () => {
   const title = dataPoolGeneric.word;
   const link = dataPoolGeneric.word + dataPoolGeneric.url;
 
@@ -1889,7 +1889,7 @@ it('F05.d - should save draft with invalid SoundCloud urls and publish page', as
   assert(publishedPageTitle === title, "Title is not the expected");
 });
 
-it('F05.e - should save draft and publish page with max title length', async () => {
+it('F59 - should save draft and publish page with max title length', async () => {
   const title = faker.lorem.words(10);
   const body = faker.lorem.sentences(10);
   const longTitle = faker.lorem.words(256);
@@ -1938,7 +1938,7 @@ it('F05.e - should save draft and publish page with max title length', async () 
   assert(publishedPageTitle === okTitle, "Title is not the expected");
 });
 
-it('F05.f - should save draft and publish page with max excerpt length', async () => {
+it('F60 - should save draft and publish page with max excerpt length', async () => {
   const title = faker.lorem.words(10);
   const body = faker.lorem.sentences(10);
   const longExcerpt = faker.lorem.words(256);
