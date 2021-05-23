@@ -108,6 +108,31 @@ module.exports = class PostDetailPage {
     await new Promise(r => setTimeout(r, 1000));
   }
 
+  async createYoutubeLink(url){
+    await this.page.click('div[title="YouTube"]');
+    const youtubeUrl = await this.page.$('input[name="url"]');
+    await youtubeUrl.fill(url);
+    await youtubeUrl.press('Enter');
+    await new Promise(r => setTimeout(r, 1000));
+  }
+
+  async createTwitterLink(url){
+    await this.page.click('div[title="Twitter"]');
+    const twitterUrl = await this.page.$('input[name="url"]');
+    await twitterUrl.fill(url);
+    await twitterUrl.press('Enter');
+    await new Promise(r => setTimeout(r, 1000));
+  }
+
+  async insertUnsplashImage(text){
+    await this.page.click('div[title="Unsplash"]');
+    const unsplashSearch = await this.page.$('.gh-unsplash-search');
+    await unsplashSearch.fill(text);
+    await new Promise(r => setTimeout(r, 1000));
+    await this.page.click('.absolute.top-6.right-6');
+    await new Promise(r => setTimeout(r, 1000));
+  }
+
   async createHTMLBlock(body){
     await this.page.click('div[title="HTML"]');
     await this.page.type('.CodeMirror-line span', body);
@@ -127,6 +152,10 @@ module.exports = class PostDetailPage {
   async assignTagWithName(name) {
     await this.page.type('.ember-power-select-trigger-multiple-input:nth-child(1)', name);
     return this.page.click('.ember-power-select-option');
+  }
+
+  async writeTagWithName(name) {
+    await this.page.type('.ember-power-select-trigger-multiple-input:nth-child(1)', name);
   }
 
   async getTagsName() {

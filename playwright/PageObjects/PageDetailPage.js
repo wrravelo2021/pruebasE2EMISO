@@ -210,9 +210,38 @@ module.exports = class PageDetailPage {
     await new Promise(r => setTimeout(r, 1000));
   }
 
+  async createCodepenLink(url){
+    await this.page.click('div[title="CodePen"]');
+    const codepenUrl = await this.page.$('input[name="url"]');
+    await codepenUrl.fill(url);
+    await codepenUrl.press('Enter');
+    await new Promise(r => setTimeout(r, 1000));
+  }
+
+  async createSoundCloudLink(url){
+    await this.page.click('div[title="SoundCloud"]');
+    const codepenUrl = await this.page.$('input[name="url"]');
+    await codepenUrl.fill(url);
+    await codepenUrl.press('Enter');
+    await new Promise(r => setTimeout(r, 1000));
+  }
+
   async getUrlParseError(){
     await new Promise(r => setTimeout(r, 1000));
     return await this.page.$('.bg-error-red');
+  }
+
+  async insertUnsplashImage(text){
+    await this.page.click('div[title="Unsplash"]');
+    const unsplashSearch = await this.page.$('.gh-unsplash-search');
+    await unsplashSearch.fill(text);
+    await new Promise(r => setTimeout(r, 1000));
+    await this.page.click('.absolute.top-6.right-6');
+    await new Promise(r => setTimeout(r, 1000));
+  }
+
+  async closeSaveModal(){
+    await this.page.click('.modal-content a');
   }
 
 };
