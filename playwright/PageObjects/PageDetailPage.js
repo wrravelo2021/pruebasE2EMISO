@@ -185,11 +185,34 @@ module.exports = class PageDetailPage {
     return this.page.keyboard.press("Delete");
   }
 
-
   async assignTagWithName(name) {
     await new Promise(r => setTimeout(r, 1000));
     await this.page.type('.ember-power-select-trigger-multiple-input:nth-child(1)', name);
     return this.page.click('.ember-power-select-option');
+  }
+
+  async openPlusOptions() {
+    await new Promise(r => setTimeout(r, 1000));
+    return await this.page.click('.koenig-plus-menu-button');
+  }
+
+  async createHTMLBlock(body){
+    await this.page.click('div[title="HTML"]');
+    await this.page.type('.CodeMirror-line span', body);
+    await new Promise(r => setTimeout(r, 1000));
+  }
+
+  async createSpotifyLink(url){
+    await this.page.click('div[title="Spotify"]');
+    const spotifyUrl = await this.page.$('input[name="url"]');
+    await spotifyUrl.fill(url);
+    await spotifyUrl.press('Enter');
+    await new Promise(r => setTimeout(r, 1000));
+  }
+
+  async getUrlParseError(){
+    await new Promise(r => setTimeout(r, 1000));
+    return await this.page.$('.bg-error-red');
   }
 
 };

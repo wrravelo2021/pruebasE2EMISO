@@ -108,6 +108,12 @@ module.exports = class PostDetailPage {
     await new Promise(r => setTimeout(r, 1000));
   }
 
+  async createHTMLBlock(body){
+    await this.page.click('div[title="HTML"]');
+    await this.page.type('.CodeMirror-line span', body);
+    await new Promise(r => setTimeout(r, 1000));
+  }
+
   async getUrlParseError(){
     await new Promise(r => setTimeout(r, 1000));
     return await this.page.$('.bg-error-red');
@@ -139,6 +145,16 @@ module.exports = class PostDetailPage {
     await this.pressDeleteOnElement(dateField, 10);
     await dateField.type(date);
     await dateField.press('Enter');
+  }
+
+  async fillHour(){
+    const value = await this.page.$eval(".gh-date-time-picker-time input", e => e.value)
+    const hour = parseInt(value.split(':')[0]) + 1;
+    const minutes = parseInt(value.split(':')[1]);
+
+    const hourField = await this.page.$('.gh-date-time-picker-time input');
+    await hourField.fill(hour + ':' + minutes);    
+    await this.page.click('.gh-date-time-picker');
   }
 
   async getFutureDateError(){
