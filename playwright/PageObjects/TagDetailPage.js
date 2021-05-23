@@ -72,4 +72,10 @@ module.exports = class TagDetailPage {
     }
     return await this.page.keyboard.press("Backspace");
   }
+
+  async returnToTagsInternalList() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('a[href="#/tags/?type=internal"]');
+  }
+
 };
