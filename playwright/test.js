@@ -29,6 +29,7 @@ let mockaroo = new MockarooClient();
 before(async() => {
   dataPoolPosts = await mockaroo.getDataPoolPosts();
   dataPoolPages = await mockaroo.getDataPoolPages();
+  dataPoolTags = await mockaroo.getDataPoolTags();
 });
 
 beforeEach(async() => {
@@ -37,6 +38,7 @@ beforeEach(async() => {
   page = await context.newPage();
   dataPoolPost = await mockaroo.getDataPoolRandom(dataPoolPosts);
   dataPoolPage = await mockaroo.getDataPoolRandom(dataPoolPages);
+  dataPoolTag = await mockaroo.getDataPoolRandom(dataPoolTags);
 });
 
 afterEach(async () => {

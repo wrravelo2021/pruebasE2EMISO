@@ -25,6 +25,15 @@ module.exports = class MockarooClient {
     });
   }
 
+  async getDataPoolTags() {
+    return this.client.generate({
+      count: this.amount,
+      schema: 'tag_schema'
+    }).then(function(records) {
+      return records;
+    });
+  }
+
   async getDataPoolRandom(records) {
     let random = this.getRandom(0, records.length);
     return records[random];
