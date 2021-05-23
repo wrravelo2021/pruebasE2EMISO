@@ -12,11 +12,20 @@ module.exports = class PostDetailPage {
     return this.page.keyboard.type(body);
   }
 
+  async clickBody() {
+    return await this.page.click('.koenig-editor__editor.__mobiledoc-editor');
+  }
+
   async deleteTitlePost() {
     await this.page.click('.gh-editor-title.ember-text-area.gh-input.ember-view');
     await this.page.keyboard.press("Meta+A");
     await this.page.keyboard.press("Control+A");
     return this.page.keyboard.press("Delete");
+  }
+
+  async cleanTitle(){
+    const title = await this.page.$('.gh-editor-title.ember-text-area.gh-input.ember-view');
+    await title.fill('');
   }
 
   async deleteBodyPost() {
@@ -27,9 +36,10 @@ module.exports = class PostDetailPage {
   }
 
   async publishPost(body) {
-    await new Promise(r => setTimeout(r, 1000));
+    await new Promise(r => setTimeout(r, 2000));
     await this.page.click('.gh-btn.gh-btn-outline.gh-publishmenu-trigger.ember-basic-dropdown-trigger.ember-view');
-    return this.page.click('.gh-btn.gh-btn-blue.gh-publishmenu-button.gh-btn-icon.ember-view');
+    await this.page.click('.gh-btn.gh-btn-blue.gh-publishmenu-button.gh-btn-icon.ember-view');
+    await new Promise(r => setTimeout(r, 2000));
   }
 
   async schedulePost() {
@@ -48,6 +58,45 @@ module.exports = class PostDetailPage {
 
   async closePostSettings() {
     return this.page.click('.close.settings-menu-header-action');
+  }
+
+  async fillExcerpt(text) {
+    const excerpt = await this.page.$('#custom-excerpt');
+    await excerpt.fill(text);
+  }
+
+  async cleanExcerpt(){
+    const title = await this.page.$('#custom-excerpt');
+    await title.fill('');
+  }
+
+  async getExcerptError(){
+    await new Promise(r => setTimeout(r, 1000));
+    const error = await this.page.$('.response');
+    return error.innerText();
+  }
+
+  async openPlusOptions() {
+    await new Promise(r => setTimeout(r, 1000));
+    return await this.page.click('.koenig-plus-menu-button');
+  }
+
+  async createVimeoLink(url){
+    await this.page.click('div[title="Vimeo"]');
+    const vimeoUrl = await this.page.$('input[name="url"]');
+    await vimeoUrl.fill(url);
+    await vimeoUrl.press('Enter');
+    await new Promise(r => setTimeout(r, 1000));
+  }
+
+  async getUrlParseError(){
+    await new Promise(r => setTimeout(r, 1000));
+    return await this.page.$('.bg-error-red');
+  }
+
+  async getExcerptErrorSaving(){
+    const error = await this.page.$('.gh-alert-content');
+    return error.innerText();
   }
 
   async assignTagWithName(name) {

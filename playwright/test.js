@@ -2,6 +2,7 @@
 const playwright = require('playwright');
 const assert = require('assert')
 const config = require("./config.json");
+const faker = require('faker');
 const LoginPage = require('./PageObjects/LoginPage.js');
 const HomePage = require('./PageObjects/HomePage.js');
 const PostsPage = require('./PageObjects/PostsPage.js');
@@ -14,7 +15,7 @@ const TagsPage = require('./PageObjects/TagsPage.js');
 const TagDetailPage = require('./PageObjects/TagDetailPage.js');
 const ViewSitePage = require('./PageObjects/ViewSitePage.js');
 
-// Setings
+// Settings
 const {viewportHeight, viewportWidth, credentials, pathScreenshots} = config;
 
 // Tests
@@ -24,7 +25,7 @@ let context;
 let test;
 
 beforeEach(async() => {
-  browser = await playwright['chromium'].launch({ headless: true, viewport: { width: viewportWidth, height: viewportHeight }});
+  browser = await playwright['chromium'].launch({ headless: false, viewport: { width: viewportWidth, height: viewportHeight }});
   context = await browser.newContext();
   page = await context.newPage();
 });
@@ -252,9 +253,11 @@ it('F15 - should create a tag and then create a new post with this tag.', async 
   assert.strictEqual(firstTagTitle, titlePost);
 });
 
-it('F01 - should create and publish post', async () => {
-  test = "F01";
-  const title = `${Date.now()}`;
+
+it('F01.e - should create post with maximum title length', async () => {
+  const longTitle = faker.lorem.words(256);
+  const okTitle = faker.lorem.words(10);
+  const body = faker.lorem.sentences(10);
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -264,31 +267,69 @@ it('F01 - should create and publish post', async () => {
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(1);
   await loginPage.clickLogin();
-  await generateScreenshot(2);
   await homePage.goToPosts();
-  await generateScreenshot(3);
   await postsPage.goToCreateNewPost();
-  await generateScreenshot(4);
-  await postDetailPage.enterTitleForNewPost(title);
-  await postDetailPage.enterBodyForNewPost('Cuerpo 1');
-  await generateScreenshot(5);
+  await postDetailPage.enterTitleForNewPost(longTitle);
+  await postDetailPage.enterBodyForNewPost(body);
+  await postDetailPage.cleanTitle();
+  await postDetailPage.enterTitleForNewPost(okTitle);
+  await postDetailPage.enterBodyForNewPost('');
   await postDetailPage.publishPost();
-  await generateScreenshot(6);
   await postDetailPage.returnToPostsList();
-  await generateScreenshot(7);
   await postsPage.openPostTypeFilterDropdown();
   await postsPage.selectFilterByPublishedPostsOption();
-  await generateScreenshot(8);
   const publishedPostTitle = await postsPage.getFirstPostTitle();
   assert(publishedPostTitle != null, "Title is null");
-  assert(publishedPostTitle === title, "Title is not the expected");
+  assert(publishedPostTitle === okTitle, "Title is not the expected");
 });
 
-it('F02 - should create and publish post on site', async () => {
-  test = "F02";
-  const title = `${Date.now()}`;
+
+it('F01.f - should create post with maximum length of title and excerpt', async () => {
+  const longTitle = faker.lorem.words(256);
+  const okTitle = faker.lorem.words(10);
+  const longExcerpt = faker.lorem.words(256);
+  const body = faker.lorem.sentences(10);
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(longTitle);
+  await postDetailPage.enterBodyForNewPost(body);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.fillExcerpt(longExcerpt);
+  await postDetailPage.closePostSettings();
+  await postDetailPage.cleanTitle();
+  await postDetailPage.enterTitleForNewPost(okTitle);
+  await postDetailPage.openPostSettings();
+
+  const excerptError = await postDetailPage.getExcerptError();
+  assert(excerptError === "Excerpt cannot be longer than 300 characters.");
+
+  await postDetailPage.cleanExcerpt();
+  await postDetailPage.closePostSettings();
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByPublishedPostsOption();
+  const publishedPostTitle = await postsPage.getFirstPostTitle();
+
+  assert(publishedPostTitle != null, "Title is null");
+  assert(publishedPostTitle === okTitle, "Title is not the expected");
+});
+
+it('F02.e - should create post with maximum title length and publish post on site', async () => {
+  const longTitle = faker.lorem.words(256);
+  const okTitle = faker.lorem.words(10);
+  const body = faker.lorem.sentences(10);
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -299,30 +340,66 @@ it('F02 - should create and publish post on site', async () => {
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(1);
   await loginPage.clickLogin();
-  await generateScreenshot(2);
   await homePage.goToPosts();
-  await generateScreenshot(3);
   await postsPage.goToCreateNewPost();
-  await generateScreenshot(4);
-  await postDetailPage.enterTitleForNewPost(title);
-  await postDetailPage.enterBodyForNewPost('Cuerpo 2');
-  await generateScreenshot(5);
+  await postDetailPage.enterTitleForNewPost(longTitle);
+  await postDetailPage.enterBodyForNewPost(body);
+  await postDetailPage.cleanTitle();
+  await postDetailPage.enterTitleForNewPost(okTitle);
+  await postDetailPage.enterBodyForNewPost('');
   await postDetailPage.publishPost();
-  await generateScreenshot(6);
   await postDetailPage.returnToPostsList();
-  await generateScreenshot(7);
   await homePage.goToViewSite();
-  await generateScreenshot(8);
   const publishedPostTitle = await viewSitePage.getFirstPostTitle();
   assert(publishedPostTitle != null, "Title is null");
-  assert(publishedPostTitle === title, "Title is not the expected");
+  assert(publishedPostTitle === okTitle, "Title is not the expected");
 });
 
-it('F03 - should not allow future date for post', async () => {
-  test = "F03";
-  const title = `${Date.now()}`;
+it('F02.f - should create post with maximum length of title and excerpt and publish it on site', async () => {
+  const longTitle = faker.lorem.words(256);
+  const okTitle = faker.lorem.words(10);
+  const longExcerpt = faker.lorem.words(256);
+  const body = faker.lorem.sentences(10);
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+  const viewSitePage = new ViewSitePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+
+  await postDetailPage.enterTitleForNewPost(longTitle);
+  await postDetailPage.enterBodyForNewPost(body);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.fillExcerpt(longExcerpt);
+  await postDetailPage.closePostSettings();
+  await postDetailPage.cleanTitle();
+  await postDetailPage.enterTitleForNewPost(okTitle);
+  await postDetailPage.openPostSettings();
+
+  const excerptError = await postDetailPage.getExcerptError();
+  assert(excerptError === "Excerpt cannot be longer than 300 characters.");
+
+  await postDetailPage.cleanExcerpt();
+  await postDetailPage.closePostSettings();
+
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await homePage.goToViewSite();
+  const publishedPostTitle = await viewSitePage.getFirstPostTitle();
+  assert(publishedPostTitle != null, "Title is null");
+  assert(publishedPostTitle === okTitle, "Title is not the expected");
+});
+
+it('F03.e - should not allow future date for post, invalid Vimeo urls', async () => {
+  const title = faker.lorem.words(10);
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -332,30 +409,25 @@ it('F03 - should not allow future date for post', async () => {
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(1);
   await loginPage.clickLogin();
-  await generateScreenshot(2);
   await homePage.goToPosts();
-  await generateScreenshot(3);
   await postsPage.goToCreateNewPost();
-  await generateScreenshot(4);
   await postDetailPage.enterTitleForNewPost(title);
-  await postDetailPage.enterBodyForNewPost('Cuerpo 3');
-  await generateScreenshot(5);
-  await postDetailPage.publishPost();
-  await generateScreenshot(6);
-  await postDetailPage.returnToPostsList();
-  await generateScreenshot(7);
-  await postsPage.clickPostWithTitle(title);
-  await generateScreenshot(8);
-  await postDetailPage.openPostSettings();
-  await generateScreenshot(9);
+  await postDetailPage.clickBody();
+  await postDetailPage.openPlusOptions();
+  await postDetailPage.createVimeoLink(faker.lorem.word(10));
 
-  const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  await postDetailPage.fillDate(tomorrow.toISOString().split('T')[0]);
-  await generateScreenshot(10);
+  const urlError = await postDetailPage.getUrlParseError();
+  assert(urlError != null, "URL error message is null");
+
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostSortByFilterDropdown();
+  await postsPage.selectFilterByRecentlyUpdatedPostOption();
+  await postsPage.clickPostWithTitle(title);
+  await postDetailPage.openPostSettings();
+  const dateFuture = faker.date.future().toISOString();
+  await postDetailPage.fillDate(dateFuture.split('T')[0]);
 
   const dateError = await postDetailPage.getFutureDateError();
   const dateErrorText = dateError ? await dateError.innerText() : null;
@@ -363,9 +435,55 @@ it('F03 - should not allow future date for post', async () => {
   assert(dateErrorText === "Must be in the past", "Error message is not the expected");
 });
 
-it('F04 - should publish new page', async () => {
-  test = "F04";
-  const title = `${Date.now()}`;
+it('F03.f - should not allow future date for post, maximum length of excerpt', async () => {
+  const title = faker.lorem.words(10);
+  const body = faker.lorem.sentences(10);
+  const longExcerpt = faker.lorem.words(256);
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(title);
+  await postDetailPage.enterBodyForNewPost(body);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.fillExcerpt(longExcerpt);
+  await postDetailPage.closePostSettings();
+  await postDetailPage.publishPost();
+
+  const excerptError = await postDetailPage.getExcerptErrorSaving();
+  assert(excerptError == "Saving failed: Excerpt cannot be longer than 300 characters.", "Error message doesn't match");
+
+  await postDetailPage.openPostSettings();
+  await postDetailPage.fillExcerpt('');
+  await postDetailPage.closePostSettings();
+  await postDetailPage.publishPost();
+
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostSortByFilterDropdown();
+  await postsPage.selectFilterByRecentlyUpdatedPostOption();
+  await postsPage.clickPostWithTitle(title);
+  await postDetailPage.openPostSettings();
+  const dateFuture = faker.date.future().toISOString();
+  await postDetailPage.fillDate(dateFuture.split('T')[0]);
+
+  const dateError = await postDetailPage.getFutureDateError();
+  const dateErrorText = dateError ? await dateError.innerText() : null;
+  assert(dateErrorText != null, "Error message is null");
+  assert(dateErrorText === "Must be in the past", "Error message is not the expected");
+});
+
+it('F04.e - should publish new page with maximum title length', async () => {
+  const longTitle = faker.lorem.words(256);
+  const okTitle = faker.lorem.words(10);
+  const body = faker.lorem.sentences(10);
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -375,32 +493,31 @@ it('F04 - should publish new page', async () => {
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(1);
   await loginPage.clickLogin();
-  await generateScreenshot(2);
   await homePage.goToPages();
-  await generateScreenshot(3);
   await pagesPage.goToCreateNewPage();
-  await generateScreenshot(4);
-  await pageDetailPage.enterTitleForNewPage(title);
-  await pageDetailPage.enterBodyForNewPage('Cuerpo 4');
-  await generateScreenshot(5);
+  await pageDetailPage.enterTitleForNewPage(longTitle);
+  await new Promise(r => setTimeout(r, 2000));
+  await pageDetailPage.enterBodyForNewPage(body);
+  await pageDetailPage.cleanTitle();
+  await new Promise(r => setTimeout(r, 2000));
+  await pageDetailPage.enterTitleForNewPage(okTitle);
+  await pageDetailPage.clickBody();
   await pageDetailPage.publishPage();
-  await generateScreenshot(6);
   await pageDetailPage.returnToPagesList();
-  await generateScreenshot(7);
   await pagesPage.openPageTypeFilterDropdown();
   await pagesPage.selectFilterByPublishedPagesOption();
-  await generateScreenshot(8);
 
   const publishedPageTitle = await pagesPage.getFirstPageTitle();
   assert(publishedPageTitle != null, "Title is null");
-  assert(publishedPageTitle === title, "Title is not the expected");
+  assert(publishedPageTitle === okTitle, "Title is not the expected");
 });
 
-it('F05 - should save draft and publish page', async () => {
-  test = "F05";
-  const title = `${Date.now()}`;
+it('F04.f - should publish new page with maximum length of title and excerpt', async () => {
+  const longTitle = faker.lorem.words(256);
+  const longExcerpt = faker.lorem.words(256);
+  const okTitle = faker.lorem.words(10);
+  const body = faker.lorem.sentences(10);
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -410,35 +527,130 @@ it('F05 - should save draft and publish page', async () => {
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(1);
   await loginPage.clickLogin();
-  await generateScreenshot(2);
   await homePage.goToPages();
-  await generateScreenshot(3);
   await pagesPage.goToCreateNewPage();
-  await generateScreenshot(4);
-  await pageDetailPage.enterTitleForNewPage(title);
-  await pageDetailPage.enterBodyForNewPage('Cuerpo 5');
-  await generateScreenshot(5);
+  await pageDetailPage.enterTitleForNewPage(longTitle);
+  await new Promise(r => setTimeout(r, 2000));
+  await pageDetailPage.enterBodyForNewPage(body);
+
+  await pageDetailPage.openPageSettings();
+  await pageDetailPage.fillExcerpt(longExcerpt);
+  await pageDetailPage.closePageSettings();
+  await pageDetailPage.cleanTitle();
+  await new Promise(r => setTimeout(r, 2000));
+  await pageDetailPage.enterTitleForNewPage(okTitle);
+  await pageDetailPage.openPageSettings();
+
+  const excerptError = await pageDetailPage.getExcerptError();
+  assert(excerptError === "Excerpt cannot be longer than 300 characters.");
+
+  await pageDetailPage.cleanExcerpt();
+  await pageDetailPage.closePageSettings();
+
+  await pageDetailPage.publishPage();
   await pageDetailPage.returnToPagesList();
-  await generateScreenshot(6);
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByPublishedPagesOption();
+
+  const publishedPageTitle = await pagesPage.getFirstPageTitle();
+  assert(publishedPageTitle != null, "Title is null");
+  assert(publishedPageTitle === okTitle, "Title is not the expected");
+});
+
+it('F05.e - should save draft and publish page with max title length', async () => {
+  const title = faker.lorem.words(10);
+  const body = faker.lorem.sentences(10);
+  const longTitle = faker.lorem.words(256);
+  const okTitle = faker.lorem.words(10);
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+  await pagesPage.goToCreateNewPage();
+  await pageDetailPage.enterTitleForNewPage(title);
+  await pageDetailPage.enterBodyForNewPage(body);
+  await pageDetailPage.returnToPagesList();
   await pagesPage.openPageTypeFilterDropdown();
   await pagesPage.selectFilterByDraftedPagesOption();
-  await generateScreenshot(7);
 
   const draftPageTitle = await pagesPage.getFirstPageTitle();
   assert(draftPageTitle != null, "Page title is null");
   assert(draftPageTitle === title, "Page title is not the expected");
 
   await pagesPage.clickPageWithTitle(title);
-  await generateScreenshot(8);
+  await new Promise(r => setTimeout(r, 1000));
+  await pageDetailPage.enterTitleForNewPage(longTitle);
   await pageDetailPage.publishPage();
-  await generateScreenshot(9);
+
+  const errorMessage = await pageDetailPage.getErrorSaving();
+  assert(errorMessage == "Saving failed: Title cannot be longer than 255 characters.", "Error message doesn't match");
+
+  await pageDetailPage.clickPublishButton();
+  await pageDetailPage.cleanTitle();
+  await new Promise(r => setTimeout(r, 2000));
+  await pageDetailPage.enterTitleForNewPage(okTitle);
+  await pageDetailPage.publishPage();
   await pageDetailPage.returnToPagesList();
-  await generateScreenshot(10);
   await pagesPage.openPageTypeFilterDropdown();
   await pagesPage.selectFilterByPublishedPagesOption();
-  await generateScreenshot(11);
+
+  const publishedPageTitle = await pagesPage.getFirstPageTitle();
+  assert(publishedPageTitle != null, "Title is null");
+  assert(publishedPageTitle === okTitle, "Title is not the expected");
+});
+
+it('F05.f - should save draft and publish page with max excerpt length', async () => {
+  const title = faker.lorem.words(10);
+  const body = faker.lorem.sentences(10);
+  const longExcerpt = faker.lorem.words(256);
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+  await pagesPage.goToCreateNewPage();
+  await pageDetailPage.enterTitleForNewPage(title);
+  await pageDetailPage.enterBodyForNewPage(body);
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByDraftedPagesOption();
+
+  const draftPageTitle = await pagesPage.getFirstPageTitle();
+  assert(draftPageTitle != null, "Page title is null");
+  assert(draftPageTitle === title, "Page title is not the expected");
+
+  await pagesPage.clickPageWithTitle(title);
+  await new Promise(r => setTimeout(r, 1000));
+  await pageDetailPage.openPageSettings();
+  await pageDetailPage.fillExcerpt(longExcerpt);
+  await pageDetailPage.closePageSettings();
+  await pageDetailPage.publishPage();
+
+  const errorMessage = await pageDetailPage.getErrorSaving();
+  assert(errorMessage == "Saving failed: Excerpt cannot be longer than 300 characters.", "Error message doesn't match");
+
+  await pageDetailPage.clickPublishButton();
+  await pageDetailPage.openPageSettings();
+  await pageDetailPage.cleanExcerpt();
+  await pageDetailPage.closePageSettings();
+  await pageDetailPage.publishPage();
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByPublishedPagesOption();
 
   const publishedPageTitle = await pagesPage.getFirstPageTitle();
   assert(publishedPageTitle != null, "Title is null");
