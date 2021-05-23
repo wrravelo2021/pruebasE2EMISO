@@ -549,9 +549,6 @@ it('F085 - should create a tag and then create a new post with this tag.', async
   await tagsPage.goToCreateNewTag();
   await tagDetailPage.enterTitleForNewTag(nameTag);
   await tagDetailPage.enterDescriptionForNewTag(descriptionTag);
-  await tagDetailPage.clickExpandMetaData();
-  await tagDetailPage.enterMetaTitleForNewTag(nameTag);
-  await tagDetailPage.enterMetaDescriptionForNewTag(descriptionTag);
   await tagDetailPage.clickSave();
   await homePage.goToPosts();
   await postsPage.goToCreateNewPost();
@@ -589,9 +586,6 @@ it('F086 - should create a tag and then create a new page with this tag.', async
   await tagsPage.goToCreateNewTag();
   await tagDetailPage.enterTitleForNewTag(nameTag);
   await tagDetailPage.enterDescriptionForNewTag(descriptionTag);
-  await tagDetailPage.clickExpandMetaData();
-  await tagDetailPage.enterMetaTitleForNewTag(nameTag);
-  await tagDetailPage.enterMetaDescriptionForNewTag(descriptionTag);
   await tagDetailPage.clickSave();
   await homePage.goToPages();
   await pagesPage.goToCreateNewPage();
@@ -607,6 +601,34 @@ it('F086 - should create a tag and then create a new page with this tag.', async
 
   let firstTagTitle = await pagesPage.getFirstPageTitle();
   assert.strictEqual(firstTagTitle, titlePage);
+});
+
+it('F087 - should create a tag with metadata.', async () => {
+  const nameTag = dataPoolTag.name_tag;
+  const descriptionTag = dataPoolTag.description_tag;
+  const metaTitleTag = dataPoolTag.meta_title_tag;
+  const metaDescriptionTag = dataPoolTag.meta_description_tag;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const tagsPage = new TagsPage(page);
+  const tagDetailPage = new TagDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToTags();
+  await tagsPage.goToCreateNewTag();
+  await tagDetailPage.enterTitleForNewTag(nameTag);
+  await tagDetailPage.enterDescriptionForNewTag(descriptionTag);
+  await tagDetailPage.clickExpandMetaData();
+  await tagDetailPage.enterMetaTitleForNewTag(metaTitleTag);
+  await tagDetailPage.enterMetaDescriptionForNewTag(metaDescriptionTag);
+  await tagDetailPage.clickSave();
+  await homePage.goToTags();
+
+  let existsTag = await tagsPage.searchTagByName(nameTag);
+  assert.strictEqual(existsTag, true);
 });
 
 it('F01 - should create and publish post', async () => {
