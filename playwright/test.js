@@ -370,52 +370,52 @@ it('F082 - should schedule a new page with metadata', async () => {
   let firstPagesTitle = await pagesPage.getFirstPageTitle();
   assert.strictEqual(firstPagesTitle, titlePage);
 });
-/*
+
 it('F083 - should not schedule a new page when the meta title has more than 300 characters.', async () => {
-  const titlePost = dataPoolPost.title_post;
-  const bodyPost = dataPoolPost.body_post;
-  const metaTitlePost = faker.datatype.string(301);
-  const metaDescriptionPost = dataPoolPost.meta_description_post;
+  const titlePage = dataPoolPage.title_page;
+  const bodyPage = dataPoolPage.body_page;
+  const metaTitlePage = faker.datatype.string(301);
+  const metaDescriptionPage = dataPoolPage.meta_description_page;
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
-  const postsPage = new PostsPage(page);
-  const postDetailPage = new PostDetailPage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
 
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
   await loginPage.clickLogin();
-  await homePage.goToPosts();
-  await postsPage.goToCreateNewPost();
-  await postDetailPage.enterTitleForNewPost(titlePost);
-  await postDetailPage.enterBodyForNewPost(bodyPost);
-  await postDetailPage.openPostSettings();
-  await postDetailPage.clickExpandMetaData();
-  await postDetailPage.enterMetaTitleForPost(metaTitlePost);
-  await postDetailPage.enterMetaDescriptionForPost(metaDescriptionPost);
-  await postDetailPage.clickContractMetaData();
-  await postDetailPage.closePostSettings();
-  await postDetailPage.schedulePost();
+  await homePage.goToPages();
+  await pagesPage.goToCreateNewPage();
+  await pageDetailPage.enterTitleForNewPage(titlePage);
+  await pageDetailPage.enterBodyForNewPage(bodyPage);
+  await pageDetailPage.openPageSettings();
+  await pageDetailPage.clickExpandMetaDataPage();
+  await pageDetailPage.enterMetaTitleForPage(metaTitlePage);
+  await pageDetailPage.enterMetaDescriptionForPage(metaDescriptionPage);
+  await pageDetailPage.clickContractMetaDataPage();
+  await pageDetailPage.closePageSettings();
+  await pageDetailPage.schedulePage();
   
   let message = await homePage.getMessageAlertNotification();
   assert.strictEqual(message, "Saving failed: Meta Title cannot be longer than 300 characters.");
 
-  const newMetaTitlePost = faker.datatype.string(300);
-  await postDetailPage.openPostSettings();
-  await postDetailPage.clickExpandMetaData();
-  await postDetailPage.deleteMetaTitlePost();
-  await postDetailPage.enterMetaTitleForPost(newMetaTitlePost);
-  await postDetailPage.clickContractMetaData();
-  await postDetailPage.closePostSettings();
-  await postDetailPage.schedulePost();
-  await postDetailPage.returnToPostsList();
-  await postsPage.openPostTypeFilterDropdown();
-  await postsPage.selectFilterByScheduledPostsOption();
+  const newMetaTitlePage = faker.datatype.string(300);
+  await pageDetailPage.openPageSettings();
+  await pageDetailPage.clickExpandMetaDataPage();
+  await pageDetailPage.deleteMetaTitlePage();
+  await pageDetailPage.enterMetaTitleForPage(newMetaTitlePage);
+  await pageDetailPage.clickContractMetaDataPage();
+  await pageDetailPage.closePageSettings();
+  await pageDetailPage.schedulePage();
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByScheduledPagesOption();
 
-  let firstPostTitle = await postsPage.getFirstPostTitle();
-  assert.strictEqual(firstPostTitle, titlePost);
+  let firstPageTitle = await pagesPage.getFirstPageTitle();
+  assert.strictEqual(firstPageTitle, titlePage);
 });
-
+/*
 it('F084 - should schedule a new page and then reschedule it', async () => {
   const titlePost = dataPoolPost.title_post;
   const bodyPost = dataPoolPost.body_post;

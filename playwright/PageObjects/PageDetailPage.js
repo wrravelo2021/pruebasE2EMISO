@@ -122,4 +122,11 @@ module.exports = class PageDetailPage {
     return this.page.type('id=meta-description', metaDescription);
   }
 
+  async deleteMetaTitlePage() {
+    await this.page.click('id=meta-title');
+    await this.page.keyboard.press("Meta+A");
+    await this.page.keyboard.press("Control+A");
+    return this.page.keyboard.press("Delete");
+  }
+
 };
