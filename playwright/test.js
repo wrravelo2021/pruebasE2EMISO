@@ -1,6 +1,7 @@
 // Imports
 const playwright = require('playwright');
-const assert = require('assert')
+const assert = require('assert');
+const faker = require('faker');
 const config = require("./config.json");
 const LoginPage = require('./PageObjects/LoginPage.js');
 const HomePage = require('./PageObjects/HomePage.js');
@@ -13,6 +14,7 @@ const PagePreviewPage = require('./PageObjects/PagePreviewPage.js');
 const TagsPage = require('./PageObjects/TagsPage.js');
 const TagDetailPage = require('./PageObjects/TagDetailPage.js');
 const ViewSitePage = require('./PageObjects/ViewSitePage.js');
+const MockarooClient = require('./Mockaroo/MockarooClient');
 
 // Setings
 const {viewportHeight, viewportWidth, credentials, pathScreenshots} = config;
@@ -22,11 +24,17 @@ let browser;
 let page;
 let context;
 let test;
+let mockaroo = new MockarooClient();
+
+before(async() => {
+  dataPoolPosts = await mockaroo.getDataPoolPosts();
+});
 
 beforeEach(async() => {
   browser = await playwright['chromium'].launch({ headless: false, viewport: { width: viewportWidth, height: viewportHeight }});
   context = await browser.newContext();
   page = await context.newPage();
+  dataPoolPost = await mockaroo.getDataPoolPost(dataPoolPosts);
 });
 
 afterEach(async () => {
@@ -119,6 +127,119 @@ it('F063 - should schedule a new post and then unschedule it', async () => {
   await postDetailPage.returnToPostsList();
   await postsPage.openPostTypeFilterDropdown();
   await postsPage.selectFilterByDraftedPostsOption();
+
+  firstPostTitle = await postsPage.getFirstPostTitle();
+  assert.strictEqual(firstPostTitle, titlePost);
+});
+
+it('F064 - should schedule a new post with metadata', async () => {
+  const titlePost = dataPoolPost.title_post;
+  const bodyPost = dataPoolPost.body_post;
+  const metaTitlePost = dataPoolPost.meta_title_post;
+  const metaDescriptionPost = dataPoolPost.meta_description_post;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(titlePost);
+  await postDetailPage.enterBodyForNewPost(bodyPost);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.clickExpandMetaData();
+  await postDetailPage.enterMetaTitleForPost(metaTitlePost);
+  await postDetailPage.enterMetaDescriptionForPost(metaDescriptionPost);
+  await postDetailPage.clickContractMetaData();
+  await postDetailPage.closePostSettings();
+  await postDetailPage.schedulePost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByScheduledPostsOption();
+
+  let firstPostTitle = await postsPage.getFirstPostTitle();
+  assert.strictEqual(firstPostTitle, titlePost);
+});
+
+it('F065 - should not schedule when the meta title has more than 300 characters.', async () => {
+  const titlePost = dataPoolPost.title_post;
+  const bodyPost = dataPoolPost.body_post;
+  const metaTitlePost = faker.datatype.string(301);
+  const metaDescriptionPost = dataPoolPost.meta_description_post;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(titlePost);
+  await postDetailPage.enterBodyForNewPost(bodyPost);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.clickExpandMetaData();
+  await postDetailPage.enterMetaTitleForPost(metaTitlePost);
+  await postDetailPage.enterMetaDescriptionForPost(metaDescriptionPost);
+  await postDetailPage.clickContractMetaData();
+  await postDetailPage.closePostSettings();
+  await postDetailPage.schedulePost();
+
+  let message = await homePage.getMessageAlertNotification();
+  assert.strictEqual(message, "Saving failed: Meta Title cannot be longer than 300 characters.");
+
+  const newMetaTitlePost = faker.datatype.string(300);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.clickExpandMetaData();
+  await postDetailPage.deleteMetaTitlePost();
+  await postDetailPage.enterMetaTitleForPost(newMetaTitlePost);
+  await postDetailPage.clickContractMetaData();
+  await postDetailPage.closePostSettings();
+  await postDetailPage.schedulePost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByScheduledPostsOption();
+
+  let firstPostTitle = await postsPage.getFirstPostTitle();
+  assert.strictEqual(firstPostTitle, titlePost);
+});
+
+it('F066 - should schedule a new post and then reschedule it', async () => {
+  const titlePost = dataPoolPost.title_post;
+  const bodyPost = dataPoolPost.body_post;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(titlePost);
+  await postDetailPage.enterBodyForNewPost(bodyPost);
+  await postDetailPage.schedulePost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByScheduledPostsOption();
+
+  let firstPostTitle = await postsPage.getFirstPostTitle();
+  assert.strictEqual(firstPostTitle, titlePost);
+
+  const newScheduleDate = faker.date.soon(1).toISOString().split('T')[0];
+  await postsPage.clickPostWithTitle(titlePost);
+  await postDetailPage.reschedulePost(newScheduleDate);
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByScheduledPostsOption();
 
   firstPostTitle = await postsPage.getFirstPostTitle();
   assert.strictEqual(firstPostTitle, titlePost);

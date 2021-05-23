@@ -37,7 +37,12 @@ module.exports = class HomePage {
     return this.page.click('.relative > span > a[href="#/site/"]');
   }
 
+  async getMessageAlertNotification() {
+    const notification = await this.page.$$(".gh-alert-content");
+    return notification[0].innerText();
+  }
+
   async confirmLeaveCurrentPage() {
-    return await this.page.click('.modal-footer > .gh-btn.gh-btn-red')
+    return await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
   }
 };
