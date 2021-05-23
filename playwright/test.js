@@ -32,6 +32,7 @@ before(async() => {
   dataPoolPages = await mockaroo.getDataPoolPages();
   dataPoolTags = await mockaroo.getDataPoolTags();
   dataPoolSlugs = await mockaroo.getDataPoolSlugs();
+  dataPoolGeneric = await mockaroo.getDataPoolGeneric();
 });
 
 beforeEach(async() => {
@@ -42,6 +43,7 @@ beforeEach(async() => {
   dataPoolPage = await mockaroo.getDataPoolRandom(dataPoolPages);
   dataPoolTag = await mockaroo.getDataPoolRandom(dataPoolTags);
   dataPoolSlug = await mockaroo.getDataPoolRandom(dataPoolSlugs);
+  dataPoolGeneric = await mockaroo.getDataPoolRandom(dataPoolGeneric);
 });
 
 afterEach(async () => {
@@ -926,7 +928,7 @@ it('F087 - should not create a new tag when the canonical URL is not in the corr
   assert.strictEqual(existsTag, true);
 });
 
-it('F01.a - should create post with fields ok', async () => {
+it('F01 - should create post with fields ok', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const body = randomData['sentence'];
@@ -953,7 +955,7 @@ it('F01.a - should create post with fields ok', async () => {
   assert(publishedPostTitle === title, "Title is not the expected");
 });
 
-it('F01.b - should create post with invalid HTML blocks', async () => {
+it('F02 - should create post with invalid HTML blocks', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const block = "<" + randomData['word'] + " " + randomData['sentence'] + ">";
@@ -983,7 +985,67 @@ it('F01.b - should create post with invalid HTML blocks', async () => {
   assert(publishedPostTitle === title, "Title is not the expected");
 });
 
-it('F01.e - should create post with maximum title length', async () => {
+it('F03 - should create post with invalid Youtube urls', async () => {
+  const title = dataPoolGeneric.word;
+  const link = dataPoolGeneric.word + dataPoolGeneric.url;
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(title);
+  await postDetailPage.clickBody();
+  await postDetailPage.openPlusOptions();
+  await postDetailPage.createYoutubeLink(link);
+
+  const urlError = await postDetailPage.getUrlParseError();
+  assert(urlError != null, "URL error message is null");
+
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByPublishedPostsOption();
+  const publishedPostTitle = await postsPage.getFirstPostTitle();
+  assert(publishedPostTitle != null, "Title is null");
+  assert(publishedPostTitle === title, "Title is not the expected");
+});
+
+it('F04 - should create post with unsplash images', async () => {
+  const title = dataPoolGeneric.word;
+  const image = dataPoolGeneric.animal;
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(title);
+  await postDetailPage.clickBody();
+  await postDetailPage.openPlusOptions();
+  await postDetailPage.insertUnsplashImage(image);
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByPublishedPostsOption();
+  const publishedPostTitle = await postsPage.getFirstPostTitle();
+  assert(publishedPostTitle != null, "Title is null");
+  assert(publishedPostTitle === title, "Title is not the expected");
+});
+
+it('F05 - should create post with maximum title length', async () => {
   const longTitle = faker.lorem.words(256);
   const okTitle = faker.lorem.words(10);
   const body = faker.lorem.sentences(10);
@@ -1013,7 +1075,7 @@ it('F01.e - should create post with maximum title length', async () => {
   assert(publishedPostTitle === okTitle, "Title is not the expected");
 });
 
-it('F01.f - should create post with maximum length of title and excerpt', async () => {
+it('F06 - should create post with maximum length of title and excerpt', async () => {
   const longTitle = faker.lorem.words(256);
   const okTitle = faker.lorem.words(10);
   const longExcerpt = faker.lorem.words(256);
@@ -1054,7 +1116,7 @@ it('F01.f - should create post with maximum length of title and excerpt', async 
   assert(publishedPostTitle === okTitle, "Title is not the expected");
 });
 
-it('F02.a - should create post with fields ok and publish post on site', async () => {
+it('F07 - should create post with fields ok and publish post on site', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const body = randomData['sentence'];
@@ -1081,7 +1143,7 @@ it('F02.a - should create post with fields ok and publish post on site', async (
   assert(publishedPostTitle === title, "Title is not the expected");
 });
 
-it('F02.b - should create post with invalid HTMLs and publish post on site', async () => {
+it('F08 - should create post with invalid HTMLs and publish post on site', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const block = "<" + randomData['word'] + " " + randomData['sentence'] + ">";
@@ -1110,7 +1172,70 @@ it('F02.b - should create post with invalid HTMLs and publish post on site', asy
   assert(publishedPostTitle === title, "Title is not the expected");
 });
 
-it('F02.e - should create post with maximum title length and publish post on site', async () => {
+it('F09 - should create post with invalid Twitter urls and publish post on site', async () => {
+  const title = dataPoolGeneric.word;
+  const link = dataPoolGeneric.word + dataPoolGeneric.url;
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+  const viewSitePage = new ViewSitePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(title);
+  
+  await postDetailPage.clickBody();
+  await postDetailPage.openPlusOptions();
+  await postDetailPage.createTwitterLink(link);
+
+  const urlError = await postDetailPage.getUrlParseError();
+  assert(urlError != null, "URL error message is null");
+
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await homePage.goToViewSite();
+  const publishedPostTitle = await viewSitePage.getFirstPostTitle();
+  assert(publishedPostTitle != null, "Title is null");
+  assert(publishedPostTitle === title, "Title is not the expected");
+});
+
+it('F10 - should create post with unplash images and publish post on site', async () => {
+  const title = dataPoolGeneric.word;
+  const image = dataPoolGeneric.animal;
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+  const viewSitePage = new ViewSitePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(title);
+  
+  await postDetailPage.clickBody();
+  await postDetailPage.openPlusOptions();
+  await postDetailPage.insertUnsplashImage(image);
+
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await homePage.goToViewSite();
+  const publishedPostTitle = await viewSitePage.getFirstPostTitle();
+  assert(publishedPostTitle != null, "Title is null");
+  assert(publishedPostTitle === title, "Title is not the expected");
+});
+
+it('F11 - should create post with maximum title length and publish post on site', async () => {
   const longTitle = faker.lorem.words(256);
   const okTitle = faker.lorem.words(10);
   const body = faker.lorem.sentences(10);
@@ -1140,7 +1265,7 @@ it('F02.e - should create post with maximum title length and publish post on sit
   assert(publishedPostTitle === okTitle, "Title is not the expected");
 });
 
-it('F02.f - should create post with maximum length of title and excerpt and publish it on site', async () => {
+it('F12 - should create post with maximum length of title and excerpt and publish it on site', async () => {
   const longTitle = faker.lorem.words(256);
   const okTitle = faker.lorem.words(10);
   const longExcerpt = faker.lorem.words(256);
@@ -1182,7 +1307,7 @@ it('F02.f - should create post with maximum length of title and excerpt and publ
   assert(publishedPostTitle === okTitle, "Title is not the expected");
 });
 
-it('F03.a - should not allow future date for post, with body and title ok', async () => {
+it('F13 - should not allow future date for post, with body and title ok', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const body = randomData['sentence'];
@@ -1215,7 +1340,7 @@ it('F03.a - should not allow future date for post, with body and title ok', asyn
   assert(dateErrorText === "Must be in the past", "Error message is not the expected");
 });
 
-it('F03.b - should not allow future hour for post, with body and title ok', async () => {
+it('F14 - should not allow future hour for post, with body and title ok', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const body = randomData['sentence'];
@@ -1247,7 +1372,76 @@ it('F03.b - should not allow future hour for post, with body and title ok', asyn
   assert(dateErrorText === "Must be in the past", "Error message is not the expected");
 });
 
-it('F03.e - should not allow future date for post, invalid Vimeo urls', async () => {
+it('F15 - should not allow future date for post, with random tag', async () => {
+  const title = dataPoolGeneric.word;
+  const body = dataPoolGeneric.sentence;
+  const futureDate = dataPoolGeneric.futureDate;
+  const tagName = dataPoolGeneric.animal;
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(title);
+  await postDetailPage.enterBodyForNewPost(body);
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostSortByFilterDropdown();
+  await postsPage.selectFilterByRecentlyUpdatedPostOption();
+  await postsPage.clickPostWithTitle(title);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.writeTagWithName(tagName);
+  await postDetailPage.fillDate(futureDate);
+
+  const dateError = await postDetailPage.getFutureDateError();
+  const dateErrorText = dateError ? await dateError.innerText() : null;
+  assert(dateErrorText != null, "Error message is null");
+  assert(dateErrorText === "Must be in the past", "Error message is not the expected");
+});
+
+it('F46 - should not allow future date for post, with invalid HTMLs', async () => {
+  const title = dataPoolGeneric.word;
+  const body = dataPoolGeneric.sentence;
+  const futureDate = dataPoolGeneric.futureDate;
+  const block = "<" + dataPoolGeneric.word + " " + dataPoolGeneric.animal + ">";
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(title);
+  await postDetailPage.clickBody();
+  await postDetailPage.openPlusOptions();
+  await postDetailPage.createHTMLBlock(block);
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostSortByFilterDropdown();
+  await postsPage.selectFilterByRecentlyUpdatedPostOption();
+  await postsPage.clickPostWithTitle(title);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.fillDate(futureDate);
+
+  const dateError = await postDetailPage.getFutureDateError();
+  const dateErrorText = dateError ? await dateError.innerText() : null;
+  assert(dateErrorText != null, "Error message is null");
+  assert(dateErrorText === "Must be in the past", "Error message is not the expected");
+});
+
+it('F47 - should not allow future date for post, invalid Vimeo urls', async () => {
   const title = faker.lorem.words(10);
 
   const loginPage = new LoginPage(page);
@@ -1284,7 +1478,7 @@ it('F03.e - should not allow future date for post, invalid Vimeo urls', async ()
   assert(dateErrorText === "Must be in the past", "Error message is not the expected");
 });
 
-it('F03.f - should not allow future date for post, maximum length of excerpt', async () => {
+it('F48 - should not allow future date for post, maximum length of excerpt', async () => {
   const title = faker.lorem.words(10);
   const body = faker.lorem.sentences(10);
   const longExcerpt = faker.lorem.words(256);
@@ -1329,7 +1523,7 @@ it('F03.f - should not allow future date for post, maximum length of excerpt', a
   assert(dateErrorText === "Must be in the past", "Error message is not the expected");
 });
 
-it('F04.a - should publish new page with fields ok', async () => {
+it('F49 - should publish new page with fields ok', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const body = randomData['sentence'];
@@ -1357,7 +1551,7 @@ it('F04.a - should publish new page with fields ok', async () => {
   assert(publishedPageTitle === title, "Title is not the expected");
 });
 
-it('F04.b - should publish new page with invalid HTMLs', async () => {
+it('F50 - should publish new page with invalid HTMLs', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const block = "<" + randomData['word'] + " " + randomData['sentence'] + ">";
@@ -1387,7 +1581,72 @@ it('F04.b - should publish new page with invalid HTMLs', async () => {
   assert(publishedPageTitle === title, "Title is not the expected");
 });
 
-it('F04.e - should publish new page with maximum title length', async () => {
+it('F51 - should publish new page with invalid CodePen urls', async () => {
+  const title = dataPoolGeneric.word;
+  const link = dataPoolGeneric.word + dataPoolGeneric.url;
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+  await pagesPage.goToCreateNewPage();
+  await pageDetailPage.enterTitleForNewPage(title);
+
+  await pageDetailPage.clickBody();
+  await pageDetailPage.openPlusOptions();
+  await pageDetailPage.createCodepenLink(link);
+
+  const urlError = await pageDetailPage.getUrlParseError();
+  assert(urlError != null, "URL error message is null");
+
+  await pageDetailPage.publishPage();
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByPublishedPagesOption();
+
+  const publishedPageTitle = await pagesPage.getFirstPageTitle();
+  assert(publishedPageTitle != null, "Title is null");
+  assert(publishedPageTitle === title, "Title is not the expected");
+});
+
+it('F52 - should publish new page with unsplash images', async () => {
+  const title = dataPoolGeneric.word;
+  const image = dataPoolGeneric.animal;
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+  await pagesPage.goToCreateNewPage();
+  await pageDetailPage.enterTitleForNewPage(title);
+
+  await pageDetailPage.clickBody();
+  await pageDetailPage.openPlusOptions();
+  await pageDetailPage.insertUnsplashImage(image);
+
+  await pageDetailPage.publishPage();
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByPublishedPagesOption();
+
+  const publishedPageTitle = await pagesPage.getFirstPageTitle();
+  assert(publishedPageTitle != null, "Title is null");
+  assert(publishedPageTitle === title, "Title is not the expected");
+});
+
+it('F53 - should publish new page with maximum title length', async () => {
   const longTitle = faker.lorem.words(256);
   const okTitle = faker.lorem.words(10);
   const body = faker.lorem.sentences(10);
@@ -1420,7 +1679,7 @@ it('F04.e - should publish new page with maximum title length', async () => {
   assert(publishedPageTitle === okTitle, "Title is not the expected");
 });
 
-it('F04.f - should publish new page with maximum length of title and excerpt', async () => {
+it('F54 - should publish new page with maximum length of title and excerpt', async () => {
   const longTitle = faker.lorem.words(256);
   const longExcerpt = faker.lorem.words(256);
   const okTitle = faker.lorem.words(10);
@@ -1465,7 +1724,7 @@ it('F04.f - should publish new page with maximum length of title and excerpt', a
   assert(publishedPageTitle === okTitle, "Title is not the expected");
 });
 
-it('F05.a - should save draft and publish page with fields ok', async () => {
+it('F55 - should save draft and publish page with fields ok', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const body = randomData['sentence'];
@@ -1502,7 +1761,7 @@ it('F05.a - should save draft and publish page with fields ok', async () => {
   assert(publishedPageTitle === title, "Title is not the expected");
 });
 
-it('F05.b - should save draft and publish page with invalid spotify links', async () => {
+it('F56 - should save draft and publish page with invalid spotify links', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const link = randomData['word'] + randomData['url'];
@@ -1546,7 +1805,90 @@ it('F05.b - should save draft and publish page with invalid spotify links', asyn
   assert(publishedPageTitle === title, "Title is not the expected");
 });
 
-it('F05.e - should save draft and publish page with max title length', async () => {
+it('F57 - should try to save draft with title max length and publish page', async () => {
+  const longTitle = dataPoolGeneric.word.repeat(256);
+  const okTitle = dataPoolGeneric.word;
+  const body = dataPoolGeneric.sentence;
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+  await pagesPage.goToCreateNewPage();
+  await pageDetailPage.enterTitleForNewPage(longTitle);
+  await pageDetailPage.enterBodyForNewPage(body);
+  await pageDetailPage.returnToPagesList();
+  await pageDetailPage.closeSaveModal();
+  await pageDetailPage.cleanTitle();
+  await pageDetailPage.enterTitleForNewPage(okTitle);
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByDraftedPagesOption();
+
+  const draftPageTitle = await pagesPage.getFirstPageTitle();
+  assert(draftPageTitle != null, "Page title is null");
+  assert(draftPageTitle === okTitle, "Page title is not the expected");
+
+  await pagesPage.clickPageWithTitle(okTitle);
+  await pageDetailPage.publishPage();
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByPublishedPagesOption();
+
+  const publishedPageTitle = await pagesPage.getFirstPageTitle();
+  assert(publishedPageTitle != null, "Title is null");
+  assert(publishedPageTitle === okTitle, "Title is not the expected");
+});
+
+it('F58 - should save draft with invalid SoundCloud urls and publish page', async () => {
+  const title = dataPoolGeneric.word;
+  const link = dataPoolGeneric.word + dataPoolGeneric.url;
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+  await pagesPage.goToCreateNewPage();
+  await pageDetailPage.enterTitleForNewPage(title);
+  await pageDetailPage.clickBody();
+  await pageDetailPage.openPlusOptions();
+  await pageDetailPage.createSoundCloudLink(link);
+
+  const urlError = await pageDetailPage.getUrlParseError();
+  assert(urlError != null, "URL error message is null");
+
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByDraftedPagesOption();
+
+  const draftPageTitle = await pagesPage.getFirstPageTitle();
+  assert(draftPageTitle != null, "Page title is null");
+  assert(draftPageTitle === title, "Page title is not the expected");
+
+  await pagesPage.clickPageWithTitle(title);
+  await pageDetailPage.publishPage();
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByPublishedPagesOption();
+
+  const publishedPageTitle = await pagesPage.getFirstPageTitle();
+  assert(publishedPageTitle != null, "Title is null");
+  assert(publishedPageTitle === title, "Title is not the expected");
+});
+
+it('F59 - should save draft and publish page with max title length', async () => {
   const title = faker.lorem.words(10);
   const body = faker.lorem.sentences(10);
   const longTitle = faker.lorem.words(256);
@@ -1595,7 +1937,7 @@ it('F05.e - should save draft and publish page with max title length', async () 
   assert(publishedPageTitle === okTitle, "Title is not the expected");
 });
 
-it('F05.f - should save draft and publish page with max excerpt length', async () => {
+it('F60 - should save draft and publish page with max excerpt length', async () => {
   const title = faker.lorem.words(10);
   const body = faker.lorem.sentences(10);
   const longExcerpt = faker.lorem.words(256);
