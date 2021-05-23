@@ -102,4 +102,24 @@ module.exports = class PageDetailPage {
     await this.page.click('.koenig-editor__editor.__mobiledoc-editor');
   }
 
+  async clickExpandMetaDataPage() {
+    await new Promise(r => setTimeout(r, 1000));
+    this.page.click('b:text("Meta data")');
+  }
+
+  async clickContractMetaDataPage() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('.back.settings-menu-header-action');
+  }
+
+  async enterMetaTitleForPage(metaTitle) {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.type('id=meta-title', metaTitle);
+  }
+
+  async enterMetaDescriptionForPage(metaDescription) {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.type('id=meta-description', metaDescription);
+  }
+
 };
