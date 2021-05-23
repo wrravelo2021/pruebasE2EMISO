@@ -829,6 +829,7 @@ it('F092 - should not create a new tag when the color value is wrong.', async ()
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
   await loginPage.clickLogin();
+
   await homePage.goToTags();
   await tagsPage.goToCreateNewTag();
   await tagDetailPage.enterTitleForNewTag(nameTag);
@@ -852,6 +853,63 @@ it('F092 - should not create a new tag when the color value is wrong.', async ()
 
   let existsTag = await tagsPage.searchTagByName(nameTag);
   assert.strictEqual(existsTag, true);
+});
+
+it('F01.a - should create post with fields ok', async () => {
+  const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
+  const title = randomData['word'];
+  const body = randomData['sentence'];
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(title);
+  await postDetailPage.enterBodyForNewPost(body);
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByPublishedPostsOption();
+  const publishedPostTitle = await postsPage.getFirstPostTitle();
+  assert(publishedPostTitle != null, "Title is null");
+  assert(publishedPostTitle === title, "Title is not the expected");
+});
+
+it('F01.b - should create post with invalid HTML blocks', async () => {
+  const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
+  const title = randomData['word'];
+  const block = "<" + randomData['word'] + " " + randomData['sentence'] + ">";
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(title);
+  await postDetailPage.clickBody();
+  await postDetailPage.openPlusOptions();
+  await postDetailPage.createHTMLBlock(block);
+  await postDetailPage.publishPost();
+
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByPublishedPostsOption();
+  const publishedPostTitle = await postsPage.getFirstPostTitle();
+  assert(publishedPostTitle != null, "Title is null");
+  assert(publishedPostTitle === title, "Title is not the expected");
 });
 
 it('F01.e - should create post with maximum title length', async () => {
@@ -925,6 +983,62 @@ it('F01.f - should create post with maximum length of title and excerpt', async 
   assert(publishedPostTitle === okTitle, "Title is not the expected");
 });
 
+it('F02.a - should create post with fields ok and publish post on site', async () => {
+  const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
+  const title = randomData['word'];
+  const body = randomData['sentence'];
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+  const viewSitePage = new ViewSitePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(title);
+  await postDetailPage.enterBodyForNewPost(body);
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await homePage.goToViewSite();
+  const publishedPostTitle = await viewSitePage.getFirstPostTitle();
+  assert(publishedPostTitle != null, "Title is null");
+  assert(publishedPostTitle === title, "Title is not the expected");
+});
+
+it('F02.b - should create post with invalid HTMLs and publish post on site', async () => {
+  const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
+  const title = randomData['word'];
+  const block = "<" + randomData['word'] + " " + randomData['sentence'] + ">";
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+  const viewSitePage = new ViewSitePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(title);
+  await postDetailPage.clickBody();
+  await postDetailPage.openPlusOptions();
+  await postDetailPage.createHTMLBlock(block);
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await homePage.goToViewSite();
+  const publishedPostTitle = await viewSitePage.getFirstPostTitle();
+  assert(publishedPostTitle != null, "Title is null");
+  assert(publishedPostTitle === title, "Title is not the expected");
+});
+
 it('F02.e - should create post with maximum title length and publish post on site', async () => {
   const longTitle = faker.lorem.words(256);
   const okTitle = faker.lorem.words(10);
@@ -995,6 +1109,71 @@ it('F02.f - should create post with maximum length of title and excerpt and publ
   const publishedPostTitle = await viewSitePage.getFirstPostTitle();
   assert(publishedPostTitle != null, "Title is null");
   assert(publishedPostTitle === okTitle, "Title is not the expected");
+});
+
+it('F03.a - should not allow future date for post, with body and title ok', async () => {
+  const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
+  const title = randomData['word'];
+  const body = randomData['sentence'];
+  const futureDate = randomData['futureDate'];
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(title);
+  await postDetailPage.enterBodyForNewPost(body);
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostSortByFilterDropdown();
+  await postsPage.selectFilterByRecentlyUpdatedPostOption();
+  await postsPage.clickPostWithTitle(title);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.fillDate(futureDate);
+
+  const dateError = await postDetailPage.getFutureDateError();
+  const dateErrorText = dateError ? await dateError.innerText() : null;
+  assert(dateErrorText != null, "Error message is null");
+  assert(dateErrorText === "Must be in the past", "Error message is not the expected");
+});
+
+it('F03.b - should not allow future hour for post, with body and title ok', async () => {
+  const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
+  const title = randomData['word'];
+  const body = randomData['sentence'];
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(title);
+  await postDetailPage.enterBodyForNewPost(body);
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostSortByFilterDropdown();
+  await postsPage.selectFilterByRecentlyUpdatedPostOption();
+  await postsPage.clickPostWithTitle(title);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.fillHour();
+
+  const dateError = await postDetailPage.getFutureDateError();
+  const dateErrorText = dateError ? await dateError.innerText() : null;
+  assert(dateErrorText != null, "Error message is null");
+  assert(dateErrorText === "Must be in the past", "Error message is not the expected");
 });
 
 it('F03.e - should not allow future date for post, invalid Vimeo urls', async () => {
@@ -1079,6 +1258,64 @@ it('F03.f - should not allow future date for post, maximum length of excerpt', a
   assert(dateErrorText === "Must be in the past", "Error message is not the expected");
 });
 
+it('F04.a - should publish new page with fields ok', async () => {
+  const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
+  const title = randomData['word'];
+  const body = randomData['sentence'];
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+  await pagesPage.goToCreateNewPage();
+  await pageDetailPage.enterTitleForNewPage(title);
+  await pageDetailPage.enterBodyForNewPage(body);
+  await pageDetailPage.publishPage();
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByPublishedPagesOption();
+
+  const publishedPageTitle = await pagesPage.getFirstPageTitle();
+  assert(publishedPageTitle != null, "Title is null");
+  assert(publishedPageTitle === title, "Title is not the expected");
+});
+
+it('F04.b - should publish new page with invalid HTMLs', async () => {
+  const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
+  const title = randomData['word'];
+  const block = "<" + randomData['word'] + " " + randomData['sentence'] + ">";
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+  await pagesPage.goToCreateNewPage();
+  await pageDetailPage.enterTitleForNewPage(title);
+  await pageDetailPage.clickBody();
+  await pageDetailPage.openPlusOptions();
+  await pageDetailPage.createHTMLBlock(block);
+  await pageDetailPage.publishPage();
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByPublishedPagesOption();
+
+  const publishedPageTitle = await pagesPage.getFirstPageTitle();
+  assert(publishedPageTitle != null, "Title is null");
+  assert(publishedPageTitle === title, "Title is not the expected");
+});
+
 it('F04.e - should publish new page with maximum title length', async () => {
   const longTitle = faker.lorem.words(256);
   const okTitle = faker.lorem.words(10);
@@ -1155,6 +1392,87 @@ it('F04.f - should publish new page with maximum length of title and excerpt', a
   const publishedPageTitle = await pagesPage.getFirstPageTitle();
   assert(publishedPageTitle != null, "Title is null");
   assert(publishedPageTitle === okTitle, "Title is not the expected");
+});
+
+it('F05.a - should save draft and publish page with fields ok', async () => {
+  const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
+  const title = randomData['word'];
+  const body = randomData['sentence'];
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+  await pagesPage.goToCreateNewPage();
+  await pageDetailPage.enterTitleForNewPage(title);
+  await pageDetailPage.enterBodyForNewPage(body);
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByDraftedPagesOption();
+
+  const draftPageTitle = await pagesPage.getFirstPageTitle();
+  assert(draftPageTitle != null, "Page title is null");
+  assert(draftPageTitle === title, "Page title is not the expected");
+
+  await pagesPage.clickPageWithTitle(title);
+  await pageDetailPage.publishPage();
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByPublishedPagesOption();
+
+  const publishedPageTitle = await pagesPage.getFirstPageTitle();
+  assert(publishedPageTitle != null, "Title is null");
+  assert(publishedPageTitle === title, "Title is not the expected");
+});
+
+it('F05.b - should save draft and publish page with invalid spotify links', async () => {
+  const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
+  const title = randomData['word'];
+  const link = randomData['word'] + randomData['url'];
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+  await pagesPage.goToCreateNewPage();
+  await pageDetailPage.enterTitleForNewPage(title);
+
+  await pageDetailPage.clickBody();
+  await pageDetailPage.openPlusOptions();
+  await pageDetailPage.createSpotifyLink(link);
+
+  const urlError = await pageDetailPage.getUrlParseError();
+  assert(urlError != null, "URL error message is null");
+
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByDraftedPagesOption();
+
+  const draftPageTitle = await pagesPage.getFirstPageTitle();
+  assert(draftPageTitle != null, "Page title is null");
+  assert(draftPageTitle === title, "Page title is not the expected");
+
+  await pagesPage.clickPageWithTitle(title);
+  await pageDetailPage.publishPage();
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByPublishedPagesOption();
+
+  const publishedPageTitle = await pagesPage.getFirstPageTitle();
+  assert(publishedPageTitle != null, "Title is null");
+  assert(publishedPageTitle === title, "Title is not the expected");
 });
 
 it('F05.e - should save draft and publish page with max title length', async () => {
