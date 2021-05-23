@@ -296,6 +296,35 @@ it('F067 should create a post, then modify it and validate that the modification
   assert.strictEqual(firstPostTitle, newTitlePost);
 });
 
+it('F073 - should change user password and login correctly.', async () => {
+  let newPassword = faker.internet.password();
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.scrollToBottom();
+  await profilePage.enterOldPassword(credentials.password);
+  await profilePage.enterNewPassword(newPassword);
+  await profilePage.enterNewPasswordConfirmation(newPassword);
+  await profilePage.clickChangePassword();
+  await homePage.closePublishedPostNotification();
+  await homePage.signOut();
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(newPassword)
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.scrollToBottom();
+  await profilePage.enterOldPassword(newPassword);
+  await profilePage.enterNewPassword(credentials.password);
+  await profilePage.enterNewPasswordConfirmation(credentials.password);
+  await profilePage.clickChangePassword();
+});
+
 it('F079 - should schedule a new page and filter it in the list of pages by scheduled status.', async () => {
   const titlePage = dataPoolPage.title_page;
   const bodyPage = dataPoolPage.body_page;
@@ -498,43 +527,6 @@ it('F084 - should schedule a new page and then reschedule it', async () => {
 
   firstPageTitle = await pagesPage.getFirstPageTitle();
   assert.strictEqual(firstPageTitle, titlePage);
-});
-
-it('F13 - should change user password and login correctly.', async () => {
-  test = "F13";
-  let newPassword = "newpruebasmiso";
-  const loginPage = new LoginPage(page);
-  const homePage = new HomePage(page);
-  const profilePage = new ProfilePage(page);
-
-  await page.goto(config.url);
-  await loginPage.enterEmail(credentials.email);
-  await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(1);
-  await loginPage.clickLogin();
-  await generateScreenshot(2);
-  await homePage.goToMyProfile();
-  await generateScreenshot(3);
-  await profilePage.scrollToBottom();
-  await profilePage.enterOldPassword(credentials.password);
-  await profilePage.enterNewPassword(newPassword);
-  await profilePage.enterNewPasswordConfirmation(newPassword);
-  await generateScreenshot(4);
-  await profilePage.clickChangePassword();
-  await homePage.closePublishedPostNotification();
-  await generateScreenshot(5);
-  await homePage.signOut();
-  await loginPage.enterEmail(credentials.email);
-  await loginPage.enterPassword(newPassword);
-  await generateScreenshot(6);
-  await loginPage.clickLogin();
-  await generateScreenshot(7);
-  await homePage.goToMyProfile();
-  await profilePage.scrollToBottom();
-  await profilePage.enterOldPassword(newPassword);
-  await profilePage.enterNewPassword(credentials.password);
-  await profilePage.enterNewPasswordConfirmation(credentials.password);
-  await profilePage.clickChangePassword();
 });
 
 it('F15 - should create a tag and then create a new post with this tag.', async () => {
