@@ -210,6 +210,41 @@ it('F065 - should not schedule when the meta title has more than 300 characters.
   assert.strictEqual(firstPostTitle, titlePost);
 });
 
+it('F066 - should schedule a new post and then reschedule it', async () => {
+  const titlePost = dataPoolPost.title_post;
+  const bodyPost = dataPoolPost.body_post;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(titlePost);
+  await postDetailPage.enterBodyForNewPost(bodyPost);
+  await postDetailPage.schedulePost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByScheduledPostsOption();
+
+  let firstPostTitle = await postsPage.getFirstPostTitle();
+  assert.strictEqual(firstPostTitle, titlePost);
+
+  const newScheduleDate = faker.date.soon(1).toISOString().split('T')[0];
+  await postsPage.clickPostWithTitle(titlePost);
+  await postDetailPage.reschedulePost(newScheduleDate);
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByScheduledPostsOption();
+
+  firstPostTitle = await postsPage.getFirstPostTitle();
+  assert.strictEqual(firstPostTitle, titlePost);
+});
+
 it('F12 - should create a post, then modify it and validate that the modification was made.', async () => {
   test = 'F12';
   const titlePost = "Escenario de prueba: " + test +  ' - ' + Date.now();
