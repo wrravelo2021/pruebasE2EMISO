@@ -25,6 +25,11 @@ module.exports = class TagDetailPage {
     return this.page.type('id=meta-description', metaDescription);
   }
 
+  async enterCanonicalUrlForNewTag(url) {
+    await this.page.type('id=canonical-url', url);
+    return this.page.keyboard.press("Tab");
+  }
+
   async clickSave() {
     return this.page.click('.gh-btn.gh-btn-blue.gh-btn-icon.ember-view');
   }
