@@ -252,6 +252,79 @@ it('F066 - should schedule a new post and then reschedule it', async () => {
   assert.strictEqual(firstPostTitle, titlePost);
 });
 
+it('F067 should create a post, then modify it and validate that the modification was made.', async () => {
+  const titlePost = dataPoolPost.title_post;
+  const bodyPost = dataPoolPost.body_post;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+  const viewSitePage = new ViewSitePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(titlePost);
+  await postDetailPage.enterBodyForNewPost(bodyPost);
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await homePage.closePublishedPostNotification();
+  await homePage.goToViewSite();
+
+  let firstPostTitle = await viewSitePage.getFirstPostTitle();
+  assert.strictEqual(firstPostTitle, titlePost);
+
+  const newTitlePost = faker.datatype.string(255);
+  const newBodyPost = faker.lorem.paragraphs();
+  await homePage.goToPosts();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByPublishedPostsOption();
+  await postsPage.clickPostWithTitle(titlePost);
+  await postDetailPage.deleteTitlePost();
+  await postDetailPage.deleteBodyPost();
+  await postDetailPage.enterTitleForNewPost(newTitlePost);
+  await postDetailPage.enterBodyForNewPost(newBodyPost);
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await homePage.closePublishedPostNotification();
+  await homePage.goToViewSite();
+
+  firstPostTitle = await viewSitePage.getFirstPostTitle();
+  assert.strictEqual(firstPostTitle, newTitlePost);
+});
+
+it('F073 - should change user password and login correctly.', async () => {
+  let newPassword = faker.internet.password();
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.scrollToBottom();
+  await profilePage.enterOldPassword(credentials.password);
+  await profilePage.enterNewPassword(newPassword);
+  await profilePage.enterNewPasswordConfirmation(newPassword);
+  await profilePage.clickChangePassword();
+  await homePage.closePublishedPostNotification();
+  await homePage.signOut();
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(newPassword)
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.scrollToBottom();
+  await profilePage.enterOldPassword(newPassword);
+  await profilePage.enterNewPassword(credentials.password);
+  await profilePage.enterNewPasswordConfirmation(credentials.password);
+  await profilePage.clickChangePassword();
+});
+
 it('F079 - should schedule a new page and filter it in the list of pages by scheduled status.', async () => {
   const titlePage = dataPoolPage.title_page;
   const bodyPage = dataPoolPage.body_page;
@@ -456,106 +529,11 @@ it('F084 - should schedule a new page and then reschedule it', async () => {
   assert.strictEqual(firstPageTitle, titlePage);
 });
 
-it('F12 - should create a post, then modify it and validate that the modification was made.', async () => {
-  test = 'F12';
-  const titlePost = "Escenario de prueba: " + test +  ' - ' + Date.now();
-  const bodyPost = "Este es un nuevo post creado para el escenario de prueba: " + test;
-  const loginPage = new LoginPage(page);
-  const homePage = new HomePage(page);
-  const postsPage = new PostsPage(page);
-  const postDetailPage = new PostDetailPage(page);
-  const viewSitePage = new ViewSitePage(page);
-
-  await page.goto(config.url);
-  await loginPage.enterEmail(credentials.email);
-  await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(1);
-  await loginPage.clickLogin();
-  await generateScreenshot(2);
-  await homePage.goToPosts();
-  await postsPage.goToCreateNewPost();
-  await postDetailPage.enterTitleForNewPost(titlePost);
-  await postDetailPage.enterBodyForNewPost(bodyPost);
-  await generateScreenshot(3);
-  await postDetailPage.publishPost();
-  await generateScreenshot(4);
-  await postDetailPage.returnToPostsList();
-  await homePage.closePublishedPostNotification();
-  await homePage.goToViewSite();
-  await generateScreenshot(5);
-
-  let firstPostTitle = await viewSitePage.getFirstPostTitle();
-  assert.strictEqual(firstPostTitle, titlePost);
-
-  await homePage.goToPosts();
-  await generateScreenshot(6);
-  await postsPage.openPostTypeFilterDropdown();
-  await generateScreenshot(7);
-  await postsPage.selectFilterByPublishedPostsOption();
-  await generateScreenshot(8);
-  await postsPage.clickPostWithTitle(titlePost);
-  await generateScreenshot(9);
-  await postDetailPage.deleteTitlePost();
-  await postDetailPage.deleteBodyPost();
-  await generateScreenshot(10);
-  await postDetailPage.enterTitleForNewPost(titlePost + ' (Modificado)');
-  await postDetailPage.enterBodyForNewPost(bodyPost + ' (Modificado)');
-  await generateScreenshot(11);
-  await postDetailPage.publishPost();
-  await generateScreenshot(12);
-  await postDetailPage.returnToPostsList();
-  await generateScreenshot(13);
-  await homePage.closePublishedPostNotification();
-  await homePage.goToViewSite();
-  await generateScreenshot(14);
-
-  firstPostTitle = await viewSitePage.getFirstPostTitle();
-  assert.strictEqual(firstPostTitle, titlePost + ' (Modificado)');
-});
-
-it('F13 - should change user password and login correctly.', async () => {
-  test = "F13";
-  let newPassword = "newpruebasmiso";
-  const loginPage = new LoginPage(page);
-  const homePage = new HomePage(page);
-  const profilePage = new ProfilePage(page);
-
-  await page.goto(config.url);
-  await loginPage.enterEmail(credentials.email);
-  await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(1);
-  await loginPage.clickLogin();
-  await generateScreenshot(2);
-  await homePage.goToMyProfile();
-  await generateScreenshot(3);
-  await profilePage.scrollToBottom();
-  await profilePage.enterOldPassword(credentials.password);
-  await profilePage.enterNewPassword(newPassword);
-  await profilePage.enterNewPasswordConfirmation(newPassword);
-  await generateScreenshot(4);
-  await profilePage.clickChangePassword();
-  await homePage.closePublishedPostNotification();
-  await generateScreenshot(5);
-  await homePage.signOut();
-  await loginPage.enterEmail(credentials.email);
-  await loginPage.enterPassword(newPassword);
-  await generateScreenshot(6);
-  await loginPage.clickLogin();
-  await generateScreenshot(7);
-  await homePage.goToMyProfile();
-  await profilePage.scrollToBottom();
-  await profilePage.enterOldPassword(newPassword);
-  await profilePage.enterNewPassword(credentials.password);
-  await profilePage.enterNewPasswordConfirmation(credentials.password);
-  await profilePage.clickChangePassword();
-});
-
-it('F15 - should create a tag and then create a new post with this tag.', async () => {
-  test = 'F15';
-  const tag = 'F15-' + + Date.now();
-  const description = "This Tag was created by Playwright";
-  const titlePost = "Escenario de prueba: " + test +  ' - ' + Date.now();
-  const bodyPost = "Esta es una nueva Page creada para el escenario de prueba: " + test;
+it('F085 - should create a tag and then create a new post with this tag.', async () => {
+  const nameTag = dataPoolTag.name_tag;
+  const descriptionTag = dataPoolTag.description_tag;
+  const titlePost = dataPoolPost.title_post;
+  const bodyPost = dataPoolPost.body_post;
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const tagsPage = new TagsPage(page);
@@ -566,43 +544,207 @@ it('F15 - should create a tag and then create a new post with this tag.', async 
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(1);
   await loginPage.clickLogin();
-  await generateScreenshot(2);
   await homePage.goToTags();
-  await generateScreenshot(3);
   await tagsPage.goToCreateNewTag();
-  await generateScreenshot(4);
-  await tagDetailPage.enterTitleForNewTag(tag);
-  await tagDetailPage.enterDescriptionForNewTag(description);
-  await tagDetailPage.clickExpandMetaData();
-  await tagDetailPage.enterMetaTitleForNewTag(tag);
-  await tagDetailPage.enterMetaDescriptionForNewTag(description);
+  await tagDetailPage.enterTitleForNewTag(nameTag);
+  await tagDetailPage.enterDescriptionForNewTag(descriptionTag);
   await tagDetailPage.clickSave();
-  await generateScreenshot(5);
   await homePage.goToPosts();
-  await generateScreenshot(6);
   await postsPage.goToCreateNewPost();
-  await generateScreenshot(7);
   await postDetailPage.enterTitleForNewPost(titlePost);
   await postDetailPage.enterBodyForNewPost(bodyPost);
-  await generateScreenshot(8);
   await postDetailPage.openPostSettings();
-  await postDetailPage.assignTagWithName(tag);
-  await generateScreenshot(9);
+  await postDetailPage.assignTagWithName(nameTag);
   await postDetailPage.closePostSettings();
   await postDetailPage.publishPost();
-  await generateScreenshot(10);
   await postDetailPage.returnToPostsList();
-  await generateScreenshot(11);
-  await homePage.closePublishedPostNotification();
   await postsPage.openPostTagsFilterDropdown();
-  await generateScreenshot(12);
-  await postsPage.selectFilterByTagName(tag);
-  await generateScreenshot(13);
+  await postsPage.selectFilterByTagName(nameTag);
 
   let firstTagTitle = await postsPage.getFirstPostTitle();
   assert.strictEqual(firstTagTitle, titlePost);
+});
+
+it('F086 - should create a tag and then create a new page with this tag.', async () => {
+  const nameTag = dataPoolTag.name_tag;
+  const descriptionTag = dataPoolTag.description_tag;
+  const titlePage = dataPoolPage.title_page;
+  const bodyPage = dataPoolPage.body_page;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const tagsPage = new TagsPage(page);
+  const tagDetailPage = new TagDetailPage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToTags();
+  await tagsPage.goToCreateNewTag();
+  await tagDetailPage.enterTitleForNewTag(nameTag);
+  await tagDetailPage.enterDescriptionForNewTag(descriptionTag);
+  await tagDetailPage.clickSave();
+  await homePage.goToPages();
+  await pagesPage.goToCreateNewPage();
+  await pageDetailPage.enterTitleForNewPage(titlePage);
+  await pageDetailPage.enterBodyForNewPage(bodyPage);
+  await pageDetailPage.openPageSettings();
+  await pageDetailPage.assignTagWithName(nameTag);
+  await pageDetailPage.closePageSettings();
+  await pageDetailPage.publishPage();
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTagsFilterDropdown();
+  await pagesPage.selectFilterByTagName(nameTag);
+
+  let firstTagTitle = await pagesPage.getFirstPageTitle();
+  assert.strictEqual(firstTagTitle, titlePage);
+});
+
+it('F087 - should create a tag with metadata.', async () => {
+  const nameTag = dataPoolTag.name_tag;
+  const descriptionTag = dataPoolTag.description_tag;
+  const metaTitleTag = dataPoolTag.meta_title_tag;
+  const metaDescriptionTag = dataPoolTag.meta_description_tag;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const tagsPage = new TagsPage(page);
+  const tagDetailPage = new TagDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToTags();
+  await tagsPage.goToCreateNewTag();
+  await tagDetailPage.enterTitleForNewTag(nameTag);
+  await tagDetailPage.enterDescriptionForNewTag(descriptionTag);
+  await tagDetailPage.clickExpandMetaData();
+  await tagDetailPage.enterMetaTitleForNewTag(metaTitleTag);
+  await tagDetailPage.enterMetaDescriptionForNewTag(metaDescriptionTag);
+  await tagDetailPage.clickSave();
+  await homePage.goToTags();
+
+  let existsTag = await tagsPage.searchTagByName(nameTag);
+  assert.strictEqual(existsTag, true);
+});
+
+it('F088 - should not create a new tag when the meta title has more than 300 characteres.', async () => {
+  const nameTag = dataPoolTag.name_tag;
+  const descriptionTag = dataPoolTag.description_tag;
+  const metaTitleTag = faker.datatype.string(301);
+  const metaDescriptionTag = dataPoolTag.meta_description_tag;
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const tagsPage = new TagsPage(page);
+  const tagDetailPage = new TagDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToTags();
+  await tagsPage.goToCreateNewTag();
+  await tagDetailPage.enterTitleForNewTag(nameTag);
+  await tagDetailPage.enterDescriptionForNewTag(descriptionTag);
+  await tagDetailPage.clickExpandMetaData();
+  await tagDetailPage.enterMetaTitleForNewTag(metaTitleTag);
+  await tagDetailPage.enterMetaDescriptionForNewTag(metaDescriptionTag);
+  await tagDetailPage.clickSave();
+
+  let tagMetaTitleError = await tagDetailPage.tagMetaTitleError();
+  assert.strictEqual(tagMetaTitleError.trim(), 'Meta Title cannot be longer than 300 characters.');
+  
+  const correctMetaTitleTag = faker.datatype.string(300);
+  await homePage.goToTags();
+  await homePage.confirmLeaveCurrentPage();
+  await homePage.goToTags();
+  await tagsPage.goToCreateNewTag();
+  await tagDetailPage.enterTitleForNewTag(nameTag);
+  await tagDetailPage.enterDescriptionForNewTag(descriptionTag);
+  await tagDetailPage.clickExpandMetaData();
+  await tagDetailPage.enterMetaTitleForNewTag(correctMetaTitleTag);
+  await tagDetailPage.enterMetaDescriptionForNewTag(metaDescriptionTag);
+  await tagDetailPage.clickSave();
+  await homePage.goToTags();
+
+  let existsTag = await tagsPage.searchTagByName(nameTag);
+  assert.strictEqual(existsTag, true);
+});
+
+it('F089 - should not create a new tag when the name has more than 191 characteres.', async () => {
+  const nameTag = faker.datatype.string(192);
+  const descriptionTag = dataPoolTag.description_tag;
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const tagsPage = new TagsPage(page);
+  const tagDetailPage = new TagDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToTags();
+  await tagsPage.goToCreateNewTag();
+  await tagDetailPage.enterTitleForNewTag(nameTag);
+  await tagDetailPage.enterDescriptionForNewTag(descriptionTag);
+  await tagDetailPage.clickSave();
+
+  let tagDescriptionError = await tagDetailPage.tagTitleError();
+  assert.strictEqual(tagDescriptionError.trim(), 'Tag names cannot be longer than 191 characters.');
+  
+  const correctNameTag = faker.datatype.string(191);
+  await homePage.goToTags();
+  await homePage.confirmLeaveCurrentPage();
+  await homePage.goToTags();
+  await tagsPage.goToCreateNewTag();
+  await tagDetailPage.enterTitleForNewTag(correctNameTag);
+  await tagDetailPage.enterDescriptionForNewTag(descriptionTag);
+  await tagDetailPage.clickSave();
+  await homePage.goToTags();
+
+  let existsTag = await tagsPage.searchTagByName(correctNameTag);
+  assert.strictEqual(existsTag, true);
+});
+
+it('F090 - should not create a new tag when the description has more than 500 characteres.', async () => {
+  const nameTag = dataPoolTag.name_tag;
+  const descriptionTag = faker.datatype.string(501);
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const tagsPage = new TagsPage(page);
+  const tagDetailPage = new TagDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToTags();
+  await tagsPage.goToCreateNewTag();
+  await tagDetailPage.enterTitleForNewTag(nameTag);
+  await tagDetailPage.enterDescriptionForNewTag(descriptionTag);
+  await tagDetailPage.clickSave();
+
+  let tagDescriptionError = await tagDetailPage.tagMetaTitleError();
+  assert.strictEqual(tagDescriptionError.trim(), 'Description cannot be longer than 500 characters.');
+  
+  const correctDescriptionTag = faker.datatype.string(500);
+  await homePage.goToTags();
+  await homePage.confirmLeaveCurrentPage();
+  await homePage.goToTags();
+  await tagsPage.goToCreateNewTag();
+  await tagDetailPage.enterTitleForNewTag(nameTag);
+  await tagDetailPage.enterDescriptionForNewTag(correctDescriptionTag);
+  await tagDetailPage.clickSave();
+  await homePage.goToTags();
+
+  let existsTag = await tagsPage.searchTagByName(nameTag);
+  assert.strictEqual(existsTag, true);
 });
 
 it('F01 - should create and publish post', async () => {

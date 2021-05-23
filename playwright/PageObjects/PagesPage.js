@@ -36,4 +36,14 @@ module.exports = class PagesPage {
     const pagesTitles = await this.page.$$(".gh-content-entry-title");
     return pagesTitles[0].innerText();
   }
+
+  async openPageTagsFilterDropdown() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('css=div.gh-contentfilter-menu.gh-contentfilter-tag');
+  }
+
+  async selectFilterByTagName(nameTag) {
+    await new Promise(r => setTimeout(r, 1000));
+    await this.page.click(`li:text("${nameTag}")`);
+  }
 };

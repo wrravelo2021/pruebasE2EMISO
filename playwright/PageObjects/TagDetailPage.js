@@ -41,6 +41,12 @@ module.exports = class TagDetailPage {
     return message[0].innerText();
   }
 
+  async tagMetaTitleError() {
+    await new Promise(r => setTimeout(r, 1000));
+    const message = await this.page.$$('.form-group.error.ember-view > .response');
+    return message[0].innerText();
+  }
+
   async clearTagTitle() {
     await this.page.click('input[name="name"]');
     const inputValue = await this.page.$eval('input[name="name"]', el => el.value)
