@@ -11,6 +11,10 @@ module.exports = class TagDetailPage {
     return this.page.type('id=tag-description', description);
   }
 
+  async enterSlugForNewTag(slug) {
+    return this.page.type('id=tag-slug', slug);
+  }
+
   async enterColorForNewTag(color) {
     await this.page.type('input[name="accent-color"]', color.replace('#', ''));
     await new Promise(r => setTimeout(r, 1000));
@@ -76,6 +80,16 @@ module.exports = class TagDetailPage {
   async returnToTagsInternalList() {
     await new Promise(r => setTimeout(r, 1000));
     return this.page.click('a[href="#/tags/?type=internal"]');
+  }
+
+  async clickUploadTagImageFromUnsplash() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('.gh-image-uploader-unsplash');
+  }
+
+  async selectImageFromUnsplash() {
+    await new Promise(r => setTimeout(r, 2000));
+    return this.page.click('.gh-unsplash-photo-footer > .gh-unsplash-button');
   }
 
 };
