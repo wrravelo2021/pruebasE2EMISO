@@ -6,6 +6,7 @@ module.exports = class MockarooClient {
 
   amount = 10;
   client = new Mockaroo.Client({ apiKey: 'b74b0480' });
+  slugClient = new Mockaroo.Client({ apiKey: '6e06b9b0' });
 
   async getDataPoolPosts() {
     return this.client.generate({
@@ -29,6 +30,15 @@ module.exports = class MockarooClient {
     return this.client.generate({
       count: this.amount,
       schema: 'tag_schema'
+    }).then(function(records) {
+      return records;
+    });
+  }
+
+  async getDataPoolSlugs() {
+    return this.slugClient.generate({
+      count: this.amount,
+      schema: 'slug_schema'
     }).then(function(records) {
       return records;
     });

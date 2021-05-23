@@ -31,6 +31,7 @@ before(async() => {
   dataPoolPosts = await mockaroo.getDataPoolPosts();
   dataPoolPages = await mockaroo.getDataPoolPages();
   dataPoolTags = await mockaroo.getDataPoolTags();
+  dataPoolSlugs = await mockaroo.getDataPoolSlugs();
 });
 
 beforeEach(async() => {
@@ -40,6 +41,7 @@ beforeEach(async() => {
   dataPoolPost = await mockaroo.getDataPoolRandom(dataPoolPosts);
   dataPoolPage = await mockaroo.getDataPoolRandom(dataPoolPages);
   dataPoolTag = await mockaroo.getDataPoolRandom(dataPoolTags);
+  dataPoolSlug = await mockaroo.getDataPoolRandom(dataPoolSlugs);
 });
 
 afterEach(async () => {
@@ -1803,7 +1805,7 @@ it('F21.4 - should try to change email to one that exceeds max characters then c
 });
 
 it('F22.1 - should change slug in profile', async () => {
-  let newSlug = faker.lorem.slug();
+  let newSlug = dataPoolSlug.slug;
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1820,7 +1822,7 @@ it('F22.1 - should change slug in profile', async () => {
 });
 
 it('F22.2 - should change slug in profile with URL', async () => {
-  let newSlug = faker.internet.url();
+  let newSlug = dataPoolSlug.url;
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1853,7 +1855,7 @@ it('F22.3 - should change slug in profile with empty text', async () => {
 });
 
 it('F22.4 - should change slug in profile with empty text', async () => {
-  let slug = faker.lorem.sentence();
+  let slug = dataPoolSlug.sentence;
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1870,7 +1872,7 @@ it('F22.4 - should change slug in profile with empty text', async () => {
 });
 
 it('F22.5 - should change slug in profile with email', async () => {
-  let slug = faker.internet.email();
+  let slug = dataPoolSlug.email;
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
@@ -1887,7 +1889,7 @@ it('F22.5 - should change slug in profile with email', async () => {
 });
 
 it('F22.6 - should change slug in profile with number of characters exceeded', async () => {
-  let slug = `${faker.lorem.word().substring(0,1)}`.repeat(200);
+  let slug = `${dataPoolSlug.word.substring(0,1)}`.repeat(200);
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const profilePage = new ProfilePage(page);
