@@ -21,4 +21,9 @@ module.exports = class TagsPage {
     }
     return false;
   }
+
+  async clickInternalTags() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('.gh-btn.gh-btn-group-selected');
+  }
 };
