@@ -529,12 +529,11 @@ it('F084 - should schedule a new page and then reschedule it', async () => {
   assert.strictEqual(firstPageTitle, titlePage);
 });
 
-it('F15 - should create a tag and then create a new post with this tag.', async () => {
-  test = 'F15';
-  const tag = 'F15-' + + Date.now();
-  const description = "This Tag was created by Playwright";
-  const titlePost = "Escenario de prueba: " + test +  ' - ' + Date.now();
-  const bodyPost = "Esta es una nueva Page creada para el escenario de prueba: " + test;
+it('F085 - should create a tag and then create a new post with this tag.', async () => {
+  const nameTag = dataPoolTag.name_tag;
+  const descriptionTag = dataPoolTag.description_tag;
+  const titlePost = dataPoolPost.title_post;
+  const bodyPost = dataPoolPost.body_post;
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const tagsPage = new TagsPage(page);
@@ -545,40 +544,27 @@ it('F15 - should create a tag and then create a new post with this tag.', async 
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(1);
   await loginPage.clickLogin();
-  await generateScreenshot(2);
   await homePage.goToTags();
-  await generateScreenshot(3);
   await tagsPage.goToCreateNewTag();
-  await generateScreenshot(4);
-  await tagDetailPage.enterTitleForNewTag(tag);
-  await tagDetailPage.enterDescriptionForNewTag(description);
+  await tagDetailPage.enterTitleForNewTag(nameTag);
+  await tagDetailPage.enterDescriptionForNewTag(descriptionTag);
   await tagDetailPage.clickExpandMetaData();
-  await tagDetailPage.enterMetaTitleForNewTag(tag);
-  await tagDetailPage.enterMetaDescriptionForNewTag(description);
+  await tagDetailPage.enterMetaTitleForNewTag(nameTag);
+  await tagDetailPage.enterMetaDescriptionForNewTag(descriptionTag);
   await tagDetailPage.clickSave();
-  await generateScreenshot(5);
   await homePage.goToPosts();
-  await generateScreenshot(6);
   await postsPage.goToCreateNewPost();
-  await generateScreenshot(7);
   await postDetailPage.enterTitleForNewPost(titlePost);
   await postDetailPage.enterBodyForNewPost(bodyPost);
-  await generateScreenshot(8);
   await postDetailPage.openPostSettings();
-  await postDetailPage.assignTagWithName(tag);
-  await generateScreenshot(9);
+  await postDetailPage.assignTagWithName(nameTag);
   await postDetailPage.closePostSettings();
   await postDetailPage.publishPost();
-  await generateScreenshot(10);
   await postDetailPage.returnToPostsList();
-  await generateScreenshot(11);
   await homePage.closePublishedPostNotification();
   await postsPage.openPostTagsFilterDropdown();
-  await generateScreenshot(12);
-  await postsPage.selectFilterByTagName(tag);
-  await generateScreenshot(13);
+  await postsPage.selectFilterByTagName(nameTag);
 
   let firstTagTitle = await postsPage.getFirstPostTitle();
   assert.strictEqual(firstTagTitle, titlePost);
