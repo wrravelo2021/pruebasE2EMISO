@@ -10,13 +10,22 @@ module.exports = class MockarooClient {
   async getDataPoolPosts() {
     return this.client.generate({
       count: this.amount,
-      schema: 'test_schema'
+      schema: 'post_schema'
     }).then(function(records) {
       return records;
     });
   }
 
-  async getDataPoolPost(records) {
+  async getDataPoolPages() {
+    return this.client.generate({
+      count: this.amount,
+      schema: 'page_schema'
+    }).then(function(records) {
+      return records;
+    });
+  }
+
+  async getDataPoolRandom(records) {
     let random = this.getRandom(0, records.length);
     return records[random];
   }

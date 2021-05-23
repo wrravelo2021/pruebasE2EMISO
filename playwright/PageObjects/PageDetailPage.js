@@ -25,6 +25,7 @@ module.exports = class PageDetailPage {
   }
 
   async returnToPagesList() {
+    await new Promise(r => setTimeout(r, 1000));
     return this.page.click('a.blue.link.fw4.flex.items-center.ember-view');
   }
 
@@ -65,6 +66,24 @@ module.exports = class PageDetailPage {
   async getFutureDateError(){
     await new Promise(r => setTimeout(r, 1000));
     return await this.page.$('.gh-date-time-picker-error');
+  }
+
+  async isAvailableOptionPublishPage() {
+    await new Promise(r => setTimeout(r, 1000));
+    const optionPublishPage = await this.page.$$('.gh-btn.gh-btn-outline.gh-publishmenu-trigger.ember-basic-dropdown-trigger.ember-view');
+    return optionPublishPage.length ? true : false;
+  }
+
+  async deleteTitlePage() {
+    await this.page.click('.gh-editor-title.ember-text-area.gh-input.ember-view');
+    await this.page.keyboard.press("Meta+A");
+    await this.page.keyboard.press("Control+A");
+    return this.page.keyboard.press("Delete");
+  }
+
+  async clickTextareaBodyPage() {
+    await new Promise(r => setTimeout(r, 1000));
+    await this.page.click('.koenig-editor__editor.__mobiledoc-editor');
   }
 
 };
