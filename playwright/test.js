@@ -209,7 +209,7 @@ it('F065 - should not schedule when the meta title has more than 300 characters.
   let firstPostTitle = await postsPage.getFirstPostTitle();
   assert.strictEqual(firstPostTitle, titlePost);
 });
-/*
+
 it('F12 - should create a post, then modify it and validate that the modification was made.', async () => {
   test = 'F12';
   const titlePost = "Escenario de prueba: " + test +  ' - ' + Date.now();
