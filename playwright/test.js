@@ -24,7 +24,7 @@ let context;
 let test;
 
 beforeEach(async() => {
-  browser = await playwright['chromium'].launch({ headless: true, viewport: { width: viewportWidth, height: viewportHeight }});
+  browser = await playwright['chromium'].launch({ headless: false, viewport: { width: viewportWidth, height: viewportHeight }});
   context = await browser.newContext();
   page = await context.newPage();
 });
@@ -33,10 +33,9 @@ afterEach(async () => {
   await browser.close();
 });
 
-it('F11 - should schedule a new post and filter it in the list of posts by scheduled status.', async () => {
-  test = 'F11';
-  const titlePost = "Escenario de prueba: " + test +  ' - ' + Date.now();
-  const bodyPost = "Este es un nuevo post creado para el escenario de prueba: " + test;
+it('F061 - should schedule a new post and filter it in the list of posts by scheduled status.', async () => {
+  const titlePost = dataPoolPost.title_post;
+  const bodyPost = dataPoolPost.body_post;
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const postsPage = new PostsPage(page);
@@ -45,28 +44,85 @@ it('F11 - should schedule a new post and filter it in the list of posts by sched
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(1);
   await loginPage.clickLogin();
-  await generateScreenshot(2);
   await homePage.goToPosts();
   await postsPage.goToCreateNewPost();
   await postDetailPage.enterTitleForNewPost(titlePost);
   await postDetailPage.enterBodyForNewPost(bodyPost);
-  await generateScreenshot(3);
   await postDetailPage.schedulePost();
-  await generateScreenshot(4);
   await postDetailPage.returnToPostsList();
-  await generateScreenshot(5);
-  await homePage.closePublishedPostNotification();
   await postsPage.openPostTypeFilterDropdown();
-  await generateScreenshot(6);
   await postsPage.selectFilterByScheduledPostsOption();
-  await generateScreenshot(7);
 
   let firstPostTitle = await postsPage.getFirstPostTitle();
   assert.strictEqual(firstPostTitle, titlePost);
 });
 
+it('F062 - should not schedule a new post when the title has more than 255 characters.', async () => {
+  const titlePost = faker.datatype.string(256);
+  const bodyPost = dataPoolPost.body_post;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(titlePost);
+  await postDetailPage.enterBodyForNewPost(bodyPost);
+  const canPublish = await postDetailPage.isAvailableOptionPublishPost();
+  assert.strictEqual(false, canPublish);
+
+  const newTitle = faker.datatype.string(255);
+  await postDetailPage.deleteTitlePost();
+  await postDetailPage.enterTitleForNewPost(newTitle);
+  await postDetailPage.clickTextareaBodyPost();
+  await postDetailPage.schedulePost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByScheduledPostsOption();
+
+  let firstPostTitle = await postsPage.getFirstPostTitle();
+  assert.strictEqual(firstPostTitle, newTitle);
+});
+
+it('F063 - should schedule a new post and then unschedule it', async () => {
+  const titlePost = dataPoolPost.title_post;
+  const bodyPost = dataPoolPost.body_post;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(titlePost);
+  await postDetailPage.enterBodyForNewPost(bodyPost);
+  await postDetailPage.schedulePost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByScheduledPostsOption();
+
+  let firstPostTitle = await postsPage.getFirstPostTitle();
+  assert.strictEqual(firstPostTitle, titlePost);
+
+  await postsPage.clickPostWithTitle(titlePost);
+  await postDetailPage.unschedulePost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByDraftedPostsOption();
+
+  firstPostTitle = await postsPage.getFirstPostTitle();
+  assert.strictEqual(firstPostTitle, titlePost);
+});
 
 it('F12 - should create a post, then modify it and validate that the modification was made.', async () => {
   test = 'F12';
@@ -666,10 +722,9 @@ it('F10 - Crear page, ir a lista, editar el page, ingresamos fecha de publicaciÃ
   assert(dateErrorText === "Must be in the past", "Error message is not the expected");
 });
 
-it('F16 - should publish post and remain publish even if I log out and log in again', async () => {
+it('F16.1 - should publish post and remain publish even if I log out and log in again', async () => {
   let title = `${Date.now()}`;
   let body = `${Date.now()} body.`
-  test = "F16";
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -679,44 +734,29 @@ it('F16 - should publish post and remain publish even if I log out and log in ag
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(1);
   await loginPage.clickLogin();
-  await generateScreenshot(2);
   await homePage.goToPosts();
-  await generateScreenshot(3);
   await postsPage.goToCreateNewPost();
-  await generateScreenshot(4);
   await postDetailPage.enterTitleForNewPost(title)
   await postDetailPage.enterBodyForNewPost(body);
-  await generateScreenshot(5);
   await postDetailPage.publishPost();
-  await generateScreenshot(6);
   await postDetailPage.returnToPostsList();
-  await generateScreenshot(7);
   await homePage.closePublishedPostNotification();
-  await generateScreenshot(8);
   await homePage.signOut();
-  await generateScreenshot(9);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(10);
   await loginPage.clickLogin();
-  await generateScreenshot(11);
   await homePage.goToPosts();
-  await generateScreenshot(12);
   await postsPage.openPostTypeFilterDropdown();
-  await generateScreenshot(13);
   await postsPage.selectFilterByPublishedPostsOption();
-  await generateScreenshot(14);
 
   let firstPostTitle = await postsPage.getFirstPostTitle();
   assert.equal(firstPostTitle, title);
 });
 
-it('F17 - should publish a drafted post', async () => {
-  let title = `${Date.now()}`;
-  let body = `${Date.now()} body.`
-  test = "F17";
+it('F16.2 - should publish post with long title and remain publish even if I log out and log in again', async () => {
+  let title = "a".repeat(201);
+  let body = `${Date.now()} body.`;
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -726,44 +766,95 @@ it('F17 - should publish a drafted post', async () => {
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(1);
   await loginPage.clickLogin();
-  await generateScreenshot(2);
   await homePage.goToPosts();
-  await generateScreenshot(3);
   await postsPage.goToCreateNewPost();
-  await generateScreenshot(4);
+  await postDetailPage.enterTitleForNewPost(title);
+  await postDetailPage.enterBodyForNewPost(body);
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await homePage.closePublishedPostNotification();
+  await homePage.signOut();
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByPublishedPostsOption();
+
+  let firstPostTitle = await postsPage.getFirstPostTitle();
+  assert.equal(firstPostTitle, title);
+});
+
+it('F17.1 - should publish a drafted post', async () => {
+  let title = `${Date.now()}`;
+  let body = `${Date.now()} body.`
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
   await postDetailPage.enterTitleForNewPost(title)
   await postDetailPage.enterBodyForNewPost(body);
-  await generateScreenshot(5);
   await postDetailPage.returnToPostsList();
-  await generateScreenshot(6);
   await postsPage.openPostTypeFilterDropdown();
-  await generateScreenshot(7);
   await postsPage.selectFilterByDraftedPostsOption();
-  await generateScreenshot(8);
   var firstPostTitle = await postsPage.getFirstPostTitle();
   assert.equal(firstPostTitle, title);
 
   await postsPage.clickPostWithTitle(title);
-  await generateScreenshot(9);
   await postDetailPage.publishPost();
-  await generateScreenshot(10);
   await postDetailPage.returnToPostsList();
-  await generateScreenshot(11);
   await homePage.closePublishedPostNotification();
-  await generateScreenshot(12);
   await postsPage.openPostTypeFilterDropdown();
-  await generateScreenshot(13);
   await postsPage.selectFilterByPublishedPostsOption();
-  await generateScreenshot(14);
 
   var firstPostTitle = await postsPage.getFirstPostTitle();
   assert.equal(firstPostTitle, title);
 });
 
-it('F18 - should change user password and login whith wrong password', async () => {
-  test = "F18";
+it('F17.2 - should publish a drafted post with long title', async () => {
+  let title = "a".repeat(201);
+  let body = `${Date.now()} body.`
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(title)
+  await postDetailPage.enterBodyForNewPost(body);
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByDraftedPostsOption();
+  var firstPostTitle = await postsPage.getFirstPostTitle();
+  assert.equal(firstPostTitle, title);
+
+  await postsPage.clickPostWithTitle(title);
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await homePage.closePublishedPostNotification();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByPublishedPostsOption();
+
+  var firstPostTitle = await postsPage.getFirstPostTitle();
+  assert.equal(firstPostTitle, title);
+});
+
+it('F18.1 - should change user password and login whith wrong password', async () => {
   let newPassword = "newpruebasmiso";
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -772,53 +863,252 @@ it('F18 - should change user password and login whith wrong password', async () 
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(1);
   await loginPage.clickLogin();
-  await generateScreenshot(2);
   await homePage.goToMyProfile();
-  await generateScreenshot(3);
   await profilePage.scrollToBottom();
   await profilePage.enterOldPassword(credentials.password);
   await profilePage.enterNewPassword(newPassword);
   await profilePage.enterNewPasswordConfirmation(newPassword);
-  await generateScreenshot(4);
   await profilePage.clickChangePassword();
-  await generateScreenshot(5);
   await homePage.closePublishedPostNotification();
-  await generateScreenshot(6);
   await homePage.signOut();
-  await generateScreenshot(7);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(8);
   await loginPage.clickLogin();
-  await generateScreenshot(9);
 
   let messageError = await loginPage.getMessageError();
   assert.strictEqual(messageError.trim(), "Your password is incorrect.");
 
   await loginPage.clearPassword();
-  await generateScreenshot(10);
   await loginPage.enterPassword(newPassword);
-  await generateScreenshot(11);
   await loginPage.clickLogin();
-  await generateScreenshot(12);
   await homePage.goToMyProfile();
-  await generateScreenshot(13);
   await profilePage.scrollToBottom();
-  await generateScreenshot(14);
   await profilePage.enterOldPassword(newPassword);
   await profilePage.enterNewPassword(credentials.password);
   await profilePage.enterNewPasswordConfirmation(credentials.password);
-  await generateScreenshot(15);
   await profilePage.clickChangePassword();
-  await generateScreenshot(16);
 });
 
-it('F19 - should edit a page', async () => {
+it('F18.2 - should try to change empty password then change user password and login whith wrong password', async () => {
+  let newPassword = "newpruebasmiso";
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.scrollToBottom();
+  await profilePage.enterOldPassword(credentials.password);
+  await profilePage.enterNewPassword('');
+  await profilePage.enterNewPasswordConfirmation('');
+  await profilePage.clickChangePassword();
+
+  let errorMessage = await profilePage.newPasswordErrorMessage();
+  assert.strictEqual(errorMessage.trim(), "Sorry, passwords can't be blank");
+
+  await profilePage.enterNewPassword(newPassword);
+  await profilePage.enterNewPasswordConfirmation(newPassword);
+  await profilePage.clickChangePassword();
+  await homePage.closePublishedPostNotification();
+  await homePage.signOut();
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+
+  let messageError = await loginPage.getMessageError();
+  assert.strictEqual(messageError.trim(), "Your password is incorrect.");
+
+  await loginPage.clearPassword();
+  await loginPage.enterPassword(newPassword);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.scrollToBottom();
+  await profilePage.enterOldPassword(newPassword);
+  await profilePage.enterNewPassword(credentials.password);
+  await profilePage.enterNewPasswordConfirmation(credentials.password);
+  await profilePage.clickChangePassword();
+});
+
+it('F18.3 - should try to change short password then change user password and login whith wrong password', async () => {
+  let newPassword = "newpruebasmiso";
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.scrollToBottom();
+  await profilePage.enterOldPassword(credentials.password);
+  await profilePage.enterNewPassword(newPassword.substring(0,2));
+  await profilePage.enterNewPasswordConfirmation(newPassword.substring(0,2));
+  await profilePage.clickChangePassword();
+
+  let errorMessage = await profilePage.newPasswordErrorMessage();
+  assert.strictEqual(errorMessage.trim(), "Password must be at least 10 characters long");
+
+  await profilePage.clearNewPassword();
+  await profilePage.clearNewPasswordConfirmation();
+  await profilePage.enterNewPassword(newPassword);
+  await profilePage.enterNewPasswordConfirmation(newPassword);
+  await profilePage.clickChangePassword();
+  await homePage.closePublishedPostNotification();
+  await homePage.signOut();
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+
+  let messageError = await loginPage.getMessageError();
+  assert.strictEqual(messageError.trim(), "Your password is incorrect.");
+
+  await loginPage.clearPassword();
+  await loginPage.enterPassword(newPassword);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.scrollToBottom();
+  await profilePage.enterOldPassword(newPassword);
+  await profilePage.enterNewPassword(credentials.password);
+  await profilePage.enterNewPasswordConfirmation(credentials.password);
+  await profilePage.clickChangePassword();
+});
+
+it('F18.4 - should try to change only numbers password then change user password and login whith wrong password', async () => {
+  let insecurePassword = "1111111111";
+  let newPassword = "newpruebasmiso";
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.scrollToBottom();
+  await profilePage.enterOldPassword(credentials.password);
+  await profilePage.enterNewPassword(insecurePassword);
+  await profilePage.enterNewPasswordConfirmation(insecurePassword);
+  await profilePage.clickChangePassword();
+
+  let errorMessage = await profilePage.newPasswordErrorMessage();
+  assert.strictEqual(errorMessage.trim(), "Sorry, you cannot use an insecure password");
+
+  await profilePage.clearNewPassword();
+  await profilePage.clearNewPasswordConfirmation();
+  await profilePage.enterNewPassword(newPassword);
+  await profilePage.enterNewPasswordConfirmation(newPassword);
+  await profilePage.clickChangePassword();
+  await homePage.closePublishedPostNotification();
+  await homePage.signOut();
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+
+  let messageError = await loginPage.getMessageError();
+  assert.strictEqual(messageError.trim(), "Your password is incorrect.");
+
+  await loginPage.clearPassword();
+  await loginPage.enterPassword(newPassword);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.scrollToBottom();
+  await profilePage.enterOldPassword(newPassword);
+  await profilePage.enterNewPassword(credentials.password);
+  await profilePage.enterNewPasswordConfirmation(credentials.password);
+  await profilePage.clickChangePassword();
+});
+
+it('F18.5 - should try to change with all characters insecure password then change user password and login whith wrong password', async () => {
+  let insecurePassword = "aaaaaaaaaa";
+  let newPassword = "newpruebasmiso";
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.scrollToBottom();
+  await profilePage.enterOldPassword(credentials.password);
+  await profilePage.enterNewPassword(insecurePassword);
+  await profilePage.enterNewPasswordConfirmation(insecurePassword);
+  await profilePage.clickChangePassword();
+
+  let errorMessage = await profilePage.newPasswordErrorMessage();
+  assert.strictEqual(errorMessage.trim(), "Sorry, you cannot use an insecure password");
+
+  await profilePage.clearNewPassword();
+  await profilePage.clearNewPasswordConfirmation();
+  await profilePage.enterNewPassword(newPassword);
+  await profilePage.enterNewPasswordConfirmation(newPassword);
+  await profilePage.clickChangePassword();
+  await homePage.closePublishedPostNotification();
+  await homePage.signOut();
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+
+  let messageError = await loginPage.getMessageError();
+  assert.strictEqual(messageError.trim(), "Your password is incorrect.");
+
+  await loginPage.clearPassword();
+  await loginPage.enterPassword(newPassword);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.scrollToBottom();
+  await profilePage.enterOldPassword(newPassword);
+  await profilePage.enterNewPassword(credentials.password);
+  await profilePage.enterNewPasswordConfirmation(credentials.password);
+  await profilePage.clickChangePassword();
+});
+
+it('F18.6 - should try to change with more than 60 characters then change user password and login whith wrong password', async () => {
+  let newPassword = "newpruebasmiso".repeat(6);
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.scrollToBottom();
+  await profilePage.enterOldPassword(credentials.password);
+  await profilePage.enterNewPassword(newPassword);
+  await profilePage.enterNewPasswordConfirmation(newPassword);
+  await profilePage.clickChangePassword();
+  await homePage.closePublishedPostNotification();
+  await homePage.signOut();
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+
+  let messageError = await loginPage.getMessageError();
+  assert.strictEqual(messageError.trim(), "Your password is incorrect.");
+
+  await loginPage.clearPassword();
+  await loginPage.enterPassword(newPassword);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.scrollToBottom();
+  await profilePage.enterOldPassword(newPassword);
+  await profilePage.enterNewPassword(credentials.password);
+  await profilePage.enterNewPasswordConfirmation(credentials.password);
+  await profilePage.clickChangePassword();
+});
+
+it('F19.1 - should edit a page', async () => {
   let title = `${Date.now()}`;
   let body = `${Date.now()} body.`
-  test = "F19";
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -828,31 +1118,19 @@ it('F19 - should edit a page', async () => {
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(1);
   await loginPage.clickLogin();
-  await generateScreenshot(2);
   await homePage.goToPages();
-  await generateScreenshot(3);
   await pagesPage.goToCreateNewPage();
-  await generateScreenshot(4);
   await pageDetailPage.enterTitleForNewPage(title);
   await pageDetailPage.enterBodyForNewPage(body);
-  await generateScreenshot(5);
   await pageDetailPage.publishPage();
-  await generateScreenshot(6);
   await pageDetailPage.returnToPagesList();
-  await generateScreenshot(7);
   await pagesPage.openPageTypeFilterDropdown();
-  await generateScreenshot(8);
   await pagesPage.selectFilterByPublishedPagesOption();
-  await generateScreenshot(9);
   await pagesPage.clickPageWithTitle(title)
-  await generateScreenshot(10);
   await pageDetailPage.openPageSettings();
-  await generateScreenshot(11);
 
   let [secondPage] = await pageDetailPage.openPagePreviewWithContext(context);
-  await generateScreenshot(12, secondPage);
   var pagePreviewPage = new PagePreviewPage(secondPage);
   var pageBodyContent = await pagePreviewPage.getPageBodyContent();
   assert.equal(pageBodyContent.trim(), body);
@@ -862,22 +1140,58 @@ it('F19 - should edit a page', async () => {
   for(var i = 0; i < body.length + 1; i++) {
     await pageDetailPage.eraseOneCharacterFromBodyContent();
   }
-  await generateScreenshot(13,);
   await pageDetailPage.enterBodyForNewPage(newBody);
-  await generateScreenshot(14);
   await pageDetailPage.publishPage();
-  await generateScreenshot(15);
 
   let [thirdPage] = await pageDetailPage.openPagePreviewWithContext(context);
-  await generateScreenshot(16, thirdPage);
   pagePreviewPage = new PagePreviewPage(thirdPage);
   pageBodyContent = await pagePreviewPage.getPageBodyContent();
   assert.equal(pageBodyContent.trim(), newBody);
 });
 
-it('F20 - should create tag, assign that tag to a post, delete the tag and deassign the tag from the post', async () => {
+it('F19.2 - should edit a page with long title', async () => {
+  let title = "a".repeat(201);
+  let body = `${Date.now()} body.`
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+  await pagesPage.goToCreateNewPage();
+  await pageDetailPage.enterTitleForNewPage(title);
+  await pageDetailPage.enterBodyForNewPage(body);
+  await pageDetailPage.publishPage();
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByPublishedPagesOption();
+  await pagesPage.clickPageWithTitle(title)
+  await pageDetailPage.openPageSettings();
+
+  let [secondPage] = await pageDetailPage.openPagePreviewWithContext(context);
+  var pagePreviewPage = new PagePreviewPage(secondPage);
+  var pageBodyContent = await pagePreviewPage.getPageBodyContent();
+  assert.equal(pageBodyContent.trim(), body);
+
+  let newBody = `${Date.now()} new body.`;
+  await pageDetailPage.closePageSettings();
+  await pageDetailPage.clearBody();
+  await pageDetailPage.enterBodyForNewPage(newBody);
+  await pageDetailPage.publishPage();
+
+  let [thirdPage] = await pageDetailPage.openPagePreviewWithContext(context);
+  pagePreviewPage = new PagePreviewPage(thirdPage);
+  pageBodyContent = await pagePreviewPage.getPageBodyContent();
+  assert.equal(pageBodyContent.trim(), newBody);
+});
+
+it('F20.1 - should create tag, assign that tag to a post, delete the tag and deassign the tag from the post', async () => {
   let tag = `${Date.now()}`;
-  test = "F20";
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -889,31 +1203,20 @@ it('F20 - should create tag, assign that tag to a post, delete the tag and deass
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(1);
   await loginPage.clickLogin();
-  await generateScreenshot(2);
   await homePage.goToTags();
-  await generateScreenshot(3);
   await tagsPage.goToCreateNewTag();
-  await generateScreenshot(4);
   await tagDetailPage.enterTitleForNewTag(tag);
-  await generateScreenshot(5);
   await tagDetailPage.clickSave();
-  await generateScreenshot(6);
   await homePage.goToPosts();
-  await generateScreenshot(7);
   await postsPage.goToCreateNewPost();
-  await generateScreenshot(8);
 
   let title = `${Date.now()}`;
   let body = `${Date.now()} body.`;
   await postDetailPage.enterTitleForNewPost(title)
   await postDetailPage.enterBodyForNewPost(body);
-  await generateScreenshot(9);
   await postDetailPage.openPostSettings();
-  await generateScreenshot(10);
   await postDetailPage.assignTagWithName(tag);
-  await generateScreenshot(11);
 
   var tags = await postDetailPage.getTagsName();
   assert.equal(tags.length, 1);
@@ -922,28 +1225,469 @@ it('F20 - should create tag, assign that tag to a post, delete the tag and deass
   assert.equal(addedTagText.trim(), tag);
 
   await postDetailPage.closePostSettings();
-  await generateScreenshot(12);
   await postDetailPage.publishPost();
-  await generateScreenshot(13);
   await postDetailPage.returnToPostsList();
-  await generateScreenshot(14);
   await homePage.goToTags();
-  await generateScreenshot(15);
   await tagsPage.clickTagWithName(tag);
-  await generateScreenshot(16);
   await tagDetailPage.clickDelete();
-  await generateScreenshot(17);
   await tagDetailPage.clickConfirmDelete();
-  await generateScreenshot(18);
   await homePage.goToPosts();
-  await generateScreenshot(19);
   await postsPage.clickPostWithTitle(title);
-  await generateScreenshot(20);
   await postDetailPage.openPostSettings();
-  await generateScreenshot(21);
 
   tags = await postDetailPage.getTagsName();
   assert.equal(tags.length, 0);
+});
+
+it('F20.2 - should try create empty tag then create tag, assign that tag to a post, delete the tag and deassign the tag from the post', async () => {
+  let tag = `${Date.now()}`;
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+  const tagsPage = new TagsPage(page);
+  const tagDetailPage = new TagDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToTags();
+  await tagsPage.goToCreateNewTag();
+  await tagDetailPage.clickSave();
+
+  let tagTitleError = await tagDetailPage.tagTitleError();
+  assert.strictEqual(tagTitleError.trim(), "You must specify a name for the tag.");
+
+  await tagDetailPage.enterTitleForNewTag(tag);
+  await tagDetailPage.clickSave();
+
+  await homePage.goToTags();
+  await homePage.confirmLeaveCurrentPage();
+  await tagsPage.goToCreateNewTag();
+  await tagDetailPage.enterTitleForNewTag(tag);
+  await tagDetailPage.clickSave();
+
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+
+  let title = `${Date.now()}`;
+  let body = `${Date.now()} body.`;
+  await postDetailPage.enterTitleForNewPost(title)
+  await postDetailPage.enterBodyForNewPost(body);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.assignTagWithName(tag);
+
+  var tags = await postDetailPage.getTagsName();
+  assert.equal(tags.length, 1);
+
+  let addedTagText = await tags[0].innerText();
+  assert.equal(addedTagText.trim(), tag);
+
+  await postDetailPage.closePostSettings();
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await homePage.goToTags();
+  await tagsPage.clickTagWithName(tag);
+  await tagDetailPage.clickDelete();
+  await tagDetailPage.clickConfirmDelete();
+  await homePage.goToPosts();
+  await postsPage.clickPostWithTitle(title);
+  await postDetailPage.openPostSettings();
+
+  tags = await postDetailPage.getTagsName();
+  assert.equal(tags.length, 0);
+});
+
+it('F20.3 - should try create tag with title that exceeds max characters, assign that tag to a post, delete the tag and deassign the tag from the post', async () => {
+  let tag = 'a'.repeat(25);
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+  const tagsPage = new TagsPage(page);
+  const tagDetailPage = new TagDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToTags();
+  await tagsPage.goToCreateNewTag();
+  await tagDetailPage.enterTitleForNewTag(tag);
+  await tagDetailPage.clickSave();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+
+  let title = `${Date.now()}`;
+  let body = `${Date.now()} body.`;
+  await postDetailPage.enterTitleForNewPost(title)
+  await postDetailPage.enterBodyForNewPost(body);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.assignTagWithName(tag);
+
+  var tags = await postDetailPage.getTagsName();
+  assert.equal(tags.length, 1);
+
+  let addedTagText = await tags[0].innerText();
+  assert.equal(addedTagText.trim(), tag);
+
+  await postDetailPage.closePostSettings();
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await homePage.goToTags();
+  await tagsPage.clickTagWithName(tag);
+  await tagDetailPage.clickDelete();
+  await tagDetailPage.clickConfirmDelete();
+  await homePage.goToPosts();
+  await postsPage.clickPostWithTitle(title);
+  await postDetailPage.openPostSettings();
+
+  tags = await postDetailPage.getTagsName();
+  assert.equal(tags.length, 0);
+});
+
+it('F21.1 - should change user email and login whith wrong email', async () => {
+  let newEmail = "pruebasmiso@gmail.com";
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.clearEmail();
+  await profilePage.enterEmail(newEmail);
+  await profilePage.clickSave();
+  await homePage.signOut();
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+
+  let messageError = await loginPage.getMessageError();
+  assert.strictEqual(messageError.trim(), "There is no user with that email address.");
+
+  await loginPage.clearEmailWithTripleClick();
+  await loginPage.enterEmail(newEmail);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.clearEmail();
+  await profilePage.enterEmail(credentials.email);
+  await profilePage.clickSave();
+});
+
+it('F21.2 - should try to change empty email then change user email and login whith wrong email', async () => {
+  let newEmail = "pruebasmiso@gmail.com";
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.clearEmail();
+  await profilePage.enterEmail('');
+  await profilePage.clickSave();
+
+  let errorMessage = await profilePage.emailErrorMessage();
+  assert.strictEqual(errorMessage.trim(), "Please supply a valid email address");
+
+  await profilePage.enterEmail(newEmail);
+  await profilePage.clickSave();
+  await homePage.signOut();
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+
+  let messageError = await loginPage.getMessageError();
+  assert.strictEqual(messageError.trim(), "There is no user with that email address.");
+
+  await loginPage.clearEmailWithTripleClick();
+  await loginPage.enterEmail(newEmail);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.clearEmail();
+  await profilePage.enterEmail(credentials.email);
+  await profilePage.clickSave();
+});
+
+it('F21.3 - should try to change URL email then change user email and login whith wrong email', async () => {
+  let newEmail = "pruebasmiso@gmail.com";
+  let invalidEmail = "http://google.com";
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.clearEmail();
+  await profilePage.enterEmail(invalidEmail);
+  await profilePage.clickSave();
+
+  let errorMessage = await profilePage.emailErrorMessage();
+  assert.strictEqual(errorMessage.trim(), "Please supply a valid email address");
+
+  await profilePage.clearEmail();
+  await profilePage.enterEmail(newEmail);
+  await profilePage.clickSave();
+  await homePage.signOut();
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+
+  let messageError = await loginPage.getMessageError();
+  assert.strictEqual(messageError.trim(), "There is no user with that email address.");
+
+  await loginPage.clearEmailWithTripleClick();
+  await loginPage.enterEmail(newEmail);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.clearEmail();
+  await profilePage.enterEmail(credentials.email);
+  await profilePage.clickSave();
+});
+
+it('F21.4 - should try to change email to one that exceeds max characters then change user email and login whith wrong email', async () => {
+  let newEmail = "pruebasmiso@gmail.com";
+  let invalidEmail = `${'a'.repeat(250)}@gmail.com`;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.clearEmail();
+  await profilePage.enterEmail(invalidEmail);
+  await profilePage.clickSave();
+
+  let errorMessage = await profilePage.emailErrorMessage();
+  assert.strictEqual(errorMessage.trim(), "Email is too long");
+
+  await profilePage.clearEmail();
+  await profilePage.enterEmail(newEmail);
+  await profilePage.clickSave();
+  await homePage.signOut();
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+
+  let messageError = await loginPage.getMessageError();
+  assert.strictEqual(messageError.trim(), "There is no user with that email address.");
+
+  await loginPage.clearEmailWithTripleClick();
+  await loginPage.enterEmail(newEmail);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.clearEmail();
+  await profilePage.enterEmail(credentials.email);
+  await profilePage.clickSave();
+});
+
+it('F22.1 - should change slug in profile', async () => {
+  let newSlug = "slug";
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.clearSlug();
+  await profilePage.enterSlug(newSlug);
+  await profilePage.clickSave();
+  await profilePage.clickSave();
+});
+
+it('F22.2 - should change slug in profile with URL', async () => {
+  let newSlug = "http://google.com/";
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.clearSlug();
+  await profilePage.enterSlug(newSlug);
+  await profilePage.clickSave();
+  await profilePage.clickSave();
+});
+
+it('F22.3 - should change slug in profile with empty text', async () => {
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.clearSlug();
+  await profilePage.enterSlug('');
+  await profilePage.clickSave();
+  await profilePage.clickSave();
+});
+
+it('F22.4 - should change slug in profile with empty text', async () => {
+  let slug = 'algo algo algo';
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.clearSlug();
+  await profilePage.enterSlug(slug);
+  await profilePage.clickSave();
+  await profilePage.clickSave();
+});
+
+it('F22.5 - should change slug in profile with email', async () => {
+  let slug = 'drummerwilliam@gmail.com';
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.clearSlug();
+  await profilePage.enterSlug(slug);
+  await profilePage.clickSave();
+  await profilePage.clickSave();
+});
+
+it('F22.6 - should change slug in profile with number of characters exceeded', async () => {
+  let slug = 'a'.repeat(200);
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.clearSlug();
+  await profilePage.enterSlug(slug);
+  await profilePage.clickSave();
+  await profilePage.clickSave();
+});
+
+it('F23.1 - should change website', async () => {
+  let website = 'https://www.google.com';
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.clearWebsite();
+  await profilePage.enterWebsite(website);
+  await profilePage.clickSave();
+  await profilePage.clickSave();
+});
+
+it('F23.2 - should try to change website with email as website', async () => {
+    let website = 'drummerwilliam@gmail.com';
+    const loginPage = new LoginPage(page);
+    const homePage = new HomePage(page);
+    const profilePage = new ProfilePage(page);
+
+    await page.goto(config.url);
+    await loginPage.enterEmail(credentials.email);
+    await loginPage.enterPassword(credentials.password);
+    await loginPage.clickLogin();
+    await homePage.goToMyProfile();
+    await profilePage.clearWebsite();
+    await profilePage.enterWebsite(website);
+    await profilePage.clickSave();
+    await profilePage.clickSave();
+  });
+
+it('F23.3 - should try to change website with integer as website', async () => {
+  let website = '11111111';
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.clearWebsite();
+  await profilePage.enterWebsite(website);
+  await profilePage.clickSave();
+  await profilePage.clickSave();
+
+  let errorMessage = await profilePage.websiteErrorMessage();
+  assert.strictEqual(errorMessage.trim(), "Website is not a valid url");
+});
+
+it('F23.4 - should try to change website with integer as sentence', async () => {
+  let website = 'algo algo algo';
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.clearWebsite();
+  await profilePage.enterWebsite(website);
+  await profilePage.clickSave();
+  await profilePage.clickSave();
+
+  let errorMessage = await profilePage.websiteErrorMessage();
+  assert.strictEqual(errorMessage.trim(), "Website is not a valid url");
+});
+
+it('F23.5 - should try to change website with a website that exceeds max characters', async () => {
+  let website = `http://${'a'.repeat(2000)}.com`;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const profilePage = new ProfilePage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToMyProfile();
+  await profilePage.clearWebsite();
+  await profilePage.enterWebsite(website);
+  await profilePage.clickSave();
+  await profilePage.clickSave();
+
+  let errorMessage = await profilePage.websiteErrorMessage();
+  assert.strictEqual(errorMessage.trim(), "Website is not a valid url");
 });
 
 async function generateScreenshot(id, customPage) {

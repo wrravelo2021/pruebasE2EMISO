@@ -36,4 +36,8 @@ module.exports = class HomePage {
   async goToViewSite() {
     return this.page.click('.relative > span > a[href="#/site/"]');
   }
+
+  async confirmLeaveCurrentPage() {
+    return await this.page.click('.modal-footer > .gh-btn.gh-btn-red')
+  }
 };

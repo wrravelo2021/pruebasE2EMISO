@@ -39,6 +39,7 @@ module.exports = class PostDetailPage {
   }
 
   async returnToPostsList(body) {
+    await new Promise(r => setTimeout(r, 1000));
     return this.page.click('a.blue.link.fw4.flex.items-center.ember-view');
   }
 
@@ -84,5 +85,4 @@ module.exports = class PostDetailPage {
   async clickConfirmDeletePost() {
     return this.page.click('.gh-btn.gh-btn-red.gh-btn-icon.ember-view');
   }
-
 };
