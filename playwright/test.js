@@ -636,7 +636,6 @@ it('F088 - should not create a new tag when the meta title has more than 300 cha
   const descriptionTag = dataPoolTag.description_tag;
   const metaTitleTag = faker.datatype.string(301);
   const metaDescriptionTag = dataPoolTag.meta_description_tag;
-
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const tagsPage = new TagsPage(page);
@@ -678,7 +677,6 @@ it('F088 - should not create a new tag when the meta title has more than 300 cha
 it('F089 - should not create a new tag when the name has more than 191 characteres.', async () => {
   const nameTag = faker.datatype.string(192);
   const descriptionTag = dataPoolTag.description_tag;
-
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const tagsPage = new TagsPage(page);
@@ -740,6 +738,31 @@ it('F090 - should not create a new tag when the description has more than 500 ch
   await tagsPage.goToCreateNewTag();
   await tagDetailPage.enterTitleForNewTag(nameTag);
   await tagDetailPage.enterDescriptionForNewTag(correctDescriptionTag);
+  await tagDetailPage.clickSave();
+  await homePage.goToTags();
+
+  let existsTag = await tagsPage.searchTagByName(nameTag);
+  assert.strictEqual(existsTag, true);
+});
+
+it('F091 - should create a new tag with a color selected.', async () => {
+  const nameTag = dataPoolTag.name_tag;
+  const descriptionTag = dataPoolTag.description_tag;
+  const colorTag = dataPoolTag.color_tag;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const tagsPage = new TagsPage(page);
+  const tagDetailPage = new TagDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToTags();
+  await tagsPage.goToCreateNewTag();
+  await tagDetailPage.enterTitleForNewTag(nameTag);
+  await tagDetailPage.enterDescriptionForNewTag(descriptionTag);
+  await tagDetailPage.enterColorForNewTag(colorTag);
   await tagDetailPage.clickSave();
   await homePage.goToTags();
 

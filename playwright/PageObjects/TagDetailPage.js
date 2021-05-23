@@ -11,6 +11,10 @@ module.exports = class TagDetailPage {
     return this.page.type('id=tag-description', description);
   }
 
+  async enterColorForNewTag(color) {
+    return this.page.type('input[name="accent-color"]', color.replace('#', ''));
+  }
+
   async enterMetaTitleForNewTag(metaTitle) {
     return this.page.type('id=meta-title', metaTitle);
   }
