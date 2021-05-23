@@ -296,7 +296,7 @@ it('F067 should create a post, then modify it and validate that the modification
   assert.strictEqual(firstPostTitle, newTitlePost);
 });
 
-it('F073 - should change user password and login correctly.', async () => {
+it('F070 - should change user password and login correctly.', async () => {
   let newPassword = faker.internet.password();
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -325,7 +325,7 @@ it('F073 - should change user password and login correctly.', async () => {
   await profilePage.clickChangePassword();
 });
 
-it('F079 - should schedule a new page and filter it in the list of pages by scheduled status.', async () => {
+it('F071 - should schedule a new page and filter it in the list of pages by scheduled status.', async () => {
   const titlePage = dataPoolPage.title_page;
   const bodyPage = dataPoolPage.body_page;
   const loginPage = new LoginPage(page);
@@ -350,7 +350,7 @@ it('F079 - should schedule a new page and filter it in the list of pages by sche
   assert.strictEqual(firstPageTitle, titlePage);
 });
 
-it('F080 - should not schedule a new page when the title has more than 255 characters.', async () => {
+it('F072 - should not schedule a new page when the title has more than 255 characters.', async () => {
   const titlePage = faker.datatype.string(256);
   const bodyPage = dataPoolPage.body_page;
   const loginPage = new LoginPage(page);
@@ -382,7 +382,7 @@ it('F080 - should not schedule a new page when the title has more than 255 chara
   assert.strictEqual(firstPageTitle, newTitle);
 });
 
-it('F081 - should schedule a new page and then unschedule it', async () => {
+it('F073 - should schedule a new page and then unschedule it', async () => {
   const titlePage = dataPoolPage.title_page;
   const bodyPage = dataPoolPage.body_page;
   const loginPage = new LoginPage(page);
@@ -416,7 +416,7 @@ it('F081 - should schedule a new page and then unschedule it', async () => {
   assert.strictEqual(firstPageTitle, titlePage);
 });
 
-it('F082 - should schedule a new page with metadata', async () => {
+it('F074 - should schedule a new page with metadata', async () => {
   const titlePage = dataPoolPage.title_page;
   const bodyPage = dataPoolPage.body_page;
   const metaTitlePage = dataPoolPage.meta_title_page;
@@ -449,7 +449,7 @@ it('F082 - should schedule a new page with metadata', async () => {
   assert.strictEqual(firstPagesTitle, titlePage);
 });
 
-it('F083 - should not schedule a new page when the meta title has more than 300 characters.', async () => {
+it('F075 - should not schedule a new page when the meta title has more than 300 characters.', async () => {
   const titlePage = dataPoolPage.title_page;
   const bodyPage = dataPoolPage.body_page;
   const metaTitlePage = faker.datatype.string(301);
@@ -494,7 +494,7 @@ it('F083 - should not schedule a new page when the meta title has more than 300 
   assert.strictEqual(firstPageTitle, titlePage);
 });
 
-it('F084 - should schedule a new page and then reschedule it', async () => {
+it('F076 - should schedule a new page and then reschedule it', async () => {
   const titlePage = dataPoolPage.title_page;
   const bodyPage = dataPoolPage.body_page;
   const loginPage = new LoginPage(page);
@@ -529,7 +529,7 @@ it('F084 - should schedule a new page and then reschedule it', async () => {
   assert.strictEqual(firstPageTitle, titlePage);
 });
 
-it('F085 - should create a tag and then create a new post with this tag.', async () => {
+it('F077 - should create a tag and then create a new post with this tag.', async () => {
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const titlePost = dataPoolPost.title_post;
@@ -566,7 +566,7 @@ it('F085 - should create a tag and then create a new post with this tag.', async
   assert.strictEqual(firstTagTitle, titlePost);
 });
 
-it('F086 - should create a tag and then create a new page with this tag.', async () => {
+it('F078 - should create a tag and then create a new page with this tag.', async () => {
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const titlePage = dataPoolPage.title_page;
@@ -603,7 +603,7 @@ it('F086 - should create a tag and then create a new page with this tag.', async
   assert.strictEqual(firstTagTitle, titlePage);
 });
 
-it('F087 - should create a tag with metadata.', async () => {
+it('F079 - should create a tag with metadata.', async () => {
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const metaTitleTag = dataPoolTag.meta_title_tag;
@@ -631,7 +631,7 @@ it('F087 - should create a tag with metadata.', async () => {
   assert.strictEqual(existsTag, true);
 });
 
-it('F088 - should not create a new tag when the meta title has more than 300 characteres.', async () => {
+it('F080 - should not create a new tag when the meta title has more than 300 characteres.', async () => {
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const metaTitleTag = faker.datatype.string(301);
@@ -674,7 +674,7 @@ it('F088 - should not create a new tag when the meta title has more than 300 cha
   assert.strictEqual(existsTag, true);
 });
 
-it('F089 - should not create a new tag when the meta description has more than 500 characteres.', async () => {
+it('F081 - should not create a new tag when the meta description has more than 500 characteres.', async () => {
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const metaTitleTag = dataPoolTag.meta_title_tag;
@@ -717,7 +717,7 @@ it('F089 - should not create a new tag when the meta description has more than 5
   assert.strictEqual(existsTag, true);
 });
 
-it('F089 - should not create a new tag when the name has more than 191 characteres.', async () => {
+it('F082 - should not create a new tag when the name has more than 191 characteres.', async () => {
   const nameTag = faker.datatype.string(192);
   const descriptionTag = dataPoolTag.description_tag;
   const loginPage = new LoginPage(page);
@@ -752,10 +752,9 @@ it('F089 - should not create a new tag when the name has more than 191 character
   assert.strictEqual(existsTag, true);
 });
 
-it('F090 - should not create a new tag when the description has more than 500 characteres.', async () => {
+it('F083 - should not create a new tag when the description has more than 500 characteres.', async () => {
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = faker.datatype.string(501);
-
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const tagsPage = new TagsPage(page);
@@ -788,7 +787,7 @@ it('F090 - should not create a new tag when the description has more than 500 ch
   assert.strictEqual(existsTag, true);
 });
 
-it('F091 - should create a new tag with a color selected.', async () => {
+it('F084 - should create a new tag with a color selected.', async () => {
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const colorTag = dataPoolTag.color_tag;
@@ -813,7 +812,7 @@ it('F091 - should create a new tag with a color selected.', async () => {
   assert.strictEqual(existsTag, true);
 });
 
-it('F092 - should not create a new tag when the color value is wrong.', async () => {
+it('F085 - should not create a new tag when the color value is wrong.', async () => {
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const colorTag = faker.lorem.word(6);
@@ -851,7 +850,7 @@ it('F092 - should not create a new tag when the color value is wrong.', async ()
   assert.strictEqual(existsTag, true);
 });
 
-it('F093 - should create a new tag with Canonical URL.', async () => {
+it('F086 - should create a new tag with Canonical URL.', async () => {
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const canonicalUrl = dataPoolTag.canonical_url_tag;
@@ -881,7 +880,7 @@ it('F093 - should create a new tag with Canonical URL.', async () => {
   assert.strictEqual(existsTag, true);
 });
 
-it('F094 - should not create a new tag when the canonical URL is not in the correct format.', async () => {
+it('F087 - should not create a new tag when the canonical URL is not in the correct format.', async () => {
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const metaTitleTag = dataPoolTag.meta_title_tag;
