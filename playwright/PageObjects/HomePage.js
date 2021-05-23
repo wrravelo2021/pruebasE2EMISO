@@ -41,4 +41,8 @@ module.exports = class HomePage {
     const notification = await this.page.$$(".gh-alert-content");
     return notification[0].innerText();
   }
+
+  async confirmLeaveCurrentPage() {
+    return await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
+  }
 };

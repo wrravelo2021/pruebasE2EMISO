@@ -148,5 +148,4 @@ module.exports = class PostDetailPage {
     await this.page.keyboard.press("Control+A");
     return this.page.keyboard.press("Delete");
   }
-
 };

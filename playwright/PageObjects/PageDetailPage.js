@@ -49,6 +49,15 @@ module.exports = class PageDetailPage {
     return this.page.keyboard.press("Backspace");
   }
 
+  async clearBody() {
+    await this.page.click('.koenig-editor__editor.__mobiledoc-editor');
+    const inputValue = await this.page.$eval('.koenig-editor__editor.__mobiledoc-editor', el => el.innerText)
+    for(var i = 0; i < inputValue.length; i++) {
+      await this.page.keyboard.press("Backspace");
+    }
+    return await this.page.keyboard.press("Backspace");
+  }
+
   async pressDeleteOnElement(element, n){
     for (var i = 0; i <= n; i++) {
       await element.press('Delete');
