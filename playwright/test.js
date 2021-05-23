@@ -675,12 +675,9 @@ it('F088 - should not create a new tag when the meta title has more than 300 cha
 });
 
 it('F089 - should not create a new tag when the meta description has more than 500 characteres.', async () => {
-  //const nameTag = dataPoolTag.name_tag;
-  //const descriptionTag = dataPoolTag.description_tag;
-  //const metaTitleTag = dataPoolTag.meta_title_tag;
-  const nameTag = 'data_pool_tag';
-  const descriptionTag = 'data_description_tag';
-  const metaTitleTag = 'dataPoolTag.meta_title_tag';
+  const nameTag = dataPoolTag.name_tag;
+  const descriptionTag = dataPoolTag.description_tag;
+  const metaTitleTag = dataPoolTag.meta_title_tag;
   const metaDescriptionTag = faker.datatype.string(501);
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -829,7 +826,6 @@ it('F092 - should not create a new tag when the color value is wrong.', async ()
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
   await loginPage.clickLogin();
-
   await homePage.goToTags();
   await tagsPage.goToCreateNewTag();
   await tagDetailPage.enterTitleForNewTag(nameTag);
@@ -848,6 +844,82 @@ it('F092 - should not create a new tag when the color value is wrong.', async ()
   await tagDetailPage.enterTitleForNewTag(nameTag);
   await tagDetailPage.enterDescriptionForNewTag(descriptionTag);
   await tagDetailPage.enterColorForNewTag(correctColorTag);
+  await tagDetailPage.clickSave();
+  await homePage.goToTags();
+
+  let existsTag = await tagsPage.searchTagByName(nameTag);
+  assert.strictEqual(existsTag, true);
+});
+
+it('F093 - should create a new tag with Canonical URL.', async () => {
+  const nameTag = dataPoolTag.name_tag;
+  const descriptionTag = dataPoolTag.description_tag;
+  const canonicalUrl = dataPoolTag.canonical_url_tag;
+  const metaTitleTag = dataPoolTag.meta_title_tag;
+  const metaDescriptionTag = dataPoolTag.meta_description_tag;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const tagsPage = new TagsPage(page);
+  const tagDetailPage = new TagDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToTags();
+  await tagsPage.goToCreateNewTag();
+  await tagDetailPage.enterTitleForNewTag(nameTag);
+  await tagDetailPage.enterDescriptionForNewTag(descriptionTag);
+  await tagDetailPage.clickExpandMetaData();
+  await tagDetailPage.enterMetaTitleForNewTag(metaTitleTag);
+  await tagDetailPage.enterMetaDescriptionForNewTag(metaDescriptionTag);
+  await tagDetailPage.enterCanonicalUrlForNewTag(canonicalUrl);
+  await tagDetailPage.clickSave();
+  await homePage.goToTags();
+
+  let existsTag = await tagsPage.searchTagByName(nameTag);
+  assert.strictEqual(existsTag, true);
+});
+
+it('F094 - should not create a new tag when the canonical URL is not in the correct format.', async () => {
+  const nameTag = dataPoolTag.name_tag;
+  const descriptionTag = dataPoolTag.description_tag;
+  const metaTitleTag = dataPoolTag.meta_title_tag;
+  const metaDescriptionTag = dataPoolTag.meta_description_tag;
+  const canonicalUrl = faker.lorem.word();
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const tagsPage = new TagsPage(page);
+  const tagDetailPage = new TagDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToTags();
+  await tagsPage.goToCreateNewTag();
+  await tagDetailPage.enterTitleForNewTag(nameTag);
+  await tagDetailPage.enterDescriptionForNewTag(descriptionTag);
+  await tagDetailPage.clickExpandMetaData();
+  await tagDetailPage.enterMetaTitleForNewTag(metaTitleTag);
+  await tagDetailPage.enterMetaDescriptionForNewTag(metaDescriptionTag);
+  await tagDetailPage.enterCanonicalUrlForNewTag(canonicalUrl)
+  await tagDetailPage.clickSave();
+
+  let tagDescriptionError = await tagDetailPage.tagMetaTitleError();
+  assert.strictEqual(tagDescriptionError.trim(), 'The url should be a valid url');
+  
+  const correctcanonicalUrl = faker.internet.url();
+  await homePage.goToTags();
+  await homePage.confirmLeaveCurrentPage();
+  await homePage.goToTags();
+  await tagsPage.goToCreateNewTag();
+  await tagDetailPage.enterTitleForNewTag(nameTag);
+  await tagDetailPage.enterDescriptionForNewTag(descriptionTag);
+  await tagDetailPage.clickExpandMetaData();
+  await tagDetailPage.enterMetaTitleForNewTag(metaTitleTag);
+  await tagDetailPage.enterMetaDescriptionForNewTag(metaDescriptionTag);
+  await tagDetailPage.enterCanonicalUrlForNewTag(correctcanonicalUrl)
   await tagDetailPage.clickSave();
   await homePage.goToTags();
 
