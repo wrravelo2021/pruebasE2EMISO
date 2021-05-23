@@ -12,7 +12,9 @@ module.exports = class TagDetailPage {
   }
 
   async enterColorForNewTag(color) {
-    return this.page.type('input[name="accent-color"]', color.replace('#', ''));
+    await this.page.type('input[name="accent-color"]', color.replace('#', ''));
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.keyboard.press("Tab");
   }
 
   async enterMetaTitleForNewTag(metaTitle) {
@@ -43,6 +45,12 @@ module.exports = class TagDetailPage {
     await new Promise(r => setTimeout(r, 1000));
     const message = await this.page.$$('.error > .response');
     return message[0].innerText();
+  }
+
+  async tagColorError() {
+    await new Promise(r => setTimeout(r, 1000));
+    const message = await this.page.$$('.error > .response');
+    return message[1].innerText();
   }
 
   async tagMetaTitleError() {

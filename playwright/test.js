@@ -770,6 +770,47 @@ it('F091 - should create a new tag with a color selected.', async () => {
   assert.strictEqual(existsTag, true);
 });
 
+it('F092 - should not create a new tag when the color value is wrong.', async () => {
+  //const nameTag = dataPoolTag.name_tag;
+  //const descriptionTag = dataPoolTag.description_tag;
+  const nameTag = 'color_wrong_test';
+  const descriptionTag = 'description_color_wrong_test';
+  const colorTag = faker.lorem.word(6);
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const tagsPage = new TagsPage(page);
+  const tagDetailPage = new TagDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToTags();
+  await tagsPage.goToCreateNewTag();
+  await tagDetailPage.enterTitleForNewTag(nameTag);
+  await tagDetailPage.enterDescriptionForNewTag(descriptionTag);
+  await tagDetailPage.enterColorForNewTag(colorTag);
+  await tagDetailPage.clickSave();
+
+  let titleError = await tagDetailPage.tagColorError();
+  assert.strictEqual(titleError.trim(), 'The color should be in valid hex format');
+
+  //const correctColorTag = dataPoolTag.color_tag;
+  const correctColorTag = '#b06f0c';
+  await homePage.goToTags();
+  await homePage.confirmLeaveCurrentPage();
+  await homePage.goToTags();
+  await tagsPage.goToCreateNewTag();
+  await tagDetailPage.enterTitleForNewTag(nameTag);
+  await tagDetailPage.enterDescriptionForNewTag(descriptionTag);
+  await tagDetailPage.enterColorForNewTag(correctColorTag);
+  await tagDetailPage.clickSave();
+  await homePage.goToTags();
+
+  let existsTag = await tagsPage.searchTagByName(nameTag);
+  assert.strictEqual(existsTag, true);
+});
+
 it('F01 - should create and publish post', async () => {
   test = "F01";
   const title = `${Date.now()}`;
