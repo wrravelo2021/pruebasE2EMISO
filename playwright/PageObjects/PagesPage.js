@@ -46,4 +46,15 @@ module.exports = class PagesPage {
     await new Promise(r => setTimeout(r, 1000));
     await this.page.click(`li:text("${nameTag}")`);
   }
+
+  async searchPageByName(namePage) {
+    await new Promise(r => setTimeout(r, 1000));
+    const pageTitles = await this.page.$$("h3.gh-content-entry-title");
+    for (var i = 0; i < pageTitles.length; i++) {
+      if (await pageTitles[i].innerText() === namePage) {
+        return true;
+      }
+    }
+    return false;
+  }
 };

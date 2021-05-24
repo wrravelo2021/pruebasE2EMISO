@@ -244,4 +244,13 @@ module.exports = class PageDetailPage {
     await this.page.click('.modal-content a');
   }
 
+  async clickDeletePage() {
+    await new Promise(r => setTimeout(r, 1000));
+    await this.page.click('.gh-btn.gh-btn-hover-red.gh-btn-icon.settings-menu-delete-button');
+  }
+
+  async clickConfirmDeletePage() {
+    return this.page.click('.gh-btn.gh-btn-red.gh-btn-icon.ember-view');
+  }
+
 };

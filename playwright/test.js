@@ -298,6 +298,39 @@ it('F067 should create a post, then modify it and validate that the modification
   assert.strictEqual(firstPostTitle, newTitlePost);
 });
 
+it('F068 - should create a new page and then delete it.', async () => {
+  const titlePage = dataPoolPage.title_page;
+  const bodyPage = dataPoolPage.body_page;
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+  await pagesPage.goToCreateNewPage();
+  await pageDetailPage.enterTitleForNewPage(titlePage);
+  await pageDetailPage.enterBodyForNewPage(bodyPage);
+  await pageDetailPage.schedulePage();
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByScheduledPagesOption();
+
+  let firstPageTitle = await pagesPage.getFirstPageTitle();
+  assert.strictEqual(firstPageTitle, titlePage);
+
+  await pagesPage.clickPageWithTitle(titlePage);
+  await pageDetailPage.openPageSettings();
+  await pageDetailPage.clickDeletePage();
+  await pageDetailPage.clickConfirmDeletePage();
+
+  const existsPage = await pagesPage.searchPageByName(titlePage);
+  assert.strictEqual(existsPage, false);
+});
+
 it('F069 - should change user password and login correctly.', async () => {
   let newPassword = faker.internet.password();
   const loginPage = new LoginPage(page);
