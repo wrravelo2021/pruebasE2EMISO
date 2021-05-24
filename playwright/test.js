@@ -2299,7 +2299,6 @@ it('F06.e - Editar Draft post, metadata, editar Canonical Url con texto valido',
   await postsPage.selectFilterByRecentlyUpdatedPostOption();
 
   var EditPostTitle = await postsPage.getFirstPostTitle();
-  //await new Promise(r => setTimeout(r, 5000));
   assert.equal(EditPostTitle, firstPostTitle);
 });
 
