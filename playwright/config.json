@@ -1,7 +1,7 @@
 {
-    "url": "http://localhost:2371/ghost",
+    "url": "http://localhost:2368/ghost",
     "credentials": {
-        "email": "drummerwilliam@gmail.com",
+        "email": "emilsonqp@gmail.com",
         "password": "pruebasmiso"
     },
     "pathScreenshots": "./screenshots/3.42.5/",

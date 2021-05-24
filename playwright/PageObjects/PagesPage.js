@@ -46,4 +46,19 @@ module.exports = class PagesPage {
     await new Promise(r => setTimeout(r, 1000));
     await this.page.click(`li:text("${nameTag}")`);
   }
+
+  async openPageSortByFilterDropdown() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('.ember-power-select-selected-item:has-text("Newest")');
+  }
+
+  async selectFilterByNewestPageOption() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('.ember-power-select-option:has-text("Newest")');
+  }
+
+  async selectFilterByRecentlyUpPagesOption() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('.ember-power-select-option:has-text("Recently updated")');
+  }
 };

@@ -56,4 +56,9 @@ module.exports = class PostsPage {
     await new Promise(r => setTimeout(r, 1000));
     return this.page.click('.ember-power-select-option:has-text("Newest")');
   }
+
+  async selectFilterByRecentlyUpPostsOption() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('.ember-power-select-option:has-text("Recently updated")');
+  }
 };
