@@ -16,6 +16,7 @@ const TagsPage = require('./PageObjects/TagsPage.js');
 const TagDetailPage = require('./PageObjects/TagDetailPage.js');
 const ViewSitePage = require('./PageObjects/ViewSitePage.js');
 const MockarooClient = require('./Mockaroo/MockarooClient');
+const { fake } = require('faker');
 
 // Settings
 const {viewportHeight, viewportWidth, credentials, pathScreenshots} = config;
@@ -2126,12 +2127,11 @@ it('F60 - should save draft and publish page with max excerpt length', async () 
   const publishedPageTitle = await pagesPage.getFirstPageTitle();
   assert(publishedPageTitle != null, "Title is null");
   assert(publishedPageTitle === title, "Title is not the expected");
-});
+})
 
 it('F06 - Crear Draft post, validarlo en la lista', async () => {
-  let title = "Last Draft Post";
-  let body = "Last Draft Post Body";
-  test = "F06";
+  let title = faker.name.title();
+  let body = faker.lorem.sentence();
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2141,34 +2141,20 @@ it('F06 - Crear Draft post, validarlo en la lista', async () => {
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(1);
   await loginPage.clickLogin();
-  await generateScreenshot(2);
   await homePage.goToPosts();
-  await generateScreenshot(3);
   await postsPage.goToCreateNewPost();
-  await generateScreenshot(4);
   await postDetailPage.enterTitleForNewPost(title)
-  await generateScreenshot(5);
   await postDetailPage.enterBodyForNewPost(body);
-  await generateScreenshot(6);
   await postDetailPage.returnToPostsList();
-  await generateScreenshot(7);
   await postsPage.openPostTypeFilterDropdown();
-  await generateScreenshot(8);
   await postsPage.selectFilterByDraftedPostsOption();
-  await generateScreenshot(9);
 
   var firstPostTitle = await postsPage.getFirstPostTitle();
   assert.equal(firstPostTitle, title);
 });
 
-it('F07 - Crear 2 post, ordenar la lista por el mas nuevo, validar en la lista que el post mas reciente esté de primeras', async () => {
-  let titlePost1 = "Oldest Post";
-  let bodyPost1 = "Oldest Post Body";
-  let titlePost2 = "Newest Post";
-  let bodyPost2 = "Newest Post Body";
-  test = "F07";
+it('F06.a - Editar Draft post, editar Post URL con texto valido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2178,48 +2164,405 @@ it('F07 - Crear 2 post, ordenar la lista por el mas nuevo, validar en la lista q
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(1);
   await loginPage.clickLogin();
-  await generateScreenshot(2);
   await homePage.goToPosts();
-  await generateScreenshot(3);
-  await postsPage.goToCreateNewPost();
-  await generateScreenshot(4);
-  await postDetailPage.enterTitleForNewPost(titlePost1)
-  await generateScreenshot(5);
-  await postDetailPage.enterBodyForNewPost(bodyPost1);
-  await generateScreenshot(6);
-  await postDetailPage.publishPost();
-  await generateScreenshot(7);
-  await postDetailPage.returnToPostsList();
-  await generateScreenshot(8);
-  await postsPage.goToCreateNewPost();
-  await generateScreenshot(9);
-  await postDetailPage.enterTitleForNewPost(titlePost2)
-  await generateScreenshot(10);
-  await postDetailPage.enterBodyForNewPost(bodyPost2);
-  await generateScreenshot(11);
-  await postDetailPage.publishPost();
-  await generateScreenshot(12);
-  await postDetailPage.returnToPostsList();
-  await generateScreenshot(13);
+
   await postsPage.openPostTypeFilterDropdown();
-  await generateScreenshot(14);
-  await postsPage.selectFilterByPublishedPostsOption();
-  await generateScreenshot(15);
+  await postsPage.selectFilterByDraftedPostsOption();
+  var firstPostTitle = await postsPage.getFirstPostTitle();
+  await postsPage.clickPostWithTitle(firstPostTitle);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.clickPostUrl();
+  await postDetailPage.deleteInfoInputPrevSelected();
+  await postDetailPage.enterPostUrl(faker.lorem.word(10));
+  await postDetailPage.closePostSettings();
+  await postDetailPage.returnToPostsList();
   await postsPage.openPostSortByFilterDropdown();
-  await generateScreenshot(16);
+  await postsPage.selectFilterByRecentlyUpdatedPostOption();
+
+  var EditPostTitle = await postsPage.getFirstPostTitle();
+  assert.equal(EditPostTitle, firstPostTitle);
+});
+
+it('F06.b - Editar Draft post, editar Post URL con texto que supere el límite de chars', async () => {
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByDraftedPostsOption();
+  var firstPostTitle = await postsPage.getFirstPostTitle();
+  await postsPage.clickPostWithTitle(firstPostTitle);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.clickPostUrl();
+  await postDetailPage.deleteInfoInputPrevSelected();
+  await postDetailPage.enterPostUrl(faker.datatype.string(65001));  
+  await postDetailPage.closePostSettings();
+
+  const urlError = await postDetailPage.getUrlError();
+  const urlErrorText = urlError ? await urlError.innerText() : null;
+  assert(urlErrorText != null, "Error message is null");
+  assert(urlErrorText === "Request was formatted incorrectly.", "Error message is not the expected");
+
+});
+
+it('F06.c - Editar Draft post, editar Excerpt con texto valido', async () => {
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByDraftedPostsOption();
+  var firstPostTitle = await postsPage.getFirstPostTitle();
+  await postsPage.clickPostWithTitle(firstPostTitle);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.clickExcerpt();
+  await postDetailPage.enterExcerpt(dataPoolPost.Excerpt_OK_post);
+  await postDetailPage.closePostSettings();
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostSortByFilterDropdown();
+  await postsPage.selectFilterByRecentlyUpdatedPostOption();
+
+  var EditPostTitle = await postsPage.getFirstPostTitle();
+  assert.equal(EditPostTitle, firstPostTitle);
+});
+
+it('F06.d - Editar Draft post, editar Excerpt con texto que supere el límite de chars', async () => {
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByDraftedPostsOption();
+  var firstPostTitle = await postsPage.getFirstPostTitle();
+  await postsPage.clickPostWithTitle(firstPostTitle);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.clickExcerpt();
+  await postDetailPage.enterExcerpt(dataPoolPost.Excerpt_FAIL_post);
+  await postDetailPage.clickSettingsBody();
+
+  const excError = await postDetailPage.getExcError();
+  const excErrorText = excError ? await excError.innerText() : null;
+  assert(excErrorText != null, "Error message is null");
+  assert(excErrorText === "Excerpt cannot be longer than 300 characters.", "Error message is not the expected");
+});
+
+it('F06.e - Editar Draft post, metadata, editar Canonical Url con texto valido', async () => {
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByDraftedPostsOption();
+  var firstPostTitle = await postsPage.getFirstPostTitle();
+  await postsPage.clickPostWithTitle(firstPostTitle);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.clickExpandMetaData();
+  await postDetailPage.clickCanUrlMetaData();
+  await postDetailPage.enterMetaCanUrlForPost(dataPoolPost.meta_url_post);
+  await postDetailPage.goToBackSettingsPost();
+  await postDetailPage.closePostSettings();
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostSortByFilterDropdown();
+  await postsPage.selectFilterByRecentlyUpdatedPostOption();
+
+  var EditPostTitle = await postsPage.getFirstPostTitle();
+  //await new Promise(r => setTimeout(r, 5000));
+  assert.equal(EditPostTitle, firstPostTitle);
+});
+
+it('F06.f - Editar Draft post, metadata, editar Canonical Url con texto inválido', async () => {
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByDraftedPostsOption();
+  var firstPostTitle = await postsPage.getFirstPostTitle();
+  await postsPage.clickPostWithTitle(firstPostTitle);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.clickExpandMetaData();
+  await postDetailPage.clickCanUrlMetaData();
+  await postDetailPage.deleteInfoInputPrevSelected();
+  await postDetailPage.enterMetaCanUrlForPost(faker.lorem.word());
+  await postDetailPage.clickSettingsBodyMetadata();
+
+  const canUrlError = await postDetailPage.getcanUrlError();
+  const canUrlErrorText = canUrlError ? await canUrlError.innerText() : null;
+  assert(canUrlErrorText != null, "Error message is null");
+  assert(canUrlErrorText === "Please enter a valid URL", "Error message is not the expected");
+});
+
+it('F06.g - Editar Draft post, settings, code intection, editar header con texto inválido', async () => {
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByDraftedPostsOption();
+  var firstPostTitle = await postsPage.getFirstPostTitle();
+  await postsPage.clickPostWithTitle(firstPostTitle);
+  await postDetailPage.enterbodyInterchangePost(faker.datatype.string(65536));
+  await postDetailPage.openPostSettings();
+  await postDetailPage.clickExpandCodeInjection();
+  await postDetailPage.clickandFillPostheaderCodeInj();
+  await postDetailPage.clickSettingsBodyMetadata();
+
+  const titleCodInjError = await postDetailPage.getCodInjHeaderError();
+  const titleCodInjErrorText = titleCodInjError ? await titleCodInjError.innerText() : null;
+  assert(titleCodInjErrorText != null, "Error message is null");
+  assert(titleCodInjErrorText === "Header code cannot be longer than 65535 characters.", "Error message is not the expected");
+});
+
+it('F06.h - Editar Draft post, settings, code intection, editar footer con texto inválido', async () => {
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByDraftedPostsOption();
+  var firstPostTitle = await postsPage.getFirstPostTitle();
+  await postsPage.clickPostWithTitle(firstPostTitle);
+  await postDetailPage.enterbodyInterchangePost(faker.datatype.string(65536));
+  await postDetailPage.openPostSettings();
+  await postDetailPage.clickExpandCodeInjection();
+  await postDetailPage.clickandFillPostfooterCodeInj();
+  await postDetailPage.clickSettingsBodyMetadata();
+
+  const titleCodInjError = await postDetailPage.getCodInjFooterError();
+  const titleCodInjErrorText = titleCodInjError ? await titleCodInjError.innerText() : null;
+  assert(titleCodInjErrorText != null, "Error message is null");
+  assert(titleCodInjErrorText === "Footer code cannot be longer than 65535 characters.", "Error message is not the expected");
+});
+
+it('F06.i - Editar Draft post, settings, ingresamos fecha de publicación en formato inválido, validar error generado', async () => {
+  
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByDraftedPostsOption();
+  var firstPostTitle = await postsPage.getFirstPostTitle();
+  await postsPage.clickPostWithTitle(firstPostTitle);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.fillDate(faker.lorem.word());
+
+  const dateError = await postDetailPage.getFutureDateError();
+  const dateErrorText = dateError ? await dateError.innerText() : null;
+  assert(dateErrorText != null, "Error message is null");
+  assert(dateErrorText === "Invalid date format, must be YYYY-MM-DD", "Error message is not the expected");
+});
+
+it('F06.j - Editar Draft post, settings, ingresamos fecha de publicación inválida, validar error generado', async () => {
+  
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByDraftedPostsOption();
+  var firstPostTitle = await postsPage.getFirstPostTitle();
+  await postsPage.clickPostWithTitle(firstPostTitle);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.fillDate(dataPoolPost.Date_Invalid_post);
+
+  const dateError = await postDetailPage.getFutureDateError();
+  const dateErrorText = dateError ? await dateError.innerText() : null;
+  assert(dateErrorText != null, "Error message is null");
+  assert(dateErrorText === "Invalid date", "Error message is not the expected");
+});
+
+it('F06.k - Editar Draft post, settings, ingresamos hora de publicación en formato inválido, validar error generado', async () => {
+  
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByDraftedPostsOption();
+  var firstPostTitle = await postsPage.getFirstPostTitle();
+  await postsPage.clickPostWithTitle(firstPostTitle);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.fillTime(faker.lorem.word());
+
+  const dateError = await postDetailPage.getFutureDateError();
+  const dateErrorText = dateError ? await dateError.innerText() : null;
+  assert(dateErrorText != null, "Error message is null");
+  assert(dateErrorText === 'Must be in format: "15:00"', "Error message is not the expected");
+});
+
+it('F06.l - Editar Draft post, settings, ingresamos hora de publicación en formato inválido y fecha inválida, validar error compuesto', async () => {
+  
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByDraftedPostsOption();
+  var firstPostTitle = await postsPage.getFirstPostTitle();
+  await postsPage.clickPostWithTitle(firstPostTitle);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.fillTime(dataPoolPost.title_post);
+  await postDetailPage.fillDate(dataPoolPost.Date_Invalid_post);
+
+  const dateError = await postDetailPage.getFutureDateError();
+  const dateErrorText = dateError ? await dateError.innerText() : null;
+  assert(dateErrorText != null, "Error message is null");
+  assert(dateErrorText === 'Invalid dateMust be in format: "15:00"', "Error message is not the expected");
+});
+
+it('F06.m - Editar Draft post, settings, ingresamos hora de publicación en formato inválido y fecha inválida, validar error compuesto', async () => {
+  
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByDraftedPostsOption();
+  var firstPostTitle = await postsPage.getFirstPostTitle();
+  await postsPage.clickPostWithTitle(firstPostTitle);
+  await postDetailPage.openPostSettings();
+  await postDetailPage.fillTime(faker.lorem.word());
+  await postDetailPage.fillDate(faker.lorem.word());
+
+  const dateError = await postDetailPage.getFutureDateError();
+  const dateErrorText = dateError ? await dateError.innerText() : null;
+  assert(dateErrorText != null, "Error message is null");
+  assert(dateErrorText === 'Invalid date format, must be YYYY-MM-DDMust be in format: "15:00"', "Error message is not the expected");
+});
+
+it('F07 - Crear 2 post, ordenar la lista por el mas nuevo, validar en la lista que el post mas reciente esté de primeras', async () => {
+  let titlePost1 = faker.name.title();
+  let bodyPost1 = faker.lorem.sentence();
+  let titlePost2 = faker.name.title();
+  let bodyPost2 = faker.lorem.sentence();
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const postsPage = new PostsPage(page);
+  const postDetailPage = new PostDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPosts();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(titlePost1)
+  await postDetailPage.enterBodyForNewPost(bodyPost1);
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.goToCreateNewPost();
+  await postDetailPage.enterTitleForNewPost(titlePost2)
+  await postDetailPage.enterBodyForNewPost(bodyPost2);
+  await postDetailPage.publishPost();
+  await postDetailPage.returnToPostsList();
+  await postsPage.openPostTypeFilterDropdown();
+  await postsPage.selectFilterByPublishedPostsOption();
+  await postsPage.openPostSortByFilterDropdown();
   await postsPage.selectFilterByNewestPostOption();
-  await generateScreenshot(17);
 
   var firstPostTitle = await postsPage.getFirstPostTitle();
   assert.equal(firstPostTitle, titlePost2);
 });
 
 it('F08 - Crear post, ir al sitio web, validar que esté, volver y eliminarlo, ir de nuevo al sitio web y validar que NO esté', async () => {
-  let titlePost = "Post Publicado";
-  let bodyPost = "Post Publicado Body";
-  test = "F08";
+  const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
+
+  let titlePost = randomData['word'];
+  let bodyPost = randomData['sentence'];
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2230,40 +2573,25 @@ it('F08 - Crear post, ir al sitio web, validar que esté, volver y eliminarlo, i
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(1);
   await loginPage.clickLogin();
-  await generateScreenshot(2);
   await homePage.goToPosts();
-  await generateScreenshot(3);
   await postsPage.goToCreateNewPost();
-  await generateScreenshot(4);
   await postDetailPage.enterTitleForNewPost(titlePost)
-  await generateScreenshot(5);
   await postDetailPage.enterBodyForNewPost(bodyPost);
-  await generateScreenshot(6);
   await postDetailPage.publishPost();
-  await generateScreenshot(7);
   await postDetailPage.returnToPostsList();
-  await generateScreenshot(8);
   await homePage.goToViewSite();
-  await generateScreenshot(9);
 
   var publishedPostTitle = await viewSitePage.getFirstPostTitle();
   assert(publishedPostTitle != null, "Title is null");
   assert(publishedPostTitle === titlePost, "Title is not the expected");
 
   await homePage.goToPosts();
-  await generateScreenshot(10);
   await postsPage.clickPostWithTitle(titlePost);
-  await generateScreenshot(11);
   await postDetailPage.openPostSettings();
-  await generateScreenshot(12);
   await postDetailPage.clickDeletePost();
-  await generateScreenshot(13);
   await postDetailPage.clickConfirmDeletePost();
-  await generateScreenshot(14);
   await homePage.goToViewSite();
-  await generateScreenshot(15);
 
   publishedPostTitle = await viewSitePage.getFirstPostTitle();
   assert(publishedPostTitle != null, "Title is null");
@@ -2272,9 +2600,10 @@ it('F08 - Crear post, ir al sitio web, validar que esté, volver y eliminarlo, i
 });
 
 it('F09 - Crear draft page, ir a lista y verificar que exista', async () => {
-  let titlePage = "New Page";
-  let bodyPage = "New Page Body";
-  test = "F09";
+  const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
+
+  let titlePage = randomData['word'];
+  let bodyPage = randomData['sentence'];
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2284,32 +2613,50 @@ it('F09 - Crear draft page, ir a lista y verificar que exista', async () => {
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(1);
   await loginPage.clickLogin();
-  await generateScreenshot(2);
   await homePage.goToPages();
-  await generateScreenshot(3);
   await pagesPage.goToCreateNewPage();
-  await generateScreenshot(4);
   await pageDetailPage.enterTitleForNewPage(titlePage);
-  await generateScreenshot(5);
   await pageDetailPage.enterBodyForNewPage(bodyPage);
-  await generateScreenshot(6);
   await pageDetailPage.returnToPagesList();
-  await generateScreenshot(7);
   await pagesPage.openPageTypeFilterDropdown();
-  await generateScreenshot(8);
   await pagesPage.selectFilterByDraftedPagesOption();
-  await generateScreenshot(9);
 
   var firstPageTitle = await pagesPage.getFirstPageTitle();
   assert.equal(firstPageTitle, titlePage);
 });
 
-it('F10 - Crear page, ir a lista, editar el page, ingresamos fecha de publicación futura, validar error generado', async () => {
-  let titlePage = "New Page";
-  let bodyPage = "New Page Body";
-  test = "F10";
+it('F09.a - Editar Draft page, editar Page URL con texto valido', async () => {
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagePage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+
+  await pagePage.openPageTypeFilterDropdown();
+  await pagePage.selectFilterByDraftedPagesOption();
+  var firstPageTitle = await pagePage.getFirstPageTitle();
+  await pagePage.clickPageWithTitle(firstPageTitle);
+  await pageDetailPage.openPageSettings();
+  await pageDetailPage.clickPageUrl();
+  await pageDetailPage.deleteInfoInputPrevSelected();
+  await pageDetailPage.enterPageUrl(faker.lorem.word(10));
+  await pageDetailPage.closePageSettings();
+  await pageDetailPage.returnToPagesList();
+  await pagePage.openPageSortByFilterDropdown();
+  await pagePage.selectFilterByRecentlyUpPagesOption();
+
+  var EditPostTitle = await pagePage.getFirstPageTitle();
+  assert.equal(EditPostTitle, firstPageTitle);
+});
+
+it('F09.b - Editar Draft page, editar Page URL con texto que supere el límite de chars', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2319,34 +2666,335 @@ it('F10 - Crear page, ir a lista, editar el page, ingresamos fecha de publicaci�
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
-  await generateScreenshot(1);
   await loginPage.clickLogin();
-  await generateScreenshot(2);
   await homePage.goToPages();
-  await generateScreenshot(3);
-  await pagesPage.goToCreateNewPage();
-  await generateScreenshot(4);
-  await pageDetailPage.enterTitleForNewPage(titlePage);
-  await generateScreenshot(5);
-  await pageDetailPage.enterBodyForNewPage(bodyPage);
-  await generateScreenshot(6);
-  await pageDetailPage.returnToPagesList();
-  await generateScreenshot(7);
-  await pagesPage.clickPageWithTitle(titlePage);
-  await generateScreenshot(8);
+
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByDraftedPagesOption();
+  var firstPageTitle = await pagesPage.getFirstPageTitle();
+  await pagesPage.clickPageWithTitle(firstPageTitle);
   await pageDetailPage.openPageSettings();
-  await generateScreenshot(9);
+  await pageDetailPage.clickPageUrl();
+  await pageDetailPage.deleteInfoInputPrevSelected();
+  await pageDetailPage.enterPageUrl(faker.datatype.string(65001));  
+  await pageDetailPage.closePageSettings();
+
+  const urlError = await pageDetailPage.getUrlError();
+  const urlErrorText = urlError ? await urlError.innerText() : null;
+  assert(urlErrorText != null, "Error message is null");
+  assert(urlErrorText === "Request was formatted incorrectly.", "Error message is not the expected");
+
+});
+
+it('F09.c - Editar Draft page, settings, editar Excerpt con texto valido', async () => {
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByDraftedPagesOption();
+  var firstPageTitle = await pagesPage.getFirstPageTitle();
+  await pagesPage.clickPageWithTitle(firstPageTitle);
+  await pageDetailPage.openPageSettings();
+  await pageDetailPage.clickExcerpt();
+  await pageDetailPage.enterExcerpt(dataPoolPage.Excerpt_OK_page);
+  await pageDetailPage.closePageSettings();
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.openPageSortByFilterDropdown();
+  await pagesPage.selectFilterByRecentlyUpPagesOption();
+
+  var EditPageTitle = await pagesPage.getFirstPageTitle();
+  assert.equal(EditPageTitle, firstPageTitle);
+});
+
+it('F09.d - Editar Draft page, settings, editar Excerpt con texto que supere el límite de chars', async () => {
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByDraftedPagesOption();
+  var firstPageTitle = await pagesPage.getFirstPageTitle();
+  await pagesPage.clickPageWithTitle(firstPageTitle);
+  await pageDetailPage.openPageSettings();
+  await pageDetailPage.clickExcerpt();
+  await pageDetailPage.enterExcerpt(dataPoolPage.Excerpt_FAIL_page);
+  await pageDetailPage.clickSettingsBody();
+
+  const excError = await pageDetailPage.getExcError();
+  const excErrorText = excError ? await excError.innerText() : null;
+  assert(excErrorText != null, "Error message is null");
+  assert(excErrorText === "Excerpt cannot be longer than 300 characters.", "Error message is not the expected");
+});
+
+it('F09.e - Editar Draft Page, metadata, editar Canonical Url con texto inválido', async () => {
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByDraftedPagesOption();
+  var firstPageTitle = await pagesPage.getFirstPageTitle();
+  await pagesPage.clickPageWithTitle(firstPageTitle);
+  await pageDetailPage.openPageSettings();
+  await pageDetailPage.clickExpandMetaDataPage();
+  await pageDetailPage.clickCanUrlMetaData();
+  await pageDetailPage.deleteInfoInputPrevSelected();
+  await pageDetailPage.enterMetaCanUrlForPage(faker.lorem.word());
+  await pageDetailPage.clickSettingsBodyMetadata();
+
+  const canUrlError = await pageDetailPage.getcanUrlError();
+  const canUrlErrorText = canUrlError ? await canUrlError.innerText() : null;
+  assert(canUrlErrorText != null, "Error message is null");
+  assert(canUrlErrorText === "Please enter a valid URL", "Error message is not the expected");
+});
+
+it('F09.f - Editar Draft page, settings, code intection, editar header con texto inválido', async () => {
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByDraftedPagesOption();
+  var firstPageTitle = await pagesPage.getFirstPageTitle();
+  await pagesPage.clickPageWithTitle(firstPageTitle);
+  await pageDetailPage.enterbodyInterchangePage(faker.datatype.string(65536));
+  await pageDetailPage.openPageSettings();
+  await pageDetailPage.clickExpandCodeInjection();
+  await pageDetailPage.clickandFillPageheaderCodeInj();
+  await pageDetailPage.clickSettingsBodyMetadata();
+
+  const titleCodInjError = await pageDetailPage.getCodInjHeaderError();
+  const titleCodInjErrorText = titleCodInjError ? await titleCodInjError.innerText() : null;
+  assert(titleCodInjErrorText != null, "Error message is null");
+  assert(titleCodInjErrorText === "Header code cannot be longer than 65535 characters.", "Error message is not the expected");
+});
+
+it('F09.g - Editar Draft page, settings, code intection, editar footer con texto inválido', async () => {
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByDraftedPagesOption();
+  var firstPageTitle = await pagesPage.getFirstPageTitle();
+  await pagesPage.clickPageWithTitle(firstPageTitle);
+  await pageDetailPage.enterbodyInterchangePage(faker.datatype.string(65536));
+  await pageDetailPage.openPageSettings();
+  await pageDetailPage.clickExpandCodeInjection();
+  await pageDetailPage.clickandFillPagefooterCodeInj();
+  await pageDetailPage.clickSettingsBodyMetadata();
+
+  const titleCodInjError = await pageDetailPage.getCodInjFooterError();
+  const titleCodInjErrorText = titleCodInjError ? await titleCodInjError.innerText() : null;
+  assert(titleCodInjErrorText != null, "Error message is null");
+  assert(titleCodInjErrorText === "Footer code cannot be longer than 65535 characters.", "Error message is not the expected");
+});
+
+it('F10 - Crear page, ir a lista, editar el page, ingresamos fecha de publicación futura, validar error generado', async () => {
+  const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
+
+  let titlePage = randomData['word'];
+  let bodyPage = randomData['sentence'];
+
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+  await pagesPage.goToCreateNewPage();
+  await pageDetailPage.enterTitleForNewPage(titlePage);
+  await pageDetailPage.enterBodyForNewPage(bodyPage);
+  await pageDetailPage.returnToPagesList();
+  await pagesPage.clickPageWithTitle(titlePage);
+  await pageDetailPage.openPageSettings();
 
   const today = new Date();
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
   await pageDetailPage.fillDate(tomorrow.toISOString().split('T')[0]);
-  await generateScreenshot(10);
 
   const dateError = await pageDetailPage.getFutureDateError();
   const dateErrorText = dateError ? await dateError.innerText() : null;
   assert(dateErrorText != null, "Error message is null");
   assert(dateErrorText === "Must be in the past", "Error message is not the expected");
+});
+
+it('F10.a - Editar Draft page, settings, ingresamos fecha de publicación en formato inválido, validar error generado', async () => {
+  
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByDraftedPagesOption();
+  var firstPageTitle = await pagesPage.getFirstPageTitle();
+  await pagesPage.clickPageWithTitle(firstPageTitle);
+  await pageDetailPage.openPageSettings();
+  await pageDetailPage.fillDate(faker.lorem.word());
+
+  const dateError = await pageDetailPage.getFutureDateError();
+  const dateErrorText = dateError ? await dateError.innerText() : null;
+  assert(dateErrorText != null, "Error message is null");
+  assert(dateErrorText === "Invalid date format, must be YYYY-MM-DD", "Error message is not the expected");
+});
+
+it('F10.b - Editar Draft page, settings, ingresamos fecha de publicación inválida, validar error generado', async () => {
+  
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByDraftedPagesOption();
+  var firstPageTitle = await pagesPage.getFirstPageTitle();
+  await pagesPage.clickPageWithTitle(firstPageTitle);
+  await pageDetailPage.openPageSettings();
+  await pageDetailPage.fillDate(dataPoolPage.Date_Invalid_page);
+
+  const dateError = await pageDetailPage.getFutureDateError();
+  const dateErrorText = dateError ? await dateError.innerText() : null;
+  assert(dateErrorText != null, "Error message is null");
+  assert(dateErrorText === "Invalid date", "Error message is not the expected");
+});
+
+it('F10.c - Editar Draft page, settings, ingresamos hora de publicación en formato inválido, validar error generado', async () => {
+  
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByDraftedPagesOption();
+  var firstPageTitle = await pagesPage.getFirstPageTitle();
+  await pagesPage.clickPageWithTitle(firstPageTitle);
+  await pageDetailPage.openPageSettings();
+  await pageDetailPage.fillTime(faker.lorem.word());
+
+  const dateError = await pageDetailPage.getFutureDateError();
+  const dateErrorText = dateError ? await dateError.innerText() : null;
+  assert(dateErrorText != null, "Error message is null");
+  assert(dateErrorText === 'Must be in format: "15:00"', "Error message is not the expected");
+});
+
+it('F10.d - Editar Draft page, settings, ingresamos hora de publicación en formato inválido y fecha inválida, validar error compuesto', async () => {
+  
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByDraftedPagesOption();
+  var firstPageTitle = await pagesPage.getFirstPageTitle();
+  await pagesPage.clickPageWithTitle(firstPageTitle);
+  await pageDetailPage.openPageSettings();
+  await pageDetailPage.fillTime(dataPoolPage.title_page);
+  await pageDetailPage.fillDate(dataPoolPage.Date_Invalid_page);
+
+  const dateError = await pageDetailPage.getFutureDateError();
+  const dateErrorText = dateError ? await dateError.innerText() : null;
+  assert(dateErrorText != null, "Error message is null");
+  assert(dateErrorText === 'Invalid dateMust be in format: "15:00"', "Error message is not the expected");
+});
+
+it('F10.e - Editar Draft page, settings, ingresamos hora de publicación en formato inválido y fecha inválida, validar error compuesto', async () => {
+  
+  const loginPage = new LoginPage(page);
+  const homePage = new HomePage(page);
+  const pagesPage = new PagesPage(page);
+  const pageDetailPage = new PageDetailPage(page);
+
+  await page.goto(config.url);
+  await loginPage.enterEmail(credentials.email);
+  await loginPage.enterPassword(credentials.password);
+  await loginPage.clickLogin();
+  await homePage.goToPages();
+
+  await pagesPage.openPageTypeFilterDropdown();
+  await pagesPage.selectFilterByDraftedPagesOption();
+  var firstPageTitle = await pagesPage.getFirstPageTitle();
+  await pagesPage.clickPageWithTitle(firstPageTitle);
+  await pageDetailPage.openPageSettings();
+  await pageDetailPage.fillTime(faker.lorem.word());
+  await pageDetailPage.fillDate(faker.lorem.word());
+
+  const dateError = await pageDetailPage.getFutureDateError();
+  const dateErrorText = dateError ? await dateError.innerText() : null;
+  assert(dateErrorText != null, "Error message is null");
+  assert(dateErrorText === 'Invalid date format, must be YYYY-MM-DDMust be in format: "15:00"', "Error message is not the expected");
 });
 
 it('F16 - should publish post and remain publish even if I log out and log in again', async () => {
@@ -2355,7 +3003,7 @@ it('F16 - should publish post and remain publish even if I log out and log in ag
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
-  const postsPage = new PostsPage(page);
+  const pagesPage = new PostsPage(page);
   const postDetailPage = new PostDetailPage(page);
 
   await page.goto(config.url);

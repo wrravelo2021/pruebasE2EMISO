@@ -229,6 +229,11 @@ module.exports = class PostDetailPage {
     return this.page.type('id=meta-description', metaDescription);
   }
 
+  async goToBackSettingsPost() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('.back');
+  }
+
   async deleteMetaTitlePost() {
     await this.page.click('id=meta-title');
     await this.page.keyboard.press("Meta+A");
@@ -241,5 +246,109 @@ module.exports = class PostDetailPage {
     await this.page.keyboard.press("Meta+A");
     await this.page.keyboard.press("Control+A");
     return this.page.keyboard.press("Delete");
+  }
+
+  async clickPostUrl() {
+    await new Promise(r => setTimeout(r, 1000));
+    this.page.click('id=url');
+  }
+
+  async enterPostUrl(url) {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.fill('id=url', url);
+  }
+
+  async getUrlError(){
+    await new Promise(r => setTimeout(r, 1000));
+    return await this.page.$('article.gh-alert:nth-child(2) > div:nth-child(1)');
+  }
+
+  async clickExcerpt() {
+    await new Promise(r => setTimeout(r, 1000));
+    this.page.click('id=custom-excerpt');
+  }
+
+  async enterExcerpt(exc) {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.fill('id=custom-excerpt', exc);
+  }
+
+  async getExcError(){
+    await new Promise(r => setTimeout(r, 1000));
+    return await this.page.$('div.form-group:nth-child(4) > p:nth-child(3)');
+  }
+
+  async deleteInfoInputPrevSelected(){
+    await new Promise(r => setTimeout(r, 1000));
+    await this.page.keyboard.press("Control+A");
+    await this.page.keyboard.press("Delete");
+  }
+
+  async clickSettingsBody() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('.settings-menu-content');
+  }
+
+  async clickSettingsBodyMetadata() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('.active > .settings-menu-content');
+  }
+
+  async clickCanUrlMetaData() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('.post-setting-canonicalUrl');
+  }
+
+  async enterMetaCanUrlForPost(canUrl) {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.type('.post-setting-canonicalUrl', canUrl);
+  }
+
+  async getcanUrlError(){
+    await new Promise(r => setTimeout(r, 1000));
+    return await this.page.$('.error > p:nth-child(3)');
+  }
+
+  async enterbodyInterchangePost(body) {
+    await new Promise(r => setTimeout(r, 1000));
+    await this.page.click('.koenig-editor__editor.__mobiledoc-editor');
+    await this.page.fill('.koenig-editor__editor.__mobiledoc-editor', body);
+    await this.page.keyboard.press("Control+A");
+    return this.page.keyboard.press("Control+C");
+  }
+
+  async clickExpandCodeInjection() {
+    await new Promise(r => setTimeout(r, 1000));
+    this.page.click('b:text("Code injection")');
+  }
+
+  async clickandFillPostheaderCodeInj() {
+    await new Promise(r => setTimeout(r, 1000));
+    await this.page.click('#post-setting-codeinjection-head > div:nth-child(2) > div:nth-child(6) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(1) > pre:nth-child(2)');
+    return this.page.keyboard.press("Control+V");
+  }
+
+  async getCodInjHeaderError(){
+    await new Promise(r => setTimeout(r, 1000));
+    return await this.page.$('.error > p:nth-child(3)');
+  }
+
+  async clickandFillPostfooterCodeInj() {
+    await new Promise(r => setTimeout(r, 1000));
+    await this.page.click('#post-setting-codeinjection-foot > div:nth-child(2) > div:nth-child(6) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(1) > pre:nth-child(2)');
+    return this.page.keyboard.press("Control+V");
+  }
+
+  async getCodInjFooterError(){
+    await new Promise(r => setTimeout(r, 1000));
+    return await this.page.$('div.error:nth-child(2) > p:nth-child(3)');
+  }
+
+  async fillTime(time){
+    await new Promise(r => setTimeout(r, 1000));
+    const dateField = await this.page.$('.gh-date-time-picker-time > input:nth-child(1)');
+    await this.pressDeleteOnElement(dateField, 10);
+    await dateField.type(time);
+    await dateField.press('Tab');
   }
 };
