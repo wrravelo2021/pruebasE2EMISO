@@ -4,7 +4,7 @@
 
 - Node.js ≥ v15.14.0
 - Ruby ≥ 2.6.5
-- Ghost v3.3.0
+- Ghost v3.42.5
 
 ### Credenciales
 
