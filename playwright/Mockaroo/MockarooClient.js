@@ -5,7 +5,7 @@ module.exports = class MockarooClient {
   constructor() {};
 
   amount = 10;
-  client = new Mockaroo.Client({ apiKey: 'b74b0480' });
+  client = new Mockaroo.Client({ apiKey: '75a05b80' });
   slugClient = new Mockaroo.Client({ apiKey: '6e06b9b0' });
   client2 = new Mockaroo.Client({apiKey: '1c3adc60'});
 
