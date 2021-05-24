@@ -10,6 +10,10 @@
 
 Para las pruebas se debe crear un usuario de Ghost que luego debe ser remplazado en los archivos de pruebas como se indican en las instrucciones.
 
+##GENERACIÓN DE DATOS
+
+Para el uso de herramientas de generación de datos se realizaron 120 escenarios con ayuda de la herramienta Playwright con una distribución de técnicas de generación descrita a continuación al igual que las herramientas que fueron utilizadas. [Generación de datos](https://github.com/wrravelo2021/pruebasE2EMISO/wiki/Generaci%C3%B3n-de-datos).
+
 ## Playwright 🎭
 
 A continuación se presentan las instrucciones para ejecutar las pruebas desarrolladas con playwright luego de clonar el repositorio desde la carpeta principal.
