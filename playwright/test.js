@@ -2714,7 +2714,7 @@ it('F09.d - Editar Draft page, settings, editar Excerpt con texto valido', async
   assert.equal(EditPageTitle, firstPageTitle);
 });
 
-it('F09.f - Editar Draft page, settings, editar Excerpt con texto que supere el límite de chars', async () => {
+it('F09.e - Editar Draft page, settings, editar Excerpt con texto que supere el límite de chars', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2742,7 +2742,7 @@ it('F09.f - Editar Draft page, settings, editar Excerpt con texto que supere el 
   assert(excErrorText === "Excerpt cannot be longer than 300 characters.", "Error message is not the expected");
 });
 
-it('F09.g - Editar Draft Page, metadata, editar Canonical Url con texto inválido', async () => {
+it('F09.f - Editar Draft Page, metadata, editar Canonical Url con texto inválido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2772,7 +2772,7 @@ it('F09.g - Editar Draft Page, metadata, editar Canonical Url con texto inválid
   assert(canUrlErrorText === "Please enter a valid URL", "Error message is not the expected");
 });
 
-it('F09.h - Editar Draft page, settings, code intection, editar header con texto inválido', async () => {
+it('F09.g - Editar Draft page, settings, code intection, editar header con texto inválido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2801,7 +2801,7 @@ it('F09.h - Editar Draft page, settings, code intection, editar header con texto
   assert(titleCodInjErrorText === "Header code cannot be longer than 65535 characters.", "Error message is not the expected");
 });
 
-it('F09.i - Editar Draft page, settings, code intection, editar footer con texto inválido', async () => {
+it('F09.h - Editar Draft page, settings, code intection, editar footer con texto inválido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
