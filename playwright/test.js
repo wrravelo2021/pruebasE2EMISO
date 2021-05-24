@@ -2129,7 +2129,7 @@ it('F60 - should save draft and publish page with max excerpt length', async () 
   assert(publishedPageTitle === title, "Title is not the expected");
 })
 
-it('F06 - Crear Draft post, validarlo en la lista', async () => {
+it('F06.n - Crear Draft post, validarlo en la lista', async () => {
   let title = faker.name.title();
   let body = faker.lorem.sentence();
 
