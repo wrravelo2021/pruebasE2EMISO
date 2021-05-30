@@ -189,6 +189,56 @@ npm i
 
 5. Ejecutar el archivo **monkey_testing.spec.js** desde la interfaz de cypress
 
+## 🤖 Ripper
+
+A continuación se presentan las instrucciones para ejecutar el ripper.
+
+1. Ir a la carpeta con las especificaciones del ripper
+
+```bash
+cd RIPuppet-ghost/
+```
+
+2. Instalar las librerías de node
+
+```bash
+npm i
+```
+
+3. Modificar URL y accesos del usuario
+
+    En el archivo **\RIPuppet-ghost\config.json** modificar los campos del json
+
+    ```json
+    "url": "http://localhost:2368/ghost", // URL donde esta desplegado Ghost
+    "values": {
+        "passwordInput": "pruebasmiso", // Contraseña del usuario
+        "emailInput": "emilsonqp@gmail.com" // Email del usuario
+              },
+    ```
+
+4. Ejecutar la prueba, en la terminal se podrá observar la retroalimentación del proceso
+
+```bash
+node index.js
+```
+
+5. Después de la ejecución, se debió crear un directorio con el nombre **/results**. Al abrirlo, podrá ver un subdirectorio cuyo nombre corresponde a la fecha y hora en la que se obtuvo el reporte de ejecución de la prueba en formato ISO. Para ver el contenido del reporte en un navegador se debe crear un servidor que aloje los archivos resultados de la prueba en su máquina local, para ello, ubicarse en el directorio **/results** desde allí, ejecutar el siguiente comando para instalar la librería http-server de Node.js:
+
+```bash
+npm install -g http-server
+```
+
+Con la herramienta instalada, ejecutar:
+
+```bash
+http-server
+```
+
+Ahora puede acceder desde un navegador a la dirección que se le indica en la consola. 
+
+Navegar al directorio **/chromium** y revisar el archivo **report.html**
+
 ## Reporte de Incidencias
 
 Las incidencias encontradas durante la ejecución de pruebas E2E y VRT, se registro en el sistema de Issues de Github del proyecto. Se puede acceder a través del [siguiente link](https://github.com/wrravelo2021/pruebasE2EMISO/issues).
