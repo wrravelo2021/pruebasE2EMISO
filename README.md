@@ -209,7 +209,7 @@ npm i
 
     En el archivo **\RIPuppet-ghost\config.json** modificar los campos del json
 
-    ```json
+    ```javascript
     "url": "http://localhost:2368/ghost", // URL donde esta desplegado Ghost
     "values": {
         "passwordInput": "pruebasmiso", // Contraseña del usuario
@@ -235,7 +235,7 @@ Con la herramienta instalada, ejecutar:
 http-server
 ```
 
-Ahora puede acceder desde un navegador a la dirección que se le indica en la consola. 
+Acceder desde un navegador a la dirección que se le indica en la consola. 
 
 Navegar al directorio **/chromium** y revisar el archivo **report.html**
 
