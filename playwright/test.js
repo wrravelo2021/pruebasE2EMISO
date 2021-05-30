@@ -1071,6 +1071,7 @@ it('F090 - should create a new tag with a image.', async () => {
 });
 
 it('F01 - should create post with fields ok', async () => {
+  test = 'F01'
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const body = randomData['sentence'];
@@ -1083,15 +1084,23 @@ it('F01 - should create post with fields ok', async () => {
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
+  await generateScreenshot(3);
   await postsPage.goToCreateNewPost();
+  await generateScreenshot(4);
   await postDetailPage.enterTitleForNewPost(title);
   await postDetailPage.enterBodyForNewPost(body);
+  await generateScreenshot(5);
   await postDetailPage.publishPost();
+  await generateScreenshot(6);
   await postDetailPage.returnToPostsList();
+  await generateScreenshot(7);
   await postsPage.openPostTypeFilterDropdown();
   await postsPage.selectFilterByPublishedPostsOption();
+  await generateScreenshot(8);
   const publishedPostTitle = await postsPage.getFirstPostTitle();
   assert(publishedPostTitle != null, "Title is null");
   assert(publishedPostTitle === title, "Title is not the expected");
@@ -1259,6 +1268,7 @@ it('F06 - should create post with maximum length of title and excerpt', async ()
 });
 
 it('F07 - should create post with fields ok and publish post on site', async () => {
+  test = 'F07';
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const body = randomData['sentence'];
@@ -1272,14 +1282,22 @@ it('F07 - should create post with fields ok and publish post on site', async () 
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
+  await generateScreenshot(3);
   await postsPage.goToCreateNewPost();
+  await generateScreenshot(4);
   await postDetailPage.enterTitleForNewPost(title);
   await postDetailPage.enterBodyForNewPost(body);
+  await generateScreenshot(5);
   await postDetailPage.publishPost();
+  await generateScreenshot(6);
   await postDetailPage.returnToPostsList();
+  await generateScreenshot(7);
   await homePage.goToViewSite();
+  await generateScreenshot(8);
   const publishedPostTitle = await viewSitePage.getFirstPostTitle();
   assert(publishedPostTitle != null, "Title is null");
   assert(publishedPostTitle === title, "Title is not the expected");
@@ -1450,6 +1468,7 @@ it('F12 - should create post with maximum length of title and excerpt and publis
 });
 
 it('F13 - should not allow future date for post, with body and title ok', async () => {
+  test = 'F13';
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const body = randomData['sentence'];
@@ -1463,18 +1482,28 @@ it('F13 - should not allow future date for post, with body and title ok', async 
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
+  await generateScreenshot(3);
   await postsPage.goToCreateNewPost();
+  await generateScreenshot(4);
   await postDetailPage.enterTitleForNewPost(title);
   await postDetailPage.enterBodyForNewPost(body);
+  await generateScreenshot(5);
   await postDetailPage.publishPost();
+  await generateScreenshot(6);
   await postDetailPage.returnToPostsList();
+  await generateScreenshot(7);
   await postsPage.openPostSortByFilterDropdown();
   await postsPage.selectFilterByRecentlyUpdatedPostOption();
   await postsPage.clickPostWithTitle(title);
+  await generateScreenshot(8);
   await postDetailPage.openPostSettings();
+  await generateScreenshot(9);
   await postDetailPage.fillDate(futureDate);
+  await generateScreenshot(10);
 
   const dateError = await postDetailPage.getFutureDateError();
   const dateErrorText = dateError ? await dateError.innerText() : null;
@@ -1666,6 +1695,7 @@ it('F48 - should not allow future date for post, maximum length of excerpt', asy
 });
 
 it('F49 - should publish new page with fields ok', async () => {
+  test = "F49";
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const body = randomData['sentence'];
@@ -1678,15 +1708,23 @@ it('F49 - should publish new page with fields ok', async () => {
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPages();
+  await generateScreenshot(3);
   await pagesPage.goToCreateNewPage();
+  await generateScreenshot(4);
   await pageDetailPage.enterTitleForNewPage(title);
   await pageDetailPage.enterBodyForNewPage(body);
+  await generateScreenshot(5);
   await pageDetailPage.publishPage();
+  await generateScreenshot(6);
   await pageDetailPage.returnToPagesList();
+  await generateScreenshot(7);
   await pagesPage.openPageTypeFilterDropdown();
   await pagesPage.selectFilterByPublishedPagesOption();
+  await generateScreenshot(8);
 
   const publishedPageTitle = await pagesPage.getFirstPageTitle();
   assert(publishedPageTitle != null, "Title is null");
@@ -1867,6 +1905,7 @@ it('F54 - should publish new page with maximum length of title and excerpt', asy
 });
 
 it('F55 - should save draft and publish page with fields ok', async () => {
+  test = 'F55';
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
   const title = randomData['word'];
   const body = randomData['sentence'];
@@ -1879,24 +1918,35 @@ it('F55 - should save draft and publish page with fields ok', async () => {
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPages();
+  await generateScreenshot(3);
   await pagesPage.goToCreateNewPage();
+  await generateScreenshot(4);
   await pageDetailPage.enterTitleForNewPage(title);
   await pageDetailPage.enterBodyForNewPage(body);
+  await generateScreenshot(5);
   await pageDetailPage.returnToPagesList();
+  await generateScreenshot(6);
   await pagesPage.openPageTypeFilterDropdown();
   await pagesPage.selectFilterByDraftedPagesOption();
+  await generateScreenshot(7);
 
   const draftPageTitle = await pagesPage.getFirstPageTitle();
   assert(draftPageTitle != null, "Page title is null");
   assert(draftPageTitle === title, "Page title is not the expected");
 
   await pagesPage.clickPageWithTitle(title);
+  await generateScreenshot(8);
   await pageDetailPage.publishPage();
+  await generateScreenshot(9);
   await pageDetailPage.returnToPagesList();
+  await generateScreenshot(10);
   await pagesPage.openPageTypeFilterDropdown();
   await pagesPage.selectFilterByPublishedPagesOption();
+  await generateScreenshot(11);
 
   const publishedPageTitle = await pagesPage.getFirstPageTitle();
   assert(publishedPageTitle != null, "Title is null");
