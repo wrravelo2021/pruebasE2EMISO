@@ -109,7 +109,7 @@ A continuación se presentan las instrucciones para ejecutar el reporte generado
   ```bash
   backstop test
   ```
-  
+
 ### Demo reporte BackstopJS
 
 En el siguiente link se encuentra el resultado de la ejecución de backstop. [Demo](https://wrravelo2021.github.io/pruebasE2EMISO/backstop/backstop_data/html_report/index.html)
@@ -123,24 +123,59 @@ A continuación se presentan las instrucciones para ejecutar el reporte generado
   ```bash
   cd vrt/
   ```
-  
+
 2. Instalar ResembleJS
 
   ```bash
   npm install -g resemblejs
   ```
-  
+
 3. Ejecutar reporte
 
   ```bash
   node report.js
   ```
-  
+
 ### Demo reporte ResembleJS
 
 En el siguiente link se encuentra el resultado de la ejecución de ResembleJS en Playwright. [Demo Playwright](https://raw.githack.com/wrravelo2021/pruebasE2EMISO/master/vrt/report-playwright.html)
 
 En el siguiente link se encuentra el resultado de la ejecución de ResembleJS en Kraken. [Demo Kraken](https://raw.githack.com/wrravelo2021/pruebasE2EMISO/master/vrt/report-kraken.html)
+
+## 🐒 Monkey
+
+A continuación se presentan las instrucciones para ejecutar el monkey.
+
+1. Ir a la carpeta con las especificaciones del monkey
+
+```bash
+cd monkey-ghost/
+```
+
+2. Instalar las librerías de node
+
+```bash
+npm i
+```
+
+3. Modificar URL y accesos del usuario
+
+    En el archivo **/monkey-ghost/cypress/integration/examples/monkey_testing.spec.js** modificar las lineas bajo el comentario **Credentials** con las correspondientes creadas anteriormente en ghost.
+
+    ```javascript
+    // Credentials
+    let url = 'http://localhost:2372/ghost'; // URL donde esta desplegado Ghost
+    let email = 'drummerwilliam@gmail.com'; // Email del usuario
+    let password = 'pruebasmiso'; // Contraseña del usuario
+    ```
+
+4. Iniciar cypress
+
+```bash
+./node_modules/.bin/cypress open
+```
+
+5. Ejecutar el archivo **monkey_testing.spec.js** desde la interfaz de cypress
 
 ## Funcionalidades y escenarios de prueba ⚙️
 
@@ -150,7 +185,4 @@ De la misma forma, el listado de escenarios de prueba se detalla en la wiki, con
 
 ## Reporte de Incidencias
 
-Las incidencias encontradas durante la ejecución de pruebas E2E y VRT, se registro en el sistema de Issues de Github del proyecto. Se puede acceder a través del [siguiente link](https://github.com/wrravelo2021/pruebasE2EMISO/issues). 
-
-
-
+Las incidencias encontradas durante la ejecución de pruebas E2E y VRT, se registro en el sistema de Issues de Github del proyecto. Se puede acceder a través del [siguiente link](https://github.com/wrravelo2021/pruebasE2EMISO/issues).
