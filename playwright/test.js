@@ -2255,7 +2255,7 @@ it('F60 - should save draft and publish page with max excerpt length', async () 
   assert(publishedPageTitle === title, "Title is not the expected");
 })
 
-it('F06.n - Crear Draft post, validarlo en la lista', async () => {
+it('F91 - Crear Draft post, validarlo en la lista', async () => {
   let title = faker.name.title();
   let body = faker.lorem.sentence();
 
@@ -2280,7 +2280,7 @@ it('F06.n - Crear Draft post, validarlo en la lista', async () => {
   assert.equal(firstPostTitle, title);
 });
 
-it('F06.a - Editar Draft post, editar Post URL con texto valido', async () => {
+it('F92 - Editar Draft post, editar Post URL con texto valido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2310,7 +2310,7 @@ it('F06.a - Editar Draft post, editar Post URL con texto valido', async () => {
   assert.equal(EditPostTitle, firstPostTitle);
 });
 
-it('F06.b - Editar Draft post, editar Post URL con texto que supere el límite de chars', async () => {
+it('F93 - Editar Draft post, editar Post URL con texto que supere el límite de chars', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2340,7 +2340,7 @@ it('F06.b - Editar Draft post, editar Post URL con texto que supere el límite d
 
 });
 
-it('F06.c - Editar Draft post, editar Excerpt con texto valido', async () => {
+it('F94 - Editar Draft post, editar Excerpt con texto valido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2369,7 +2369,7 @@ it('F06.c - Editar Draft post, editar Excerpt con texto valido', async () => {
   assert.equal(EditPostTitle, firstPostTitle);
 });
 
-it('F06.d - Editar Draft post, editar Excerpt con texto que supere el límite de chars', async () => {
+it('F95 - Editar Draft post, editar Excerpt con texto que supere el límite de chars', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2397,7 +2397,7 @@ it('F06.d - Editar Draft post, editar Excerpt con texto que supere el límite de
   assert(excErrorText === "Excerpt cannot be longer than 300 characters.", "Error message is not the expected");
 });
 
-it('F06.e - Editar Draft post, metadata, editar Canonical Url con texto valido', async () => {
+it('F96 - Editar Draft post, metadata, editar Canonical Url con texto valido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2428,7 +2428,7 @@ it('F06.e - Editar Draft post, metadata, editar Canonical Url con texto valido',
   assert.equal(EditPostTitle, firstPostTitle);
 });
 
-it('F06.f - Editar Draft post, metadata, editar Canonical Url con texto inválido', async () => {
+it('F97 - Editar Draft post, metadata, editar Canonical Url con texto inválido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2458,7 +2458,7 @@ it('F06.f - Editar Draft post, metadata, editar Canonical Url con texto inválid
   assert(canUrlErrorText === "Please enter a valid URL", "Error message is not the expected");
 });
 
-it('F06.g - Editar Draft post, settings, code intection, editar header con texto inválido', async () => {
+it('F98 - Editar Draft post, settings, code intection, editar header con texto inválido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2487,7 +2487,7 @@ it('F06.g - Editar Draft post, settings, code intection, editar header con texto
   assert(titleCodInjErrorText === "Header code cannot be longer than 65535 characters.", "Error message is not the expected");
 });
 
-it('F06.h - Editar Draft post, settings, code intection, editar footer con texto inválido', async () => {
+it('F99 - Editar Draft post, settings, code intection, editar footer con texto inválido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2516,8 +2516,8 @@ it('F06.h - Editar Draft post, settings, code intection, editar footer con texto
   assert(titleCodInjErrorText === "Footer code cannot be longer than 65535 characters.", "Error message is not the expected");
 });
 
-it('F06.i - Editar Draft post, settings, ingresamos fecha de publicación en formato inválido, validar error generado', async () => {
-
+it('F100 - Editar Draft post, settings, ingresamos fecha de publicación en formato inválido, validar error generado', async () => {
+  test = 'F100';
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const postsPage = new PostsPage(page);
@@ -2526,15 +2526,23 @@ it('F06.i - Editar Draft post, settings, ingresamos fecha de publicación en for
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
+  await generateScreenshot(3);
 
   await postsPage.openPostTypeFilterDropdown();
+  await generateScreenshot(4);
   await postsPage.selectFilterByDraftedPostsOption();
+  await generateScreenshot(5);
   var firstPostTitle = await postsPage.getFirstPostTitle();
   await postsPage.clickPostWithTitle(firstPostTitle);
+  await generateScreenshot(6);
   await postDetailPage.openPostSettings();
+  await generateScreenshot(7);
   await postDetailPage.fillDate(faker.lorem.word());
+  await generateScreenshot(8);
 
   const dateError = await postDetailPage.getFutureDateError();
   const dateErrorText = dateError ? await dateError.innerText() : null;
@@ -2542,8 +2550,8 @@ it('F06.i - Editar Draft post, settings, ingresamos fecha de publicación en for
   assert(dateErrorText === "Invalid date format, must be YYYY-MM-DD", "Error message is not the expected");
 });
 
-it('F06.j - Editar Draft post, settings, ingresamos fecha de publicación inválida, validar error generado', async () => {
-
+it('F101 - Editar Draft post, settings, ingresamos fecha de publicación inválida, validar error generado', async () => {
+  test = 'F101';
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const postsPage = new PostsPage(page);
@@ -2552,15 +2560,23 @@ it('F06.j - Editar Draft post, settings, ingresamos fecha de publicación invál
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
+  await generateScreenshot(3);
 
   await postsPage.openPostTypeFilterDropdown();
+  await generateScreenshot(4);
   await postsPage.selectFilterByDraftedPostsOption();
+  await generateScreenshot(5);
   var firstPostTitle = await postsPage.getFirstPostTitle();
   await postsPage.clickPostWithTitle(firstPostTitle);
+  await generateScreenshot(6);
   await postDetailPage.openPostSettings();
+  await generateScreenshot(7);
   await postDetailPage.fillDate(dataPoolPost.Date_Invalid_post);
+  await generateScreenshot(8);
 
   const dateError = await postDetailPage.getFutureDateError();
   const dateErrorText = dateError ? await dateError.innerText() : null;
@@ -2568,8 +2584,8 @@ it('F06.j - Editar Draft post, settings, ingresamos fecha de publicación invál
   assert(dateErrorText === "Invalid date", "Error message is not the expected");
 });
 
-it('F06.k - Editar Draft post, settings, ingresamos hora de publicación en formato inválido, validar error generado', async () => {
-
+it('F102 - Editar Draft post, settings, ingresamos hora de publicación en formato inválido, validar error generado', async () => {
+  test = 'F102';
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const postsPage = new PostsPage(page);
@@ -2578,15 +2594,23 @@ it('F06.k - Editar Draft post, settings, ingresamos hora de publicación en form
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
+  await generateScreenshot(3);
 
   await postsPage.openPostTypeFilterDropdown();
+  await generateScreenshot(4);
   await postsPage.selectFilterByDraftedPostsOption();
+  await generateScreenshot(5);
   var firstPostTitle = await postsPage.getFirstPostTitle();
   await postsPage.clickPostWithTitle(firstPostTitle);
+  await generateScreenshot(6);
   await postDetailPage.openPostSettings();
+  await generateScreenshot(7);
   await postDetailPage.fillTime(faker.lorem.word());
+  await generateScreenshot(8);
 
   const dateError = await postDetailPage.getFutureDateError();
   const dateErrorText = dateError ? await dateError.innerText() : null;
@@ -2594,8 +2618,8 @@ it('F06.k - Editar Draft post, settings, ingresamos hora de publicación en form
   assert(dateErrorText === 'Must be in format: "15:00"', "Error message is not the expected");
 });
 
-it('F06.l - Editar Draft post, settings, ingresamos hora de publicación en formato inválido y fecha inválida, validar error compuesto', async () => {
-
+it('F103 - Editar Draft post, settings, ingresamos hora de publicación en formato inválido y fecha inválida, validar error compuesto', async () => {
+  test = 'F103';
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const postsPage = new PostsPage(page);
@@ -2604,16 +2628,25 @@ it('F06.l - Editar Draft post, settings, ingresamos hora de publicación en form
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
+  await generateScreenshot(3);
 
   await postsPage.openPostTypeFilterDropdown();
+  await generateScreenshot(4);
   await postsPage.selectFilterByDraftedPostsOption();
+  await generateScreenshot(5);
   var firstPostTitle = await postsPage.getFirstPostTitle();
   await postsPage.clickPostWithTitle(firstPostTitle);
+  await generateScreenshot(6);
   await postDetailPage.openPostSettings();
+  await generateScreenshot(7);
   await postDetailPage.fillTime(dataPoolPost.title_post);
+  await generateScreenshot(8);
   await postDetailPage.fillDate(dataPoolPost.Date_Invalid_post);
+  await generateScreenshot(9);
 
   const dateError = await postDetailPage.getFutureDateError();
   const dateErrorText = dateError ? await dateError.innerText() : null;
@@ -2621,8 +2654,8 @@ it('F06.l - Editar Draft post, settings, ingresamos hora de publicación en form
   assert(dateErrorText === 'Invalid dateMust be in format: "15:00"', "Error message is not the expected");
 });
 
-it('F06.m - Editar Draft post, settings, ingresamos hora de publicación en formato inválido y fecha inválida, validar error compuesto', async () => {
-
+it('F104 - Editar Draft post, settings, ingresamos hora de publicación en formato inválido y fecha inválida, validar error compuesto', async () => {
+  test = 'F104';
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const postsPage = new PostsPage(page);
@@ -2631,16 +2664,25 @@ it('F06.m - Editar Draft post, settings, ingresamos hora de publicación en form
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
+  await generateScreenshot(3);
 
   await postsPage.openPostTypeFilterDropdown();
+  await generateScreenshot(4);
   await postsPage.selectFilterByDraftedPostsOption();
+  await generateScreenshot(5);
   var firstPostTitle = await postsPage.getFirstPostTitle();
   await postsPage.clickPostWithTitle(firstPostTitle);
+  await generateScreenshot(6);
   await postDetailPage.openPostSettings();
+  await generateScreenshot(7);
   await postDetailPage.fillTime(faker.lorem.word());
+  await generateScreenshot(8);
   await postDetailPage.fillDate(faker.lorem.word());
+  await generateScreenshot(9);
 
   const dateError = await postDetailPage.getFutureDateError();
   const dateErrorText = dateError ? await dateError.innerText() : null;
@@ -2648,7 +2690,7 @@ it('F06.m - Editar Draft post, settings, ingresamos hora de publicación en form
   assert(dateErrorText === 'Invalid date format, must be YYYY-MM-DDMust be in format: "15:00"', "Error message is not the expected");
 });
 
-it('F07.a - Crear 2 post, ordenar la lista por el mas nuevo, validar en la lista que el post mas reciente esté de primeras', async () => {
+it('F105 - Crear 2 post, ordenar la lista por el mas nuevo, validar en la lista que el post mas reciente esté de primeras', async () => {
   let titlePost1 = faker.name.title();
   let bodyPost1 = faker.lorem.sentence();
   let titlePost2 = faker.name.title();
@@ -2683,7 +2725,7 @@ it('F07.a - Crear 2 post, ordenar la lista por el mas nuevo, validar en la lista
   assert.equal(firstPostTitle, titlePost2);
 });
 
-it('F08.a - Crear post, ir al sitio web, validar que esté, volver y eliminarlo, ir de nuevo al sitio web y validar que NO esté', async () => {
+it('F106 - Crear post, ir al sitio web, validar que esté, volver y eliminarlo, ir de nuevo al sitio web y validar que NO esté', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
 
   let titlePost = randomData['word'];
@@ -2724,7 +2766,7 @@ it('F08.a - Crear post, ir al sitio web, validar que esté, volver y eliminarlo,
 
 });
 
-it('F09.a - Crear draft page, ir a lista y verificar que exista', async () => {
+it('F107 - Crear draft page, ir a lista y verificar que exista', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
 
   let titlePage = randomData['word'];
@@ -2751,7 +2793,7 @@ it('F09.a - Crear draft page, ir a lista y verificar que exista', async () => {
   assert.equal(firstPageTitle, titlePage);
 });
 
-it('F09.b - Editar Draft page, editar Page URL con texto valido', async () => {
+it('F108 - Editar Draft page, editar Page URL con texto valido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2781,7 +2823,7 @@ it('F09.b - Editar Draft page, editar Page URL con texto valido', async () => {
   assert.equal(EditPostTitle, firstPageTitle);
 });
 
-it('F09.c - Editar Draft page, editar Page URL con texto que supere el límite de chars', async () => {
+it('F109 - Editar Draft page, editar Page URL con texto que supere el límite de chars', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2811,7 +2853,7 @@ it('F09.c - Editar Draft page, editar Page URL con texto que supere el límite d
 
 });
 
-it('F09.d - Editar Draft page, settings, editar Excerpt con texto valido', async () => {
+it('F110 - Editar Draft page, settings, editar Excerpt con texto valido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2840,7 +2882,7 @@ it('F09.d - Editar Draft page, settings, editar Excerpt con texto valido', async
   assert.equal(EditPageTitle, firstPageTitle);
 });
 
-it('F09.e - Editar Draft page, settings, editar Excerpt con texto que supere el límite de chars', async () => {
+it('F111 - Editar Draft page, settings, editar Excerpt con texto que supere el límite de chars', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2868,7 +2910,7 @@ it('F09.e - Editar Draft page, settings, editar Excerpt con texto que supere el 
   assert(excErrorText === "Excerpt cannot be longer than 300 characters.", "Error message is not the expected");
 });
 
-it('F09.f - Editar Draft Page, metadata, editar Canonical Url con texto inválido', async () => {
+it('F112 - Editar Draft Page, metadata, editar Canonical Url con texto inválido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2898,7 +2940,7 @@ it('F09.f - Editar Draft Page, metadata, editar Canonical Url con texto inválid
   assert(canUrlErrorText === "Please enter a valid URL", "Error message is not the expected");
 });
 
-it('F09.g - Editar Draft page, settings, code intection, editar header con texto inválido', async () => {
+it('F113 - Editar Draft page, settings, code intection, editar header con texto inválido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2927,7 +2969,7 @@ it('F09.g - Editar Draft page, settings, code intection, editar header con texto
   assert(titleCodInjErrorText === "Header code cannot be longer than 65535 characters.", "Error message is not the expected");
 });
 
-it('F09.h - Editar Draft page, settings, code intection, editar footer con texto inválido', async () => {
+it('F114 - Editar Draft page, settings, code intection, editar footer con texto inválido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2956,7 +2998,7 @@ it('F09.h - Editar Draft page, settings, code intection, editar footer con texto
   assert(titleCodInjErrorText === "Footer code cannot be longer than 65535 characters.", "Error message is not the expected");
 });
 
-it('F10.a - Crear page, ir a lista, editar el page, ingresamos fecha de publicación futura, validar error generado', async () => {
+it('F115 - Crear page, ir a lista, editar el page, ingresamos fecha de publicación futura, validar error generado', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
 
   let titlePage = randomData['word'];
@@ -2990,8 +3032,8 @@ it('F10.a - Crear page, ir a lista, editar el page, ingresamos fecha de publicac
   assert(dateErrorText === "Must be in the past", "Error message is not the expected");
 });
 
-it('F10.b - Editar Draft page, settings, ingresamos fecha de publicación en formato inválido, validar error generado', async () => {
-
+it('F116 - Editar Draft page, settings, ingresamos fecha de publicación en formato inválido, validar error generado', async () => {
+  
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const pagesPage = new PagesPage(page);
@@ -3016,8 +3058,8 @@ it('F10.b - Editar Draft page, settings, ingresamos fecha de publicación en for
   assert(dateErrorText === "Invalid date format, must be YYYY-MM-DD", "Error message is not the expected");
 });
 
-it('F10.c - Editar Draft page, settings, ingresamos fecha de publicación inválida, validar error generado', async () => {
-
+it('F117 - Editar Draft page, settings, ingresamos fecha de publicación inválida, validar error generado', async () => {
+  
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const pagesPage = new PagesPage(page);
@@ -3042,8 +3084,8 @@ it('F10.c - Editar Draft page, settings, ingresamos fecha de publicación invál
   assert(dateErrorText === "Invalid date", "Error message is not the expected");
 });
 
-it('F10.d - Editar Draft page, settings, ingresamos hora de publicación en formato inválido, validar error generado', async () => {
-
+it('F118 - Editar Draft page, settings, ingresamos hora de publicación en formato inválido, validar error generado', async () => {
+  
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const pagesPage = new PagesPage(page);
@@ -3068,8 +3110,8 @@ it('F10.d - Editar Draft page, settings, ingresamos hora de publicación en form
   assert(dateErrorText === 'Must be in format: "15:00"', "Error message is not the expected");
 });
 
-it('F10.e - Editar Draft page, settings, ingresamos hora de publicación en formato inválido y fecha inválida, validar error compuesto', async () => {
-
+it('F119 - Editar Draft page, settings, ingresamos hora de publicación en formato inválido y fecha inválida, validar error compuesto', async () => {
+  
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const pagesPage = new PagesPage(page);
@@ -3095,8 +3137,8 @@ it('F10.e - Editar Draft page, settings, ingresamos hora de publicación en form
   assert(dateErrorText === 'Invalid dateMust be in format: "15:00"', "Error message is not the expected");
 });
 
-it('F10.f - Editar Draft page, settings, ingresamos hora de publicación en formato inválido y fecha inválida, validar error compuesto', async () => {
-
+it('F120 - Editar Draft page, settings, ingresamos hora de publicación en formato inválido y fecha inválida, validar error compuesto', async () => {
+  
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const pagesPage = new PagesPage(page);
