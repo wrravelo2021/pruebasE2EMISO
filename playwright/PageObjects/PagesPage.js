@@ -46,4 +46,30 @@ module.exports = class PagesPage {
     await new Promise(r => setTimeout(r, 1000));
     await this.page.click(`li:text("${nameTag}")`);
   }
+
+  async searchPageByName(namePage) {
+    await new Promise(r => setTimeout(r, 1000));
+    const pageTitles = await this.page.$$("h3.gh-content-entry-title");
+    for (var i = 0; i < pageTitles.length; i++) {
+      if (await pageTitles[i].innerText() === namePage) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  async openPageSortByFilterDropdown() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('.ember-power-select-selected-item:has-text("Newest")');
+  }
+
+  async selectFilterByNewestPageOption() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('.ember-power-select-option:has-text("Newest")');
+  }
+
+  async selectFilterByRecentlyUpPagesOption() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('.ember-power-select-option:has-text("Recently updated")');
+  }
 };

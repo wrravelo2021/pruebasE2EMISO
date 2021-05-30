@@ -21,4 +21,14 @@ module.exports = class TagsPage {
     }
     return false;
   }
+
+  async clickInternalTags() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('span:text("Internal tags")');
+  }
+
+  async clickPublicTags() {
+    await new Promise(r => setTimeout(r, 1000));
+    return this.page.click('span:text("Public tags")');
+  }
 };
