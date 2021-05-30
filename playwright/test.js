@@ -52,6 +52,7 @@ afterEach(async () => {
 });
 
 it('F061 - should schedule a new post and filter it in the list of posts by scheduled status.', async () => {
+  test = 'F061';
   const titlePost = dataPoolPost.title_post;
   const bodyPost = dataPoolPost.body_post;
   const loginPage = new LoginPage(page);
@@ -62,21 +63,29 @@ it('F061 - should schedule a new post and filter it in the list of posts by sche
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
   await postsPage.goToCreateNewPost();
   await postDetailPage.enterTitleForNewPost(titlePost);
   await postDetailPage.enterBodyForNewPost(bodyPost);
+  await generateScreenshot(3);
   await postDetailPage.schedulePost();
+  await generateScreenshot(4);
   await postDetailPage.returnToPostsList();
+  await generateScreenshot(5);
   await postsPage.openPostTypeFilterDropdown();
+  await generateScreenshot(6);
   await postsPage.selectFilterByScheduledPostsOption();
+  await generateScreenshot(7);
 
   let firstPostTitle = await postsPage.getFirstPostTitle();
   assert.strictEqual(firstPostTitle, titlePost);
 });
 
 it('F062 - should not schedule a new post when the title has more than 255 characters.', async () => {
+  test = 'F062';
   const titlePost = faker.datatype.string(256);
   const bodyPost = dataPoolPost.body_post;
   const loginPage = new LoginPage(page);
@@ -109,6 +118,7 @@ it('F062 - should not schedule a new post when the title has more than 255 chara
 });
 
 it('F063 - should schedule a new post and then unschedule it', async () => {
+  test = 'F063';
   const titlePost = dataPoolPost.title_post;
   const bodyPost = dataPoolPost.body_post;
   const loginPage = new LoginPage(page);
@@ -119,30 +129,43 @@ it('F063 - should schedule a new post and then unschedule it', async () => {
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
   await postsPage.goToCreateNewPost();
   await postDetailPage.enterTitleForNewPost(titlePost);
   await postDetailPage.enterBodyForNewPost(bodyPost);
+  await generateScreenshot(3);
   await postDetailPage.schedulePost();
+  await generateScreenshot(4);
   await postDetailPage.returnToPostsList();
+  await generateScreenshot(5);
   await postsPage.openPostTypeFilterDropdown();
+  await generateScreenshot(6);
   await postsPage.selectFilterByScheduledPostsOption();
+  await generateScreenshot(7);
 
   let firstPostTitle = await postsPage.getFirstPostTitle();
   assert.strictEqual(firstPostTitle, titlePost);
 
   await postsPage.clickPostWithTitle(titlePost);
+  await generateScreenshot(8);
   await postDetailPage.unschedulePost();
+  await generateScreenshot(9);
   await postDetailPage.returnToPostsList();
+  await generateScreenshot(10);
   await postsPage.openPostTypeFilterDropdown();
+  await generateScreenshot(11);
   await postsPage.selectFilterByDraftedPostsOption();
+  await generateScreenshot(12);
 
   firstPostTitle = await postsPage.getFirstPostTitle();
   assert.strictEqual(firstPostTitle, titlePost);
 });
 
 it('F064 - should schedule a new post with metadata', async () => {
+  test = 'F064';
   const titlePost = dataPoolPost.title_post;
   const bodyPost = dataPoolPost.body_post;
   const metaTitlePost = dataPoolPost.meta_title_post;
@@ -176,6 +199,7 @@ it('F064 - should schedule a new post with metadata', async () => {
 });
 
 it('F065 - should not schedule a new post when the meta title has more than 300 characters.', async () => {
+  test = 'F065';
   const titlePost = dataPoolPost.title_post;
   const bodyPost = dataPoolPost.body_post;
   const metaTitlePost = faker.datatype.string(301);
@@ -221,6 +245,7 @@ it('F065 - should not schedule a new post when the meta title has more than 300 
 });
 
 it('F066 - should schedule a new post and then reschedule it', async () => {
+  test = 'F066';
   const titlePost = dataPoolPost.title_post;
   const bodyPost = dataPoolPost.body_post;
   const loginPage = new LoginPage(page);
@@ -256,6 +281,7 @@ it('F066 - should schedule a new post and then reschedule it', async () => {
 });
 
 it('F067 should create a post, then modify it and validate that the modification was made.', async () => {
+  test = 'F067';
   const titlePost = dataPoolPost.title_post;
   const bodyPost = dataPoolPost.body_post;
   const loginPage = new LoginPage(page);
@@ -274,7 +300,6 @@ it('F067 should create a post, then modify it and validate that the modification
   await postDetailPage.enterBodyForNewPost(bodyPost);
   await postDetailPage.publishPost();
   await postDetailPage.returnToPostsList();
-  await homePage.closePublishedPostNotification();
   await homePage.goToViewSite();
 
   let firstPostTitle = await viewSitePage.getFirstPostTitle();
@@ -300,6 +325,7 @@ it('F067 should create a post, then modify it and validate that the modification
 });
 
 it('F068 - should create a new page and then delete it.', async () => {
+  test = 'F068';
   const titlePage = dataPoolPage.title_page;
   const bodyPage = dataPoolPage.body_page;
   const loginPage = new LoginPage(page);
@@ -333,6 +359,7 @@ it('F068 - should create a new page and then delete it.', async () => {
 });
 
 it('F069 - should change user password and login correctly.', async () => {
+  test = 'F069';
   let newPassword = faker.internet.password();
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -341,18 +368,26 @@ it('F069 - should change user password and login correctly.', async () => {
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToMyProfile();
+  await generateScreenshot(3);
   await profilePage.scrollToBottom();
   await profilePage.enterOldPassword(credentials.password);
   await profilePage.enterNewPassword(newPassword);
   await profilePage.enterNewPasswordConfirmation(newPassword);
+  await generateScreenshot(4);
   await profilePage.clickChangePassword();
+  await generateScreenshot(5);
   await homePage.closePublishedPostNotification();
   await homePage.signOut();
+  await generateScreenshot(6);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(newPassword)
+  await generateScreenshot(7);
   await loginPage.clickLogin();
+  await generateScreenshot(8);
   await homePage.goToMyProfile();
   await profilePage.scrollToBottom();
   await profilePage.enterOldPassword(newPassword);
@@ -362,6 +397,7 @@ it('F069 - should change user password and login correctly.', async () => {
 });
 
 it('F070 - should schedule a new page and filter it in the list of pages by scheduled status.', async () => {
+  test = 'F070';
   const titlePage = dataPoolPage.title_page;
   const bodyPage = dataPoolPage.body_page;
   const loginPage = new LoginPage(page);
@@ -372,21 +408,30 @@ it('F070 - should schedule a new page and filter it in the list of pages by sche
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPages();
+  await generateScreenshot(3);
   await pagesPage.goToCreateNewPage();
   await pageDetailPage.enterTitleForNewPage(titlePage);
   await pageDetailPage.enterBodyForNewPage(bodyPage);
+  await generateScreenshot(4);
   await pageDetailPage.schedulePage();
+  await generateScreenshot(5);
   await pageDetailPage.returnToPagesList();
+  await generateScreenshot(6);
   await pagesPage.openPageTypeFilterDropdown();
+  await generateScreenshot(7);
   await pagesPage.selectFilterByScheduledPagesOption();
+  await generateScreenshot(8);
 
   let firstPageTitle = await pagesPage.getFirstPageTitle();
   assert.strictEqual(firstPageTitle, titlePage);
 });
 
 it('F071 - should not schedule a new page when the title has more than 255 characters.', async () => {
+  test = 'F071';
   const titlePage = faker.datatype.string(256);
   const bodyPage = dataPoolPage.body_page;
   const loginPage = new LoginPage(page);
@@ -419,6 +464,7 @@ it('F071 - should not schedule a new page when the title has more than 255 chara
 });
 
 it('F072 - should schedule a new page and then unschedule it', async () => {
+  test = 'F072';
   const titlePage = dataPoolPage.title_page;
   const bodyPage = dataPoolPage.body_page;
   const loginPage = new LoginPage(page);
@@ -453,6 +499,7 @@ it('F072 - should schedule a new page and then unschedule it', async () => {
 });
 
 it('F073 - should schedule a new page with metadata', async () => {
+  test = 'F073';
   const titlePage = dataPoolPage.title_page;
   const bodyPage = dataPoolPage.body_page;
   const metaTitlePage = dataPoolPage.meta_title_page;
@@ -486,6 +533,7 @@ it('F073 - should schedule a new page with metadata', async () => {
 });
 
 it('F074 - should not schedule a new page when the meta title has more than 300 characters.', async () => {
+  test = 'F074';
   const titlePage = dataPoolPage.title_page;
   const bodyPage = dataPoolPage.body_page;
   const metaTitlePage = faker.datatype.string(301);
@@ -531,6 +579,7 @@ it('F074 - should not schedule a new page when the meta title has more than 300 
 });
 
 it('F075 - should schedule a new page and then reschedule it', async () => {
+  test = 'F075';
   const titlePage = dataPoolPage.title_page;
   const bodyPage = dataPoolPage.body_page;
   const loginPage = new LoginPage(page);
@@ -566,6 +615,7 @@ it('F075 - should schedule a new page and then reschedule it', async () => {
 });
 
 it('F076 - should create a tag and then create a new post with this tag.', async () => {
+  test = 'F076';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const titlePost = dataPoolPost.title_post;
@@ -580,29 +630,42 @@ it('F076 - should create a tag and then create a new post with this tag.', async
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToTags();
+  await generateScreenshot(3);
   await tagsPage.goToCreateNewTag();
   await tagDetailPage.enterTitleForNewTag(nameTag);
   await tagDetailPage.enterDescriptionForNewTag(descriptionTag);
+  await generateScreenshot(4);
   await tagDetailPage.clickSave();
+  await generateScreenshot(5);
   await homePage.goToPosts();
+  await generateScreenshot(6);
   await postsPage.goToCreateNewPost();
   await postDetailPage.enterTitleForNewPost(titlePost);
   await postDetailPage.enterBodyForNewPost(bodyPost);
+  await generateScreenshot(7);
   await postDetailPage.openPostSettings();
   await postDetailPage.assignTagWithName(nameTag);
+  await generateScreenshot(8);
   await postDetailPage.closePostSettings();
   await postDetailPage.publishPost();
+  await generateScreenshot(9);
   await postDetailPage.returnToPostsList();
+  await generateScreenshot(10);
   await postsPage.openPostTagsFilterDropdown();
+  await generateScreenshot(11);
   await postsPage.selectFilterByTagName(nameTag);
+  await generateScreenshot(12);
 
   let firstTagTitle = await postsPage.getFirstPostTitle();
   assert.strictEqual(firstTagTitle, titlePost);
 });
 
 it('F077 - should create a tag and then create a new page with this tag.', async () => {
+  test = 'F077';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const titlePage = dataPoolPage.title_page;
@@ -640,6 +703,7 @@ it('F077 - should create a tag and then create a new page with this tag.', async
 });
 
 it('F078 - should create a tag with metadata.', async () => {
+  test = 'F078';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const metaTitleTag = dataPoolTag.meta_title_tag;
@@ -668,6 +732,7 @@ it('F078 - should create a tag with metadata.', async () => {
 });
 
 it('F079 - should not create a new tag when the meta title has more than 300 characteres.', async () => {
+  test = 'F079';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const metaTitleTag = faker.datatype.string(301);
@@ -711,6 +776,7 @@ it('F079 - should not create a new tag when the meta title has more than 300 cha
 });
 
 it('F080 - should not create a new tag when the meta description has more than 500 characteres.', async () => {
+  test = 'F080';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const metaTitleTag = dataPoolTag.meta_title_tag;
@@ -754,6 +820,7 @@ it('F080 - should not create a new tag when the meta description has more than 5
 });
 
 it('F081 - should not create a new tag when the name has more than 191 characteres.', async () => {
+  test = 'F081';
   const nameTag = faker.datatype.string(192);
   const descriptionTag = dataPoolTag.description_tag;
   const loginPage = new LoginPage(page);
@@ -789,6 +856,7 @@ it('F081 - should not create a new tag when the name has more than 191 character
 });
 
 it('F082 - should not create a new tag when the description has more than 500 characteres.', async () => {
+  test = 'F082';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = faker.datatype.string(501);
   const loginPage = new LoginPage(page);
@@ -824,6 +892,7 @@ it('F082 - should not create a new tag when the description has more than 500 ch
 });
 
 it('F083 - should create a new tag with a color selected.', async () => {
+  test = 'F083';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const colorTag = dataPoolTag.color_tag;
@@ -849,6 +918,7 @@ it('F083 - should create a new tag with a color selected.', async () => {
 });
 
 it('F084 - should not create a new tag when the color value is wrong.', async () => {
+  test = 'F084';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const colorTag = faker.lorem.word(6);
@@ -887,6 +957,7 @@ it('F084 - should not create a new tag when the color value is wrong.', async ()
 });
 
 it('F085 - should create a new tag with Canonical URL.', async () => {
+  test = 'F085';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const canonicalUrl = dataPoolTag.canonical_url_tag;
@@ -917,6 +988,7 @@ it('F085 - should create a new tag with Canonical URL.', async () => {
 });
 
 it('F086 - should not create a new tag when the canonical URL is not in the correct format.', async () => {
+  test = 'F086';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const metaTitleTag = dataPoolTag.meta_title_tag;
@@ -963,6 +1035,7 @@ it('F086 - should not create a new tag when the canonical URL is not in the corr
 });
 
 it('F087 - should create a internal tag.', async () => {
+  test = 'F087';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const loginPage = new LoginPage(page);
@@ -987,6 +1060,7 @@ it('F087 - should create a internal tag.', async () => {
 });
 
 it('F088 - should create a internal tag and then make it public.', async () => {
+  test = 'F088';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const loginPage = new LoginPage(page);
@@ -1021,6 +1095,7 @@ it('F088 - should create a internal tag and then make it public.', async () => {
 });
 
 it('F089 - should create a new tag with a Slug.', async () => {
+  test = 'F089';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const slug = faker.internet.domainWord();
@@ -1046,6 +1121,7 @@ it('F089 - should create a new tag with a Slug.', async () => {
 });
 
 it('F090 - should create a new tag with a image.', async () => {
+  test = 'F090';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const loginPage = new LoginPage(page);
@@ -2179,7 +2255,7 @@ it('F60 - should save draft and publish page with max excerpt length', async () 
   assert(publishedPageTitle === title, "Title is not the expected");
 })
 
-it('F06 - Crear Draft post, validarlo en la lista', async () => {
+it('F91 - Crear Draft post, validarlo en la lista', async () => {
   let title = faker.name.title();
   let body = faker.lorem.sentence();
 
@@ -2204,7 +2280,7 @@ it('F06 - Crear Draft post, validarlo en la lista', async () => {
   assert.equal(firstPostTitle, title);
 });
 
-it('F06.a - Editar Draft post, editar Post URL con texto valido', async () => {
+it('F92 - Editar Draft post, editar Post URL con texto valido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2234,7 +2310,7 @@ it('F06.a - Editar Draft post, editar Post URL con texto valido', async () => {
   assert.equal(EditPostTitle, firstPostTitle);
 });
 
-it('F06.b - Editar Draft post, editar Post URL con texto que supere el límite de chars', async () => {
+it('F93 - Editar Draft post, editar Post URL con texto que supere el límite de chars', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2264,7 +2340,7 @@ it('F06.b - Editar Draft post, editar Post URL con texto que supere el límite d
 
 });
 
-it('F06.c - Editar Draft post, editar Excerpt con texto valido', async () => {
+it('F94 - Editar Draft post, editar Excerpt con texto valido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2293,7 +2369,7 @@ it('F06.c - Editar Draft post, editar Excerpt con texto valido', async () => {
   assert.equal(EditPostTitle, firstPostTitle);
 });
 
-it('F06.d - Editar Draft post, editar Excerpt con texto que supere el límite de chars', async () => {
+it('F95 - Editar Draft post, editar Excerpt con texto que supere el límite de chars', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2321,7 +2397,7 @@ it('F06.d - Editar Draft post, editar Excerpt con texto que supere el límite de
   assert(excErrorText === "Excerpt cannot be longer than 300 characters.", "Error message is not the expected");
 });
 
-it('F06.e - Editar Draft post, metadata, editar Canonical Url con texto valido', async () => {
+it('F96 - Editar Draft post, metadata, editar Canonical Url con texto valido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2352,7 +2428,7 @@ it('F06.e - Editar Draft post, metadata, editar Canonical Url con texto valido',
   assert.equal(EditPostTitle, firstPostTitle);
 });
 
-it('F06.f - Editar Draft post, metadata, editar Canonical Url con texto inválido', async () => {
+it('F97 - Editar Draft post, metadata, editar Canonical Url con texto inválido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2382,7 +2458,7 @@ it('F06.f - Editar Draft post, metadata, editar Canonical Url con texto inválid
   assert(canUrlErrorText === "Please enter a valid URL", "Error message is not the expected");
 });
 
-it('F06.g - Editar Draft post, settings, code intection, editar header con texto inválido', async () => {
+it('F98 - Editar Draft post, settings, code intection, editar header con texto inválido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2411,7 +2487,7 @@ it('F06.g - Editar Draft post, settings, code intection, editar header con texto
   assert(titleCodInjErrorText === "Header code cannot be longer than 65535 characters.", "Error message is not the expected");
 });
 
-it('F06.h - Editar Draft post, settings, code intection, editar footer con texto inválido', async () => {
+it('F99 - Editar Draft post, settings, code intection, editar footer con texto inválido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2440,8 +2516,8 @@ it('F06.h - Editar Draft post, settings, code intection, editar footer con texto
   assert(titleCodInjErrorText === "Footer code cannot be longer than 65535 characters.", "Error message is not the expected");
 });
 
-it('F06.i - Editar Draft post, settings, ingresamos fecha de publicación en formato inválido, validar error generado', async () => {
-
+it('F100 - Editar Draft post, settings, ingresamos fecha de publicación en formato inválido, validar error generado', async () => {
+  test = 'F100';
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const postsPage = new PostsPage(page);
@@ -2450,15 +2526,23 @@ it('F06.i - Editar Draft post, settings, ingresamos fecha de publicación en for
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
+  await generateScreenshot(3);
 
   await postsPage.openPostTypeFilterDropdown();
+  await generateScreenshot(4);
   await postsPage.selectFilterByDraftedPostsOption();
+  await generateScreenshot(5);
   var firstPostTitle = await postsPage.getFirstPostTitle();
   await postsPage.clickPostWithTitle(firstPostTitle);
+  await generateScreenshot(6);
   await postDetailPage.openPostSettings();
+  await generateScreenshot(7);
   await postDetailPage.fillDate(faker.lorem.word());
+  await generateScreenshot(8);
 
   const dateError = await postDetailPage.getFutureDateError();
   const dateErrorText = dateError ? await dateError.innerText() : null;
@@ -2466,8 +2550,8 @@ it('F06.i - Editar Draft post, settings, ingresamos fecha de publicación en for
   assert(dateErrorText === "Invalid date format, must be YYYY-MM-DD", "Error message is not the expected");
 });
 
-it('F06.j - Editar Draft post, settings, ingresamos fecha de publicación inválida, validar error generado', async () => {
-
+it('F101 - Editar Draft post, settings, ingresamos fecha de publicación inválida, validar error generado', async () => {
+  test = 'F101';
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const postsPage = new PostsPage(page);
@@ -2476,15 +2560,23 @@ it('F06.j - Editar Draft post, settings, ingresamos fecha de publicación invál
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
+  await generateScreenshot(3);
 
   await postsPage.openPostTypeFilterDropdown();
+  await generateScreenshot(4);
   await postsPage.selectFilterByDraftedPostsOption();
+  await generateScreenshot(5);
   var firstPostTitle = await postsPage.getFirstPostTitle();
   await postsPage.clickPostWithTitle(firstPostTitle);
+  await generateScreenshot(6);
   await postDetailPage.openPostSettings();
+  await generateScreenshot(7);
   await postDetailPage.fillDate(dataPoolPost.Date_Invalid_post);
+  await generateScreenshot(8);
 
   const dateError = await postDetailPage.getFutureDateError();
   const dateErrorText = dateError ? await dateError.innerText() : null;
@@ -2492,8 +2584,8 @@ it('F06.j - Editar Draft post, settings, ingresamos fecha de publicación invál
   assert(dateErrorText === "Invalid date", "Error message is not the expected");
 });
 
-it('F06.k - Editar Draft post, settings, ingresamos hora de publicación en formato inválido, validar error generado', async () => {
-
+it('F102 - Editar Draft post, settings, ingresamos hora de publicación en formato inválido, validar error generado', async () => {
+  test = 'F102';
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const postsPage = new PostsPage(page);
@@ -2502,15 +2594,23 @@ it('F06.k - Editar Draft post, settings, ingresamos hora de publicación en form
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
+  await generateScreenshot(3);
 
   await postsPage.openPostTypeFilterDropdown();
+  await generateScreenshot(4);
   await postsPage.selectFilterByDraftedPostsOption();
+  await generateScreenshot(5);
   var firstPostTitle = await postsPage.getFirstPostTitle();
   await postsPage.clickPostWithTitle(firstPostTitle);
+  await generateScreenshot(6);
   await postDetailPage.openPostSettings();
+  await generateScreenshot(7);
   await postDetailPage.fillTime(faker.lorem.word());
+  await generateScreenshot(8);
 
   const dateError = await postDetailPage.getFutureDateError();
   const dateErrorText = dateError ? await dateError.innerText() : null;
@@ -2518,8 +2618,8 @@ it('F06.k - Editar Draft post, settings, ingresamos hora de publicación en form
   assert(dateErrorText === 'Must be in format: "15:00"', "Error message is not the expected");
 });
 
-it('F06.l - Editar Draft post, settings, ingresamos hora de publicación en formato inválido y fecha inválida, validar error compuesto', async () => {
-
+it('F103 - Editar Draft post, settings, ingresamos hora de publicación en formato inválido y fecha inválida, validar error compuesto', async () => {
+  test = 'F103';
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const postsPage = new PostsPage(page);
@@ -2528,16 +2628,25 @@ it('F06.l - Editar Draft post, settings, ingresamos hora de publicación en form
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
+  await generateScreenshot(3);
 
   await postsPage.openPostTypeFilterDropdown();
+  await generateScreenshot(4);
   await postsPage.selectFilterByDraftedPostsOption();
+  await generateScreenshot(5);
   var firstPostTitle = await postsPage.getFirstPostTitle();
   await postsPage.clickPostWithTitle(firstPostTitle);
+  await generateScreenshot(6);
   await postDetailPage.openPostSettings();
+  await generateScreenshot(7);
   await postDetailPage.fillTime(dataPoolPost.title_post);
+  await generateScreenshot(8);
   await postDetailPage.fillDate(dataPoolPost.Date_Invalid_post);
+  await generateScreenshot(9);
 
   const dateError = await postDetailPage.getFutureDateError();
   const dateErrorText = dateError ? await dateError.innerText() : null;
@@ -2545,8 +2654,8 @@ it('F06.l - Editar Draft post, settings, ingresamos hora de publicación en form
   assert(dateErrorText === 'Invalid dateMust be in format: "15:00"', "Error message is not the expected");
 });
 
-it('F06.m - Editar Draft post, settings, ingresamos hora de publicación en formato inválido y fecha inválida, validar error compuesto', async () => {
-
+it('F104 - Editar Draft post, settings, ingresamos hora de publicación en formato inválido y fecha inválida, validar error compuesto', async () => {
+  test = 'F104';
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const postsPage = new PostsPage(page);
@@ -2555,16 +2664,25 @@ it('F06.m - Editar Draft post, settings, ingresamos hora de publicación en form
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
+  await generateScreenshot(3);
 
   await postsPage.openPostTypeFilterDropdown();
+  await generateScreenshot(4);
   await postsPage.selectFilterByDraftedPostsOption();
+  await generateScreenshot(5);
   var firstPostTitle = await postsPage.getFirstPostTitle();
   await postsPage.clickPostWithTitle(firstPostTitle);
+  await generateScreenshot(6);
   await postDetailPage.openPostSettings();
+  await generateScreenshot(7);
   await postDetailPage.fillTime(faker.lorem.word());
+  await generateScreenshot(8);
   await postDetailPage.fillDate(faker.lorem.word());
+  await generateScreenshot(9);
 
   const dateError = await postDetailPage.getFutureDateError();
   const dateErrorText = dateError ? await dateError.innerText() : null;
@@ -2572,7 +2690,7 @@ it('F06.m - Editar Draft post, settings, ingresamos hora de publicación en form
   assert(dateErrorText === 'Invalid date format, must be YYYY-MM-DDMust be in format: "15:00"', "Error message is not the expected");
 });
 
-it('F07.a - Crear 2 post, ordenar la lista por el mas nuevo, validar en la lista que el post mas reciente esté de primeras', async () => {
+it('F105 - Crear 2 post, ordenar la lista por el mas nuevo, validar en la lista que el post mas reciente esté de primeras', async () => {
   let titlePost1 = faker.name.title();
   let bodyPost1 = faker.lorem.sentence();
   let titlePost2 = faker.name.title();
@@ -2607,7 +2725,7 @@ it('F07.a - Crear 2 post, ordenar la lista por el mas nuevo, validar en la lista
   assert.equal(firstPostTitle, titlePost2);
 });
 
-it('F08.a - Crear post, ir al sitio web, validar que esté, volver y eliminarlo, ir de nuevo al sitio web y validar que NO esté', async () => {
+it('F106 - Crear post, ir al sitio web, validar que esté, volver y eliminarlo, ir de nuevo al sitio web y validar que NO esté', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
 
   let titlePost = randomData['word'];
@@ -2648,7 +2766,7 @@ it('F08.a - Crear post, ir al sitio web, validar que esté, volver y eliminarlo,
 
 });
 
-it('F09.a - Crear draft page, ir a lista y verificar que exista', async () => {
+it('F107 - Crear draft page, ir a lista y verificar que exista', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
 
   let titlePage = randomData['word'];
@@ -2675,7 +2793,7 @@ it('F09.a - Crear draft page, ir a lista y verificar que exista', async () => {
   assert.equal(firstPageTitle, titlePage);
 });
 
-it('F09.b - Editar Draft page, editar Page URL con texto valido', async () => {
+it('F108 - Editar Draft page, editar Page URL con texto valido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2705,7 +2823,7 @@ it('F09.b - Editar Draft page, editar Page URL con texto valido', async () => {
   assert.equal(EditPostTitle, firstPageTitle);
 });
 
-it('F09.c - Editar Draft page, editar Page URL con texto que supere el límite de chars', async () => {
+it('F109 - Editar Draft page, editar Page URL con texto que supere el límite de chars', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2735,7 +2853,7 @@ it('F09.c - Editar Draft page, editar Page URL con texto que supere el límite d
 
 });
 
-it('F09.d - Editar Draft page, settings, editar Excerpt con texto valido', async () => {
+it('F110 - Editar Draft page, settings, editar Excerpt con texto valido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2764,7 +2882,7 @@ it('F09.d - Editar Draft page, settings, editar Excerpt con texto valido', async
   assert.equal(EditPageTitle, firstPageTitle);
 });
 
-it('F09.f - Editar Draft page, settings, editar Excerpt con texto que supere el límite de chars', async () => {
+it('F111 - Editar Draft page, settings, editar Excerpt con texto que supere el límite de chars', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2792,7 +2910,7 @@ it('F09.f - Editar Draft page, settings, editar Excerpt con texto que supere el 
   assert(excErrorText === "Excerpt cannot be longer than 300 characters.", "Error message is not the expected");
 });
 
-it('F09.g - Editar Draft Page, metadata, editar Canonical Url con texto inválido', async () => {
+it('F112 - Editar Draft Page, metadata, editar Canonical Url con texto inválido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2822,7 +2940,7 @@ it('F09.g - Editar Draft Page, metadata, editar Canonical Url con texto inválid
   assert(canUrlErrorText === "Please enter a valid URL", "Error message is not the expected");
 });
 
-it('F09.h - Editar Draft page, settings, code intection, editar header con texto inválido', async () => {
+it('F113 - Editar Draft page, settings, code intection, editar header con texto inválido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2851,7 +2969,7 @@ it('F09.h - Editar Draft page, settings, code intection, editar header con texto
   assert(titleCodInjErrorText === "Header code cannot be longer than 65535 characters.", "Error message is not the expected");
 });
 
-it('F09.i - Editar Draft page, settings, code intection, editar footer con texto inválido', async () => {
+it('F114 - Editar Draft page, settings, code intection, editar footer con texto inválido', async () => {
 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -2880,7 +2998,7 @@ it('F09.i - Editar Draft page, settings, code intection, editar footer con texto
   assert(titleCodInjErrorText === "Footer code cannot be longer than 65535 characters.", "Error message is not the expected");
 });
 
-it('F10.a - Crear page, ir a lista, editar el page, ingresamos fecha de publicación futura, validar error generado', async () => {
+it('F115 - Crear page, ir a lista, editar el page, ingresamos fecha de publicación futura, validar error generado', async () => {
   const randomData = aPrioriData[Math.floor(Math.random() * aPrioriData.length)];
 
   let titlePage = randomData['word'];
@@ -2914,8 +3032,8 @@ it('F10.a - Crear page, ir a lista, editar el page, ingresamos fecha de publicac
   assert(dateErrorText === "Must be in the past", "Error message is not the expected");
 });
 
-it('F10.b - Editar Draft page, settings, ingresamos fecha de publicación en formato inválido, validar error generado', async () => {
-
+it('F116 - Editar Draft page, settings, ingresamos fecha de publicación en formato inválido, validar error generado', async () => {
+  
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const pagesPage = new PagesPage(page);
@@ -2940,8 +3058,8 @@ it('F10.b - Editar Draft page, settings, ingresamos fecha de publicación en for
   assert(dateErrorText === "Invalid date format, must be YYYY-MM-DD", "Error message is not the expected");
 });
 
-it('F10.c - Editar Draft page, settings, ingresamos fecha de publicación inválida, validar error generado', async () => {
-
+it('F117 - Editar Draft page, settings, ingresamos fecha de publicación inválida, validar error generado', async () => {
+  
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const pagesPage = new PagesPage(page);
@@ -2966,8 +3084,8 @@ it('F10.c - Editar Draft page, settings, ingresamos fecha de publicación invál
   assert(dateErrorText === "Invalid date", "Error message is not the expected");
 });
 
-it('F10.d - Editar Draft page, settings, ingresamos hora de publicación en formato inválido, validar error generado', async () => {
-
+it('F118 - Editar Draft page, settings, ingresamos hora de publicación en formato inválido, validar error generado', async () => {
+  
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const pagesPage = new PagesPage(page);
@@ -2992,8 +3110,8 @@ it('F10.d - Editar Draft page, settings, ingresamos hora de publicación en form
   assert(dateErrorText === 'Must be in format: "15:00"', "Error message is not the expected");
 });
 
-it('F10.e - Editar Draft page, settings, ingresamos hora de publicación en formato inválido y fecha inválida, validar error compuesto', async () => {
-
+it('F119 - Editar Draft page, settings, ingresamos hora de publicación en formato inválido y fecha inválida, validar error compuesto', async () => {
+  
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const pagesPage = new PagesPage(page);
@@ -3019,8 +3137,8 @@ it('F10.e - Editar Draft page, settings, ingresamos hora de publicación en form
   assert(dateErrorText === 'Invalid dateMust be in format: "15:00"', "Error message is not the expected");
 });
 
-it('F10.f - Editar Draft page, settings, ingresamos hora de publicación en formato inválido y fecha inválida, validar error compuesto', async () => {
-
+it('F120 - Editar Draft page, settings, ingresamos hora de publicación en formato inválido y fecha inválida, validar error compuesto', async () => {
+  
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const pagesPage = new PagesPage(page);
