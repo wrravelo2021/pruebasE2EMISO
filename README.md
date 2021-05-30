@@ -10,9 +10,17 @@
 
 Para las pruebas se debe crear un usuario de Ghost que luego debe ser remplazado en los archivos de pruebas como se indican en las instrucciones.
 
-## GENERACIÓN DE DATOS
+## Funcionalidades y escenarios de prueba ⚙️
 
-Para el uso de herramientas de generación de datos se realizaron 120 escenarios con ayuda de la herramienta Playwright con una distribución de técnicas de generación descrita a continuación al igual que las herramientas que fueron utilizadas. [Generación de datos](https://github.com/wrravelo2021/pruebasE2EMISO/wiki/Generaci%C3%B3n-de-datos).
+El listado de funcionalidades que se probaron en este proyecto se puede encontrar en la wiki de este repositorio. Se puede acceder a través del [siguiente link](https://github.com/wrravelo2021/pruebasE2EMISO/wiki/Listado-de-funcionalidades).
+
+De la misma forma, el listado inicial de 40 escenarios de prueba se detalla en la wiki, con los casos de prueba de cada uno y el responsable de su desarrollo. Se puede acceder a través de [este link](https://github.com/wrravelo2021/pruebasE2EMISO/wiki/Listado-de-escenarios-de-prueba).
+
+Además, el listado final de 120 escenarios de prueba también se detalla en la wiki, con la funcionalidad que prueba, el tipo de prueba y si genera datos o no. Se puede acceder a través del [siguiente link](https://github.com/wrravelo2021/pruebasE2EMISO/wiki/Listado-120-escenarios-de-prueba)
+
+## Generación de datos
+
+Para el uso de herramientas de generación de datos se realizaron 120 escenarios con ayuda de la herramienta Playwright con una distribución de técnicas de generación descrita a continuación al igual que las herramientas que fueron utilizadas: [Generación de datos](https://github.com/wrravelo2021/pruebasE2EMISO/wiki/Generaci%C3%B3n-de-datos).
 
 ## Playwright 🎭
 
@@ -180,12 +188,6 @@ npm i
 ```
 
 5. Ejecutar el archivo **monkey_testing.spec.js** desde la interfaz de cypress
-
-## Funcionalidades y escenarios de prueba ⚙️
-
-El listado de funcionalidades que se probaron en este proyecto se puede encontrar en la wiki de este repositorio. Se puede acceder a través del [siguiente link](https://github.com/wrravelo2021/pruebasE2EMISO/wiki/Listado-de-funcionalidades).
-
-De la misma forma, el listado de escenarios de prueba se detalla en la wiki, con los casos de prueba de cada uno y el responsable de su desarrollo. Se puede acceder a través de [este link](https://github.com/wrravelo2021/pruebasE2EMISO/wiki/Listado-de-escenarios-de-prueba).
 
 ## Reporte de Incidencias
 
