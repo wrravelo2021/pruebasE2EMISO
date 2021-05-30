@@ -10,9 +10,17 @@
 
 Para las pruebas se debe crear un usuario de Ghost que luego debe ser remplazado en los archivos de pruebas como se indican en las instrucciones.
 
-## GENERACIÓN DE DATOS
+## Funcionalidades y escenarios de prueba ⚙️
 
-Para el uso de herramientas de generación de datos se realizaron 120 escenarios con ayuda de la herramienta Playwright con una distribución de técnicas de generación descrita a continuación al igual que las herramientas que fueron utilizadas. [Generación de datos](https://github.com/wrravelo2021/pruebasE2EMISO/wiki/Generaci%C3%B3n-de-datos).
+El listado de funcionalidades que se probaron en este proyecto se puede encontrar en la wiki de este repositorio. Se puede acceder a través del [siguiente link](https://github.com/wrravelo2021/pruebasE2EMISO/wiki/Listado-de-funcionalidades).
+
+De la misma forma, el listado inicial de 40 escenarios de prueba se detalla en la wiki, con los casos de prueba de cada uno y el responsable de su desarrollo. Se puede acceder a través de [este link](https://github.com/wrravelo2021/pruebasE2EMISO/wiki/Listado-de-escenarios-de-prueba).
+
+Además, el listado final de 120 escenarios de prueba también se detalla en la wiki, con la funcionalidad que prueba, el tipo de prueba y si genera datos o no. Se puede acceder a través del [siguiente link](https://github.com/wrravelo2021/pruebasE2EMISO/wiki/Listado-120-escenarios-de-prueba)
+
+## Generación de datos
+
+Para el uso de herramientas de generación de datos se realizaron 120 escenarios con ayuda de la herramienta Playwright con una distribución de técnicas de generación descrita a continuación al igual que las herramientas que fueron utilizadas: [Generación de datos](https://github.com/wrravelo2021/pruebasE2EMISO/wiki/Generaci%C3%B3n-de-datos).
 
 ## Playwright 🎭
 
@@ -113,7 +121,7 @@ A continuación se presentan las instrucciones para ejecutar el reporte generado
   ```bash
   backstop test
   ```
-  
+
 ### Demo reporte BackstopJS
 
 En el siguiente link se encuentra el resultado de la ejecución de backstop. [Demo](https://wrravelo2021.github.io/pruebasE2EMISO/backstop/backstop_data/html_report/index.html)
@@ -127,34 +135,60 @@ A continuación se presentan las instrucciones para ejecutar el reporte generado
   ```bash
   cd vrt/
   ```
-  
+
 2. Instalar ResembleJS
 
   ```bash
   npm install -g resemblejs
   ```
-  
+
 3. Ejecutar reporte
 
   ```bash
   node report.js
   ```
-  
+
 ### Demo reporte ResembleJS
 
 En el siguiente link se encuentra el resultado de la ejecución de ResembleJS en Playwright. [Demo Playwright](https://raw.githack.com/wrravelo2021/pruebasE2EMISO/master/vrt/report-playwright.html)
 
 En el siguiente link se encuentra el resultado de la ejecución de ResembleJS en Kraken. [Demo Kraken](https://raw.githack.com/wrravelo2021/pruebasE2EMISO/master/vrt/report-kraken.html)
 
-## Funcionalidades y escenarios de prueba ⚙️
+## 🐒 Monkey
 
-El listado de funcionalidades que se probaron en este proyecto se puede encontrar en la wiki de este repositorio. Se puede acceder a través del [siguiente link](https://github.com/wrravelo2021/pruebasE2EMISO/wiki/Listado-de-funcionalidades).
+A continuación se presentan las instrucciones para ejecutar el monkey.
 
-De la misma forma, el listado de escenarios de prueba se detalla en la wiki, con los casos de prueba de cada uno y el responsable de su desarrollo. Se puede acceder a través de [este link](https://github.com/wrravelo2021/pruebasE2EMISO/wiki/Listado-de-escenarios-de-prueba).
+1. Ir a la carpeta con las especificaciones del monkey
+
+```bash
+cd monkey-ghost/
+```
+
+2. Instalar las librerías de node
+
+```bash
+npm i
+```
+
+3. Modificar URL y accesos del usuario
+
+    En el archivo **/monkey-ghost/cypress/integration/examples/monkey_testing.spec.js** modificar las lineas bajo el comentario **Credentials** con las correspondientes creadas anteriormente en ghost.
+
+    ```javascript
+    // Credentials
+    let url = 'http://localhost:2372/ghost'; // URL donde esta desplegado Ghost
+    let email = 'drummerwilliam@gmail.com'; // Email del usuario
+    let password = 'pruebasmiso'; // Contraseña del usuario
+    ```
+
+4. Iniciar cypress
+
+```bash
+./node_modules/.bin/cypress open
+```
+
+5. Ejecutar el archivo **monkey_testing.spec.js** desde la interfaz de cypress
 
 ## Reporte de Incidencias
 
-Las incidencias encontradas durante la ejecución de pruebas E2E y VRT, se registro en el sistema de Issues de Github del proyecto. Se puede acceder a través del [siguiente link](https://github.com/wrravelo2021/pruebasE2EMISO/issues). 
-
-
-
+Las incidencias encontradas durante la ejecución de pruebas E2E y VRT, se registro en el sistema de Issues de Github del proyecto. Se puede acceder a través del [siguiente link](https://github.com/wrravelo2021/pruebasE2EMISO/issues).
