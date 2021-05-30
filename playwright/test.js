@@ -2391,7 +2391,7 @@ it('F99 - Editar Draft post, settings, code intection, editar footer con texto i
 });
 
 it('F100 - Editar Draft post, settings, ingresamos fecha de publicación en formato inválido, validar error generado', async () => {
-  
+  test = 'F100';
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const postsPage = new PostsPage(page);
@@ -2400,15 +2400,23 @@ it('F100 - Editar Draft post, settings, ingresamos fecha de publicación en form
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
+  await generateScreenshot(3);
 
   await postsPage.openPostTypeFilterDropdown();
+  await generateScreenshot(4);
   await postsPage.selectFilterByDraftedPostsOption();
+  await generateScreenshot(5);
   var firstPostTitle = await postsPage.getFirstPostTitle();
   await postsPage.clickPostWithTitle(firstPostTitle);
+  await generateScreenshot(6);
   await postDetailPage.openPostSettings();
+  await generateScreenshot(7);
   await postDetailPage.fillDate(faker.lorem.word());
+  await generateScreenshot(8);
 
   const dateError = await postDetailPage.getFutureDateError();
   const dateErrorText = dateError ? await dateError.innerText() : null;
@@ -2417,7 +2425,7 @@ it('F100 - Editar Draft post, settings, ingresamos fecha de publicación en form
 });
 
 it('F101 - Editar Draft post, settings, ingresamos fecha de publicación inválida, validar error generado', async () => {
-  
+  test = 'F101';
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const postsPage = new PostsPage(page);
@@ -2426,15 +2434,23 @@ it('F101 - Editar Draft post, settings, ingresamos fecha de publicación inváli
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
+  await generateScreenshot(3);
 
   await postsPage.openPostTypeFilterDropdown();
+  await generateScreenshot(4);
   await postsPage.selectFilterByDraftedPostsOption();
+  await generateScreenshot(5);
   var firstPostTitle = await postsPage.getFirstPostTitle();
   await postsPage.clickPostWithTitle(firstPostTitle);
+  await generateScreenshot(6);
   await postDetailPage.openPostSettings();
+  await generateScreenshot(7);
   await postDetailPage.fillDate(dataPoolPost.Date_Invalid_post);
+  await generateScreenshot(8);
 
   const dateError = await postDetailPage.getFutureDateError();
   const dateErrorText = dateError ? await dateError.innerText() : null;
@@ -2443,7 +2459,7 @@ it('F101 - Editar Draft post, settings, ingresamos fecha de publicación inváli
 });
 
 it('F102 - Editar Draft post, settings, ingresamos hora de publicación en formato inválido, validar error generado', async () => {
-  
+  test = 'F102';
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const postsPage = new PostsPage(page);
@@ -2452,15 +2468,23 @@ it('F102 - Editar Draft post, settings, ingresamos hora de publicación en forma
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
+  await generateScreenshot(3);
 
   await postsPage.openPostTypeFilterDropdown();
+  await generateScreenshot(4);
   await postsPage.selectFilterByDraftedPostsOption();
+  await generateScreenshot(5);
   var firstPostTitle = await postsPage.getFirstPostTitle();
   await postsPage.clickPostWithTitle(firstPostTitle);
+  await generateScreenshot(6);
   await postDetailPage.openPostSettings();
+  await generateScreenshot(7);
   await postDetailPage.fillTime(faker.lorem.word());
+  await generateScreenshot(8);
 
   const dateError = await postDetailPage.getFutureDateError();
   const dateErrorText = dateError ? await dateError.innerText() : null;
@@ -2469,7 +2493,7 @@ it('F102 - Editar Draft post, settings, ingresamos hora de publicación en forma
 });
 
 it('F103 - Editar Draft post, settings, ingresamos hora de publicación en formato inválido y fecha inválida, validar error compuesto', async () => {
-  
+  test = 'F103';
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const postsPage = new PostsPage(page);
@@ -2478,16 +2502,25 @@ it('F103 - Editar Draft post, settings, ingresamos hora de publicación en forma
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
+  await generateScreenshot(3);
 
   await postsPage.openPostTypeFilterDropdown();
+  await generateScreenshot(4);
   await postsPage.selectFilterByDraftedPostsOption();
+  await generateScreenshot(5);
   var firstPostTitle = await postsPage.getFirstPostTitle();
   await postsPage.clickPostWithTitle(firstPostTitle);
+  await generateScreenshot(6);
   await postDetailPage.openPostSettings();
+  await generateScreenshot(7);
   await postDetailPage.fillTime(dataPoolPost.title_post);
+  await generateScreenshot(8);
   await postDetailPage.fillDate(dataPoolPost.Date_Invalid_post);
+  await generateScreenshot(9);
 
   const dateError = await postDetailPage.getFutureDateError();
   const dateErrorText = dateError ? await dateError.innerText() : null;
@@ -2496,7 +2529,7 @@ it('F103 - Editar Draft post, settings, ingresamos hora de publicación en forma
 });
 
 it('F104 - Editar Draft post, settings, ingresamos hora de publicación en formato inválido y fecha inválida, validar error compuesto', async () => {
-  
+  test = 'F104';
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const postsPage = new PostsPage(page);
@@ -2505,16 +2538,25 @@ it('F104 - Editar Draft post, settings, ingresamos hora de publicación en forma
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
+  await generateScreenshot(3);
 
   await postsPage.openPostTypeFilterDropdown();
+  await generateScreenshot(4);
   await postsPage.selectFilterByDraftedPostsOption();
+  await generateScreenshot(5);
   var firstPostTitle = await postsPage.getFirstPostTitle();
   await postsPage.clickPostWithTitle(firstPostTitle);
+  await generateScreenshot(6);
   await postDetailPage.openPostSettings();
+  await generateScreenshot(7);
   await postDetailPage.fillTime(faker.lorem.word());
+  await generateScreenshot(8);
   await postDetailPage.fillDate(faker.lorem.word());
+  await generateScreenshot(9);
 
   const dateError = await postDetailPage.getFutureDateError();
   const dateErrorText = dateError ? await dateError.innerText() : null;
