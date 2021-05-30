@@ -52,6 +52,7 @@ afterEach(async () => {
 });
 
 it('F061 - should schedule a new post and filter it in the list of posts by scheduled status.', async () => {
+  test = 'F061';
   const titlePost = dataPoolPost.title_post;
   const bodyPost = dataPoolPost.body_post;
   const loginPage = new LoginPage(page);
@@ -62,21 +63,29 @@ it('F061 - should schedule a new post and filter it in the list of posts by sche
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
   await postsPage.goToCreateNewPost();
   await postDetailPage.enterTitleForNewPost(titlePost);
   await postDetailPage.enterBodyForNewPost(bodyPost);
+  await generateScreenshot(3);
   await postDetailPage.schedulePost();
+  await generateScreenshot(4);
   await postDetailPage.returnToPostsList();
+  await generateScreenshot(5);
   await postsPage.openPostTypeFilterDropdown();
+  await generateScreenshot(6);
   await postsPage.selectFilterByScheduledPostsOption();
+  await generateScreenshot(7);
 
   let firstPostTitle = await postsPage.getFirstPostTitle();
   assert.strictEqual(firstPostTitle, titlePost);
 });
 
 it('F062 - should not schedule a new post when the title has more than 255 characters.', async () => {
+  test = 'F062';
   const titlePost = faker.datatype.string(256);
   const bodyPost = dataPoolPost.body_post;
   const loginPage = new LoginPage(page);
@@ -109,6 +118,7 @@ it('F062 - should not schedule a new post when the title has more than 255 chara
 });
 
 it('F063 - should schedule a new post and then unschedule it', async () => {
+  test = 'F063';
   const titlePost = dataPoolPost.title_post;
   const bodyPost = dataPoolPost.body_post;
   const loginPage = new LoginPage(page);
@@ -119,30 +129,43 @@ it('F063 - should schedule a new post and then unschedule it', async () => {
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPosts();
   await postsPage.goToCreateNewPost();
   await postDetailPage.enterTitleForNewPost(titlePost);
   await postDetailPage.enterBodyForNewPost(bodyPost);
+  await generateScreenshot(3);
   await postDetailPage.schedulePost();
+  await generateScreenshot(4);
   await postDetailPage.returnToPostsList();
+  await generateScreenshot(5);
   await postsPage.openPostTypeFilterDropdown();
+  await generateScreenshot(6);
   await postsPage.selectFilterByScheduledPostsOption();
+  await generateScreenshot(7);
 
   let firstPostTitle = await postsPage.getFirstPostTitle();
   assert.strictEqual(firstPostTitle, titlePost);
 
   await postsPage.clickPostWithTitle(titlePost);
+  await generateScreenshot(8);
   await postDetailPage.unschedulePost();
+  await generateScreenshot(9);
   await postDetailPage.returnToPostsList();
+  await generateScreenshot(10);
   await postsPage.openPostTypeFilterDropdown();
+  await generateScreenshot(11);
   await postsPage.selectFilterByDraftedPostsOption();
+  await generateScreenshot(12);
 
   firstPostTitle = await postsPage.getFirstPostTitle();
   assert.strictEqual(firstPostTitle, titlePost);
 });
 
 it('F064 - should schedule a new post with metadata', async () => {
+  test = 'F064';
   const titlePost = dataPoolPost.title_post;
   const bodyPost = dataPoolPost.body_post;
   const metaTitlePost = dataPoolPost.meta_title_post;
@@ -176,6 +199,7 @@ it('F064 - should schedule a new post with metadata', async () => {
 });
 
 it('F065 - should not schedule a new post when the meta title has more than 300 characters.', async () => {
+  test = 'F065';
   const titlePost = dataPoolPost.title_post;
   const bodyPost = dataPoolPost.body_post;
   const metaTitlePost = faker.datatype.string(301);
@@ -221,6 +245,7 @@ it('F065 - should not schedule a new post when the meta title has more than 300 
 });
 
 it('F066 - should schedule a new post and then reschedule it', async () => {
+  test = 'F066';
   const titlePost = dataPoolPost.title_post;
   const bodyPost = dataPoolPost.body_post;
   const loginPage = new LoginPage(page);
@@ -256,6 +281,7 @@ it('F066 - should schedule a new post and then reschedule it', async () => {
 });
 
 it('F067 should create a post, then modify it and validate that the modification was made.', async () => {
+  test = 'F067';
   const titlePost = dataPoolPost.title_post;
   const bodyPost = dataPoolPost.body_post;
   const loginPage = new LoginPage(page);
@@ -274,7 +300,6 @@ it('F067 should create a post, then modify it and validate that the modification
   await postDetailPage.enterBodyForNewPost(bodyPost);
   await postDetailPage.publishPost();
   await postDetailPage.returnToPostsList();
-  await homePage.closePublishedPostNotification();
   await homePage.goToViewSite();
 
   let firstPostTitle = await viewSitePage.getFirstPostTitle();
@@ -300,6 +325,7 @@ it('F067 should create a post, then modify it and validate that the modification
 });
 
 it('F068 - should create a new page and then delete it.', async () => {
+  test = 'F068';
   const titlePage = dataPoolPage.title_page;
   const bodyPage = dataPoolPage.body_page;
   const loginPage = new LoginPage(page);
@@ -333,6 +359,7 @@ it('F068 - should create a new page and then delete it.', async () => {
 });
 
 it('F069 - should change user password and login correctly.', async () => {
+  test = 'F069';
   let newPassword = faker.internet.password();
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
@@ -341,18 +368,26 @@ it('F069 - should change user password and login correctly.', async () => {
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToMyProfile();
+  await generateScreenshot(3);
   await profilePage.scrollToBottom();
   await profilePage.enterOldPassword(credentials.password);
   await profilePage.enterNewPassword(newPassword);
   await profilePage.enterNewPasswordConfirmation(newPassword);
+  await generateScreenshot(4);
   await profilePage.clickChangePassword();
+  await generateScreenshot(5);
   await homePage.closePublishedPostNotification();
   await homePage.signOut();
+  await generateScreenshot(6);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(newPassword)
+  await generateScreenshot(7);
   await loginPage.clickLogin();
+  await generateScreenshot(8);
   await homePage.goToMyProfile();
   await profilePage.scrollToBottom();
   await profilePage.enterOldPassword(newPassword);
@@ -362,6 +397,7 @@ it('F069 - should change user password and login correctly.', async () => {
 });
 
 it('F070 - should schedule a new page and filter it in the list of pages by scheduled status.', async () => {
+  test = 'F070';
   const titlePage = dataPoolPage.title_page;
   const bodyPage = dataPoolPage.body_page;
   const loginPage = new LoginPage(page);
@@ -372,21 +408,30 @@ it('F070 - should schedule a new page and filter it in the list of pages by sche
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToPages();
+  await generateScreenshot(3);
   await pagesPage.goToCreateNewPage();
   await pageDetailPage.enterTitleForNewPage(titlePage);
   await pageDetailPage.enterBodyForNewPage(bodyPage);
+  await generateScreenshot(4);
   await pageDetailPage.schedulePage();
+  await generateScreenshot(5);
   await pageDetailPage.returnToPagesList();
+  await generateScreenshot(6);
   await pagesPage.openPageTypeFilterDropdown();
+  await generateScreenshot(7);
   await pagesPage.selectFilterByScheduledPagesOption();
+  await generateScreenshot(8);
 
   let firstPageTitle = await pagesPage.getFirstPageTitle();
   assert.strictEqual(firstPageTitle, titlePage);
 });
 
 it('F071 - should not schedule a new page when the title has more than 255 characters.', async () => {
+  test = 'F071';
   const titlePage = faker.datatype.string(256);
   const bodyPage = dataPoolPage.body_page;
   const loginPage = new LoginPage(page);
@@ -419,6 +464,7 @@ it('F071 - should not schedule a new page when the title has more than 255 chara
 });
 
 it('F072 - should schedule a new page and then unschedule it', async () => {
+  test = 'F072';
   const titlePage = dataPoolPage.title_page;
   const bodyPage = dataPoolPage.body_page;
   const loginPage = new LoginPage(page);
@@ -453,6 +499,7 @@ it('F072 - should schedule a new page and then unschedule it', async () => {
 });
 
 it('F073 - should schedule a new page with metadata', async () => {
+  test = 'F073';
   const titlePage = dataPoolPage.title_page;
   const bodyPage = dataPoolPage.body_page;
   const metaTitlePage = dataPoolPage.meta_title_page;
@@ -486,6 +533,7 @@ it('F073 - should schedule a new page with metadata', async () => {
 });
 
 it('F074 - should not schedule a new page when the meta title has more than 300 characters.', async () => {
+  test = 'F074';
   const titlePage = dataPoolPage.title_page;
   const bodyPage = dataPoolPage.body_page;
   const metaTitlePage = faker.datatype.string(301);
@@ -531,6 +579,7 @@ it('F074 - should not schedule a new page when the meta title has more than 300 
 });
 
 it('F075 - should schedule a new page and then reschedule it', async () => {
+  test = 'F075';
   const titlePage = dataPoolPage.title_page;
   const bodyPage = dataPoolPage.body_page;
   const loginPage = new LoginPage(page);
@@ -566,6 +615,7 @@ it('F075 - should schedule a new page and then reschedule it', async () => {
 });
 
 it('F076 - should create a tag and then create a new post with this tag.', async () => {
+  test = 'F076';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const titlePost = dataPoolPost.title_post;
@@ -580,29 +630,42 @@ it('F076 - should create a tag and then create a new post with this tag.', async
   await page.goto(config.url);
   await loginPage.enterEmail(credentials.email);
   await loginPage.enterPassword(credentials.password);
+  await generateScreenshot(1);
   await loginPage.clickLogin();
+  await generateScreenshot(2);
   await homePage.goToTags();
+  await generateScreenshot(3);
   await tagsPage.goToCreateNewTag();
   await tagDetailPage.enterTitleForNewTag(nameTag);
   await tagDetailPage.enterDescriptionForNewTag(descriptionTag);
+  await generateScreenshot(4);
   await tagDetailPage.clickSave();
+  await generateScreenshot(5);
   await homePage.goToPosts();
+  await generateScreenshot(6);
   await postsPage.goToCreateNewPost();
   await postDetailPage.enterTitleForNewPost(titlePost);
   await postDetailPage.enterBodyForNewPost(bodyPost);
+  await generateScreenshot(7);
   await postDetailPage.openPostSettings();
   await postDetailPage.assignTagWithName(nameTag);
+  await generateScreenshot(8);
   await postDetailPage.closePostSettings();
   await postDetailPage.publishPost();
+  await generateScreenshot(9);
   await postDetailPage.returnToPostsList();
+  await generateScreenshot(10);
   await postsPage.openPostTagsFilterDropdown();
+  await generateScreenshot(11);
   await postsPage.selectFilterByTagName(nameTag);
+  await generateScreenshot(12);
 
   let firstTagTitle = await postsPage.getFirstPostTitle();
   assert.strictEqual(firstTagTitle, titlePost);
 });
 
 it('F077 - should create a tag and then create a new page with this tag.', async () => {
+  test = 'F077';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const titlePage = dataPoolPage.title_page;
@@ -640,6 +703,7 @@ it('F077 - should create a tag and then create a new page with this tag.', async
 });
 
 it('F078 - should create a tag with metadata.', async () => {
+  test = 'F078';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const metaTitleTag = dataPoolTag.meta_title_tag;
@@ -668,6 +732,7 @@ it('F078 - should create a tag with metadata.', async () => {
 });
 
 it('F079 - should not create a new tag when the meta title has more than 300 characteres.', async () => {
+  test = 'F079';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const metaTitleTag = faker.datatype.string(301);
@@ -711,6 +776,7 @@ it('F079 - should not create a new tag when the meta title has more than 300 cha
 });
 
 it('F080 - should not create a new tag when the meta description has more than 500 characteres.', async () => {
+  test = 'F080';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const metaTitleTag = dataPoolTag.meta_title_tag;
@@ -754,6 +820,7 @@ it('F080 - should not create a new tag when the meta description has more than 5
 });
 
 it('F081 - should not create a new tag when the name has more than 191 characteres.', async () => {
+  test = 'F081';
   const nameTag = faker.datatype.string(192);
   const descriptionTag = dataPoolTag.description_tag;
   const loginPage = new LoginPage(page);
@@ -789,6 +856,7 @@ it('F081 - should not create a new tag when the name has more than 191 character
 });
 
 it('F082 - should not create a new tag when the description has more than 500 characteres.', async () => {
+  test = 'F082';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = faker.datatype.string(501);
   const loginPage = new LoginPage(page);
@@ -824,6 +892,7 @@ it('F082 - should not create a new tag when the description has more than 500 ch
 });
 
 it('F083 - should create a new tag with a color selected.', async () => {
+  test = 'F083';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const colorTag = dataPoolTag.color_tag;
@@ -849,6 +918,7 @@ it('F083 - should create a new tag with a color selected.', async () => {
 });
 
 it('F084 - should not create a new tag when the color value is wrong.', async () => {
+  test = 'F084';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const colorTag = faker.lorem.word(6);
@@ -887,6 +957,7 @@ it('F084 - should not create a new tag when the color value is wrong.', async ()
 });
 
 it('F085 - should create a new tag with Canonical URL.', async () => {
+  test = 'F085';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const canonicalUrl = dataPoolTag.canonical_url_tag;
@@ -917,6 +988,7 @@ it('F085 - should create a new tag with Canonical URL.', async () => {
 });
 
 it('F086 - should not create a new tag when the canonical URL is not in the correct format.', async () => {
+  test = 'F086';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const metaTitleTag = dataPoolTag.meta_title_tag;
@@ -963,6 +1035,7 @@ it('F086 - should not create a new tag when the canonical URL is not in the corr
 });
 
 it('F087 - should create a internal tag.', async () => {
+  test = 'F087';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const loginPage = new LoginPage(page);
@@ -987,6 +1060,7 @@ it('F087 - should create a internal tag.', async () => {
 });
 
 it('F088 - should create a internal tag and then make it public.', async () => {
+  test = 'F088';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const loginPage = new LoginPage(page);
@@ -1021,6 +1095,7 @@ it('F088 - should create a internal tag and then make it public.', async () => {
 });
 
 it('F089 - should create a new tag with a Slug.', async () => {
+  test = 'F089';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const slug = faker.internet.domainWord();
@@ -1046,6 +1121,7 @@ it('F089 - should create a new tag with a Slug.', async () => {
 });
 
 it('F090 - should create a new tag with a image.', async () => {
+  test = 'F090';
   const nameTag = dataPoolTag.name_tag;
   const descriptionTag = dataPoolTag.description_tag;
   const loginPage = new LoginPage(page);
