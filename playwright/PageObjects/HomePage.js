@@ -19,7 +19,15 @@ module.exports = class HomePage {
     return this.page.click('a[href="#/pages/"]');
   }
 
+  async goToPages2() {
+    return this.page.click('a[href="#/pages/"]');
+  }
+
   async goToTags() {
+    return this.page.click('a[href="#/tags/"]');
+  }
+
+  async goToTags2() {
     return this.page.click('a[href="#/tags/"]');
   }
 
@@ -42,6 +50,11 @@ module.exports = class HomePage {
   }
 
   async getMessageAlertNotification() {
+    const notification = await this.page.$$(".gh-alert-content");
+    return notification[0].innerText();
+  }
+
+  async getMessageAlertNotification2() {
     const notification = await this.page.$$(".gh-alert-content");
     return notification[0].innerText();
   }
