@@ -60,10 +60,34 @@ module.exports = class HomePage {
   }
 
   async confirmLeaveCurrentPage() {
+    await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
+    await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
+    await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
+    await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
+    await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
+    await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
+    await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
+    await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
+    await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
+    await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
+    await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
+    await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
     return await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
   }
 
   async confirmLeaveCurrentPage() {
+    await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
+    await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
+    await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
+    await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
+    await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
+    await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
+    await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
+    await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
+    await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
+    await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
+    await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
+    await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
     return await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
   }
 
