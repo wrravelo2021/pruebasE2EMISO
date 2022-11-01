@@ -62,4 +62,8 @@ module.exports = class HomePage {
   async confirmLeaveCurrentPage() {
     return await this.page.click('.modal-footer > .gh-btn.gh-btn-red');
   }
+
+  async please() {
+
+  }
 };
