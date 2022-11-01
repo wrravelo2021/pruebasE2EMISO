@@ -15,11 +15,6 @@ module.exports = class HomePage {
     return this.page.click('a[href="#/pages/"]');
   }
 
-  async go_to_posi() {
-
-  }
-
-
   async goToTags() {
     return this.page.click('a[href="#/tags/"]');
   }
